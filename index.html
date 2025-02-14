@@ -165,6 +165,27 @@
       border-top: 2px solid #33ff33;
       margin-top: 40px;
     }
+    
+    /* Lock Animation Overlay */
+    #lockAnimation {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 2000;
+      text-align: center;
+      padding-top: 25%;
+      color: #33ff33;
+      font-family: 'Courier New', Courier, monospace;
+    }
+    
+    #lockIcon {
+      font-size: 80px;
+      transition: transform 0.5s ease;
+    }
   </style>
 </head>
 <body>
@@ -404,6 +425,12 @@
     </details>
   </section>
   
+  <!-- Lock Animation Overlay -->
+  <div id="lockAnimation">
+    <div id="lockIcon">🔒</div>
+    <div id="unlockText" style="font-size: 24px; margin-top: 20px;">Unlocking...</div>
+  </div>
+  
   <!-- Footer -->
   <footer>
     <p>&copy; 2025 Noam Yakar</p>
@@ -416,7 +443,7 @@
     // Correct mate-in-2 solution (White moves only), e.g. "Qh6 Qg7"
     const correctChessSolution = "Qh6 Qg7";
 
-    // Fire confetti for 3 seconds, then scroll to resume.
+    // Function to fire confetti after the animation
     function celebrate() {
       const duration = 3000;
       const end = Date.now() + duration;
@@ -430,15 +457,30 @@
       setTimeout(() => { location.href = '#resume'; }, duration);
     }
 
-    function showChessPuzzle() {
-      document.getElementById('cryptoPuzzle').style.display = 'none';
-      document.getElementById('chessPuzzle').style.display = 'block';
+    // Display lock unlocking animation before revealing portfolio and confetti
+    function unlockAnimation() {
+      const lockDiv = document.getElementById('lockAnimation');
+      lockDiv.style.display = 'block';
+      // Animate the lock (for example, change icon and scale)
+      setTimeout(() => {
+        document.getElementById('lockIcon').textContent = "🔓";
+        document.getElementById('lockIcon').style.transform = "scale(1.5)";
+        document.getElementById('unlockText').textContent = "Unlocked!";
+      }, 1500);
+      // After animation, hide overlay and launch confetti
+      setTimeout(() => {
+        lockDiv.style.display = 'none';
+        celebrate();
+      }, 2500);
     }
 
     function revealPortfolio() {
+      // Reveal all sections
       document.querySelectorAll('section').forEach(section => section.style.display = 'block');
+      // Hide the challenge screen
       document.getElementById('challenge').style.display = 'none';
-      celebrate();
+      // Start the lock animation then confetti
+      unlockAnimation();
     }
 
     function checkFlag() {
@@ -458,6 +500,11 @@
       } else {
         document.getElementById('chessMessage').textContent = "Wrong solution. Try again!";
       }
+    }
+
+    function showChessPuzzle() {
+      document.getElementById('cryptoPuzzle').style.display = 'none';
+      document.getElementById('chessPuzzle').style.display = 'block';
     }
   </script>
   
