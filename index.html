@@ -60,18 +60,13 @@
       align-items: center;
     }
     
-    /* Enlarged profile picture */
+    /* Updated profile picture to be square */
     .logo img {
       width: 100px;
       height: 100px;
-      border-radius: 50%;
+      border-radius: 0; /* square shape */
       margin-right: 10px;
       border: 2px solid #33ff33;
-    }
-    
-    .logo span {
-      font-size: 1.5rem;
-      font-weight: 700;
     }
     
     nav ul {
@@ -90,7 +85,6 @@
     
     /* Sections */
     section {
-      display: none; /* Hidden by default until a puzzle is solved */
       max-width: 1000px;
       margin: 40px auto;
       padding: 20px;
@@ -100,11 +94,16 @@
       border-radius: 5px;
     }
     
-    section h2 {
-      margin-bottom: 20px;
+    section details {
+      cursor: pointer;
+    }
+    
+    section details summary {
       font-size: 2rem;
+      font-weight: 700;
       border-bottom: 1px solid #33ff33;
       padding-bottom: 10px;
+      outline: none;
     }
     
     section p, section li {
@@ -151,10 +150,9 @@
       margin-top: 20px;
     }
     
-    /* Resume Embed */
-    #resume embed {
-      border: 1px solid #33ff33;
-      border-radius: 5px;
+    /* Resume Content */
+    .resume-content {
+      margin-top: 20px;
     }
     
     /* Footer */
@@ -211,134 +209,197 @@
     <div id="chessPuzzle" style="display: none;">
       <h3>2) Mate in 2</h3>
       <p>White to move. Enter the moves (for White only) separated by spaces</p>
-      <!-- Replace with your actual chess puzzle image or the base64-encoded version -->
       <img src="chess.png" alt="Chess Puzzle" style="max-width: 100%; height: auto; margin: 10px 0;" />
-      
       <br>
-      <input type="text" id="chessMovesInput" placeholder="e.g. Ka3 Ka4" />
+      <input type="text" id="chessMovesInput" placeholder="e.g. Qh6 Qg7" />
       <br>
       <button class="button" onclick="checkChessSolution()">Check Moves</button>
       <p id="chessMessage"></p>
     </div>
   </div>
   
-  <!-- Education Section -->
+  <!-- Education Section with dropdown -->
   <section id="education">
-    <h2>Education</h2>
-    <p><strong>Arizona State University, Tempe</strong> (2021 – 2025)</p>
-    <p>BSc Computer Science, BSc Mathematics (Statistics Focus) | GPA 4.0</p>
-    <p><em>Coursework:</em> Real Analysis, Advanced Linear Algebra, Mathematical Statistics, Data Structures &amp; Algorithms, Operating Systems, Stochastic Processes, Cryptography, Networks, Network Security, Systems Security, Digital Forensics</p>
+    <details open>
+      <summary>Education</summary>
+      <p><strong>Arizona State University, Tempe</strong> (2021 – 2025)</p>
+      <p>BSc Computer Science, BSc Mathematics (Statistics Focus) | GPA 4.0</p>
+      <p><em>Coursework:</em> Real Analysis, Advanced Linear Algebra, Mathematical Statistics, Data Structures &amp; Algorithms, Operating Systems, Stochastic Processes, Cryptography, Networks, Network Security, Systems Security, Digital Forensics</p>
+    </details>
   </section>
   
-  <!-- Technical Skills Section -->
+  <!-- Technical Skills Section with dropdown -->
   <section id="technical-skills">
-    <h2>Technical Skills</h2>
-    <ul>
-      <li><strong>Languages/Database:</strong> Python, R, SAS, C, C++, SQL, PowerBI</li>
-      <li><strong>Relevant Libraries:</strong> TensorFlow, Keras, PyTorch, Scikit Learn, Shiny, GGplot, Pwntools</li>
-      <li><strong>Software &amp; Tools:</strong> GATK, DeepVariant, BWA-Mem, Snakemake, Databricks, AWS</li>
-      <li><strong>Cybersecurity Competencies:</strong> Buffer Overflow Attacks, Return-Oriented Programming, Shellcode Injection, Race Conditions, Kernel Security Exploitation, Sandboxing, Dynamic Allocator Misuse, MicroArchitectural Exploitation</li>
-    </ul>
+    <details open>
+      <summary>Technical Skills</summary>
+      <ul>
+        <li><strong>Languages/Database:</strong> Python, R, SAS, C, C++, SQL, PowerBI</li>
+        <li><strong>Relevant Libraries:</strong> TensorFlow, Keras, PyTorch, Scikit Learn, Shiny, GGplot, Pwntools</li>
+        <li><strong>Software &amp; Tools:</strong> GATK, DeepVariant, BWA-Mem, Snakemake, Databricks, AWS</li>
+        <li><strong>Cybersecurity Competencies:</strong> Buffer Overflow Attacks, Return-Oriented Programming, Shellcode Injection, Race Conditions, Kernel Security Exploitation, Sandboxing, Dynamic Allocator Misuse, MicroArchitectural Exploitation</li>
+      </ul>
+    </details>
   </section>
   
-  <!-- Experience & Awards Section -->
+  <!-- Experience & Awards Section with dropdown -->
   <section id="experience-awards">
-    <h2>Experience &amp; Awards</h2>
-    
-    <h3>Nike - Data Engineering Intern (Oregon)</h3>
-    <p>Jun 2024 – Aug 2024</p>
-    <ul>
-      <li>Contributed to the development and optimization of data pipelines, ensuring efficient data flow and integration across various systems.</li>
-      <li>Collaborated with cross-functional teams to support data-driven decision-making processes using advanced analytics and machine learning techniques.</li>
-      <li>Implemented data validation and quality assurance protocols to maintain the integrity and reliability of large datasets.</li>
-    </ul>
-    
-    <h3>ASU - Statistical Modeling Analyst (Arizona)</h3>
-    <p>Aug 2023 – May 2024</p>
-    <ul>
-      <li>Developed and implemented robust time series modeling techniques to forecast financial data, providing critical insights for informed decision-making.</li>
-      <li>Applied forecasting methods—including ARIMA, Simple Exponential Smoothing, and Holt-Winters Forecasting—to capture complex temporal dependencies.</li>
-    </ul>
-    
-    <h3>Radware Inc. - Cybersecurity Data Intern (Tel Aviv)</h3>
-    <p>June 2023 – Aug 2023</p>
-    <ul>
-      <li>Developed a robust testing framework for validating a client alerts REST API through meticulous unit testing.</li>
-      <li>Utilized dimensionality reduction techniques (PCA, Kernel PCA, t-SNE, UMAP) to create low-dimensional representations of cyber attacks for efficient clustering and analysis.</li>
-      <li>Optimized tree-based machine learning models (XGBoost, Adaboost, RandomForest) for accurate cyber-attack cluster characterization and improved classification.</li>
-    </ul>
-    
-    <h3>University of Arizona (Kruer Lab) - Software Development Intern (Arizona)</h3>
-    <p>Mar 2022 – Mar 2023</p>
-    <ul>
-      <li>Engineered bioinformatics pipelines for DNA sequence analysis focusing on SNP identification in patients with cerebral palsy using Python, Bash scripting, and HPC platforms.</li>
-      <li>Migrated 70 TB of sequencing data to AWS with meticulous logging and automated budget alerts via Slack.</li>
-      <li>Streamlined dependency management within bioinformatics workflows using Docker and Singularity containers.</li>
-    </ul>
-    
-    <h3>AWS Hackathon: COVID-19 Audio Based Detection API</h3>
-    <p>Nov 2021</p>
-    <ul>
-      <li>Led the development of an API that analyzed cough sounds from patients, using a Convolutional Neural Network to predict COVID status (positive, negative, symptomatic) with an accuracy of 83.2%, comparable to rapid tests at the time.</li>
-      <li>Employed an open-source diverse dataset, preprocessed audio into visual representations, designed and optimized a CNN architecture, and validated the model’s performance for consistent diagnostic results.</li>
-      <li>Selected as the winning team among 200+ participants in the AWS Cloud Scholars Hackathon.</li>
-    </ul>
+    <details open>
+      <summary>Experience &amp; Awards</summary>
+      
+      <h3>Nike - Data Engineering Intern (Oregon)</h3>
+      <p>Jun 2024 – Aug 2024</p>
+      <ul>
+        <li>Contributed to the development and optimization of data pipelines, ensuring efficient data flow and integration across various systems.</li>
+        <li>Collaborated with cross-functional teams to support data-driven decision-making processes using advanced analytics and machine learning techniques.</li>
+        <li>Implemented data validation and quality assurance protocols to maintain the integrity and reliability of large datasets.</li>
+      </ul>
+      
+      <h3>ASU - Statistical Modeling Analyst (Arizona)</h3>
+      <p>Aug 2023 – May 2024</p>
+      <ul>
+        <li>Developed and implemented robust time series modeling techniques to forecast financial data, providing critical insights for informed decision-making.</li>
+        <li>Applied forecasting methods—including ARIMA, Simple Exponential Smoothing, and Holt-Winters Forecasting—to capture complex temporal dependencies.</li>
+      </ul>
+      
+      <h3>Radware Inc. - Cybersecurity Data Intern (Tel Aviv)</h3>
+      <p>June 2023 – Aug 2023</p>
+      <ul>
+        <li>Developed a robust testing framework for validating a client alerts REST API through meticulous unit testing.</li>
+        <li>Utilized dimensionality reduction techniques (PCA, Kernel PCA, t-SNE, UMAP) to create low-dimensional representations of cyber attacks for efficient clustering and analysis.</li>
+        <li>Optimized tree-based machine learning models (XGBoost, Adaboost, RandomForest) for accurate cyber-attack cluster characterization and improved classification.</li>
+      </ul>
+      
+      <h3>University of Arizona (Kruer Lab) - Software Development Intern (Arizona)</h3>
+      <p>Mar 2022 – Mar 2023</p>
+      <ul>
+        <li>Engineered bioinformatics pipelines for DNA sequence analysis focusing on SNP identification in patients with cerebral palsy using Python, Bash scripting, and HPC platforms.</li>
+        <li>Migrated 70 TB of sequencing data to AWS with meticulous logging and automated budget alerts via Slack.</li>
+        <li>Streamlined dependency management within bioinformatics workflows using Docker and Singularity containers.</li>
+      </ul>
+      
+      <h3>AWS Hackathon: COVID-19 Audio Based Detection API</h3>
+      <p>Nov 2021</p>
+      <ul>
+        <li>Led the development of an API that analyzed cough sounds from patients, using a Convolutional Neural Network to predict COVID status with an accuracy of 83.2%.</li>
+        <li>Employed an open-source diverse dataset, preprocessed audio into visual representations, designed and optimized a CNN architecture, and validated the model’s performance.</li>
+        <li>Selected as the winning team among 200+ participants in the AWS Cloud Scholars Hackathon.</li>
+      </ul>
+    </details>
   </section>
   
-  <!-- Projects Section -->
+  <!-- Projects Section with dropdown -->
   <section id="projects">
-    <h2>Projects</h2>
-    
-    <h3>WarGames: Secure Gradebook System</h3>
-    <p><strong>Technologies:</strong> Ethical Hacking, Python, Format String Exploit | Feb 2025</p>
-    <ul>
-      <li>Built a WarGames-inspired hacking simulation featuring admin credential cracking, format string exploits, and a DEFCON-based alert system for educational CTF challenges.</li>
-      <li>Simulated real-world vulnerabilities to teach exploitation techniques through a gameplay-driven cybersecurity concept.</li>
-    </ul>
-    
-    <h3>SneakyPixel - Hack the Pixels, Hide Your Secrets</h3>
-    <p><strong>Technologies:</strong> Steganography, Cryptography, Flask | Jan 2025</p>
-    <ul>
-      <li>Developed a steganography tool to hide and extract encrypted messages in images using custom cryptographic keys.</li>
-      <li>Ensured secure encoding/decoding while preserving image integrity, emphasizing privacy and secure communication.</li>
-    </ul>
-    
-    <h3>Privacy Preserving Tool (Private Repo)</h3>
-    <p><strong>Technologies:</strong> Vega-Lite, Flask, Data Anonymization | Aug 2024 - Present</p>
-    <ul>
-      <li>Developed a Flask-based Vega-Lite editor enabling privacy-preserving visualization using k-anonymity, l-diversity, t-closeness, and differential privacy.</li>
-      <li>Integrated real-time privacy metric computation and dataset transformation to balance data utility with protection.</li>
-      <li>Implemented security measures to defend against statistical attacks and cyber threats, ensuring robust data privacy.</li>
-    </ul>
+    <details open>
+      <summary>Projects</summary>
+      
+      <h3>WarGames: Secure Gradebook System</h3>
+      <p><strong>Technologies:</strong> Ethical Hacking, Python, Format String Exploit | Feb 2025</p>
+      <ul>
+        <li>Built a WarGames-inspired hacking simulation featuring admin credential cracking, format string exploits, and a DEFCON-based alert system for educational CTF challenges.</li>
+        <li>Simulated real-world vulnerabilities to teach exploitation techniques through a gameplay-driven cybersecurity concept.</li>
+      </ul>
+      
+      <h3>SneakyPixel - Hack the Pixels, Hide Your Secrets</h3>
+      <p><strong>Technologies:</strong> Steganography, Cryptography, Flask | Jan 2025</p>
+      <ul>
+        <li>Developed a steganography tool to hide and extract encrypted messages in images using custom cryptographic keys.</li>
+        <li>Ensured secure encoding/decoding while preserving image integrity, emphasizing privacy and secure communication.</li>
+      </ul>
+      
+      <h3>Privacy Preserving Tool (Private Repo)</h3>
+      <p><strong>Technologies:</strong> Vega-Lite, Flask, Data Anonymization | Aug 2024 - Present</p>
+      <ul>
+        <li>Developed a Flask-based Vega-Lite editor enabling privacy-preserving visualization using k-anonymity, l-diversity, t-closeness, and differential privacy.</li>
+        <li>Integrated real-time privacy metric computation and dataset transformation to balance data utility with protection.</li>
+        <li>Implemented security measures to defend against statistical attacks and cyber threats.</li>
+      </ul>
+    </details>
   </section>
   
-  <!-- Volunteering Section -->
+  <!-- Volunteering Section with dropdown -->
   <section id="volunteering">
-    <h2>Volunteering</h2>
-    <h3>Machine Learning Club, Tempe, AZ</h3>
-    <p>Sep 2021 – Present</p>
-    <ul>
-      <li>Roles: Advisor (May 2023 - Present), President (Nov 2021 - May 2023), Treasurer (Sep 2021 - Nov 2021)</li>
-      <li>Recruited and managed a team of dedicated officers, overseeing meetings, educational sessions, and faculty engagement to drive club growth.</li>
-      <li>Increased monthly meeting attendance from 5 to an average of 60 members per session.</li>
-      <li>Spearheaded the organization of a hackathon with 100+ participants and orchestrated multiple successful club events, fostering cross-campus collaborations.</li>
-    </ul>
+    <details open>
+      <summary>Volunteering</summary>
+      <h3>Machine Learning Club, Tempe, AZ</h3>
+      <p>Sep 2021 – Present</p>
+      <ul>
+        <li>Roles: Advisor (May 2023 - Present), President (Nov 2021 - May 2023), Treasurer (Sep 2021 - Nov 2021)</li>
+        <li>Recruited and managed a team of dedicated officers, overseeing meetings, educational sessions, and faculty engagement to drive club growth.</li>
+        <li>Increased monthly meeting attendance from 5 to an average of 60 members per session.</li>
+        <li>Spearheaded the organization of a hackathon with 100+ participants and orchestrated multiple successful club events.</li>
+      </ul>
+    </details>
   </section>
   
-  <!-- Resume Section -->
+  <!-- Resume Section with updated content and dropdown -->
   <section id="resume">
-    <h2>Resume</h2>
-    <p>You can view my resume below or <a href="resume1.pdf" target="_blank" style="color: #7fff7f;">download it here</a>.</p>
-    <!-- Replace "resume.pdf" with the path to your actual resume file -->
-    <embed src="resume1.pdf" type="application/pdf" width="100%" height="600px">
+    <details open>
+      <summary>Resume</summary>
+      <p>You can view my resume below or <a href="resume1.pdf" target="_blank" style="color: #7fff7f;">download it here</a>.</p>
+      <div class="resume-content">
+        <h3>Noam Yakar</h3>
+        <h4>Education</h4>
+        <p><strong>Arizona State University, Tempe</strong> (2021 – 2025)<br>
+        BSc Computer Science, BSc Mathematics (Statistics Focus) | GPA 4.0</p>
+        <p><em>Coursework:</em> Real Analysis, Advanced Linear Algebra, Mathematical Statistics, DSA, OS, Stochastic Processes, Cryptography, Networks, Network Security, Systems Security, Digital Forensics</p>
+        
+        <h4>Technical Skills</h4>
+        <p><strong>Languages/Database:</strong> Python, R, SAS, C, C++, SQL, PowerBI<br>
+        <strong>Relevant Libraries:</strong> TensorFlow, Keras, PyTorch, Scikit Learn, Shiny, GGplot, Pwntools<br>
+        <strong>Software &amp; Tools:</strong> GATK, DeepVariant, BWA-Mem, Snakemake, Databricks, AWS<br>
+        <strong>Cybersecurity Competencies:</strong> Buffer Overflow Attacks, Return-Oriented Programming, Shellcode Injection, Race Conditions, Kernel Security Exploitation, Sandboxing, Dynamic Allocator Misuse, MicroArchitectural Exploitation</p>
+        
+        <h4>Experience</h4>
+        <p><strong>Pwn College - System Security Competitive CTF (Arizona)</strong> (Aug 2024 - Dec 2024)<br>
+        • Ranked top 10 among over a thousand participants in the Pwn College Program System Security Track<br>
+        • Excelled in Program Security modules such as Shellcode Injection, Reverse Engineering, Memory Errors, Return-Oriented Programming, Dynamic Allocator Misuse, and Program Exploitation<br>
+        • Developed exploits for modules including Sandboxing, Race Conditions, Kernel Security, Microarchitecture Exploitation, and System Exploitation</p>
+        
+        <p><strong>Nike - Data Engineering Intern (Oregon)</strong> (Jun 2024 – Aug 2024)<br>
+        • Contributed to development and optimization of data pipelines<br>
+        • Collaborated with cross-functional teams using advanced analytics and machine learning<br>
+        • Implemented data validation and quality assurance protocols</p>
+        
+        <p><strong>ASU - Statistical Modeling Analyst (Arizona)</strong> (Aug 2023 – May 2024)<br>
+        • Developed robust time series modeling techniques to forecast financial data<br>
+        • Applied forecasting methods including ARIMA, Simple Exponential Smoothing, and Holt-Winters Forecasting</p>
+        
+        <p><strong>Radware Inc. - Cybersecurity Data Intern (Tel Aviv)</strong> (June 2023 – Aug 2023)<br>
+        • Developed a testing framework for validating a client alerts REST API<br>
+        • Utilized dimensionality reduction techniques (PCA, Kernel PCA, t-SNE, UMAP) for cyber attack analysis<br>
+        • Optimized ML models (XGBoost, Adaboost, RandomForest) for cyber-attack cluster characterization</p>
+        
+        <h4>Projects</h4>
+        <p><strong>Privacy Preserving Tool (Private Repo)</strong> (Aug 2024 - Present)<br>
+        • Developed a Flask-based Vega-Lite editor enabling privacy-preserving visualization using techniques like k-anonymity, l-diversity, t-closeness, and differential privacy<br>
+        • Integrated real-time privacy metric computation and dataset transformation<br>
+        • Implemented security measures against statistical attacks</p>
+        
+        <p><strong>WarGames: Secure Gradebook System</strong> (Feb 2025)<br>
+        • Built a hacking simulation featuring admin credential cracking, format string exploits, and a DEFCON-based alert system</p>
+        
+        <p><strong>SneakyPixel - Hack the Pixels, Hide Your Secrets</strong> (Jan 2025)<br>
+        • Developed a steganography tool to hide/extract encrypted messages in images using custom cryptographic keys</p>
+        
+        <p>
+          <a href="https://pwn.college/cse466-f2024/" target="_blank">https://pwn.college/cse466-f2024/</a><br>
+          <a href="https://pwn.college/program-security/" target="_blank">https://pwn.college/program-security/</a><br>
+          <a href="https://pwn.college/system-security/" target="_blank">https://pwn.college/system-security/</a><br>
+          <a href="https://github.com/NoamAdept/aTotallyNormalGradebook-" target="_blank">GitHub: aTotallyNormalGradebook</a><br>
+          <a href="https://github.com/NoamAdept/sneakyPixels" target="_blank">GitHub: sneakyPixels</a>
+        </p>
+      </div>
+    </details>
   </section>
   
-  <!-- Contact Section -->
+  <!-- Contact Section with dropdown -->
   <section id="contact">
-    <h2>Contact &amp; Links</h2>
-    <p><strong>Email:</strong> <a href="mailto:nyakar@asu.edu">nyakar@asu.edu</a></p>
-    <p><strong>GitHub:</strong> <a href="https://github.com/NoamYakar23">NoamYakar23</a></p>
-    <p><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/">linkedin.com/in/</a></p>
+    <details open>
+      <summary>Contact &amp; Links</summary>
+      <p><strong>Email:</strong> <a href="mailto:nyakar@asu.edu">nyakar@asu.edu</a></p>
+      <p><strong>GitHub:</strong> <a href="https://github.com/NoamYakar23">NoamYakar23</a></p>
+      <p><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/">linkedin.com/in/</a></p>
+    </details>
   </section>
   
   <!-- Footer -->
@@ -355,55 +416,32 @@
 
     // Fire confetti for 3 seconds, then scroll to resume.
     function celebrate() {
-      const duration = 3000; // 3 seconds
+      const duration = 3000;
       const end = Date.now() + duration;
-
       (function frame() {
-        // Launch a small burst of confetti from the left
-        confetti({
-          particleCount: 5,
-          angle: 60,
-          spread: 55,
-          origin: { x: 0 }
-        });
-        // Launch a small burst of confetti from the right
-        confetti({
-          particleCount: 5,
-          angle: 120,
-          spread: 55,
-          origin: { x: 1 }
-        });
-
-        // Continue as long as we haven't reached the end
+        confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
+        confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
         if (Date.now() < end) {
           requestAnimationFrame(frame);
         }
       })();
-
-      // After 3 seconds, navigate to Resume section
-      setTimeout(() => {
-        location.href = '#resume';
-      }, duration);
+      setTimeout(() => { location.href = '#resume'; }, duration);
     }
 
-    // Show the chess puzzle (hide the crypto puzzle)
     function showChessPuzzle() {
       document.getElementById('cryptoPuzzle').style.display = 'none';
       document.getElementById('chessPuzzle').style.display = 'block';
     }
 
-    // Reveal portfolio sections
     function revealPortfolio() {
       document.querySelectorAll('section').forEach(section => section.style.display = 'block');
       document.getElementById('challenge').style.display = 'none';
       celebrate();
     }
 
-    // Check the decrypted flag from the input
     function checkFlag() {
       const inputFlag = document.getElementById('flagInput').value.trim();
       const inputHash = CryptoJS.SHA256(inputFlag).toString();
-
       if (inputHash === flagHash) {
         revealPortfolio();
       } else {
@@ -411,7 +449,6 @@
       }
     }
 
-    // Check the chess puzzle solution
     function checkChessSolution() {
       const moves = document.getElementById('chessMovesInput').value.trim();
       if (moves === correctChessSolution) {
