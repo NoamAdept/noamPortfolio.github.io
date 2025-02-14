@@ -87,6 +87,7 @@
     
     /* Sections */
     section {
+      display: none; /* Hidden by default until a puzzle is solved */
       max-width: 1000px;
       margin: 40px auto;
       padding: 20px;
@@ -141,6 +142,12 @@
       padding: 40px 20px;
     }
     
+    /* Puzzle containers */
+    #cryptoPuzzle,
+    #chessPuzzle {
+      margin-top: 20px;
+    }
+    
     /* Resume Embed */
     #resume embed {
       border: 1px solid #33ff33;
@@ -181,13 +188,34 @@
   
   <!-- Flag Challenge Section -->
   <div id="challenge">
-    <h2>Find the Hidden Flag to Access the Portfolio</h2>
-    <p>Public Key &amp; Private Key are hidden somewhere in the source (watch out for newlines)</p>
-    <input type="text" id="flagInput" placeholder="Enter decrypted flag">
-    <br>
-    <button class="button" onclick="checkFlag()">Submit</button>
-    <button class="button" onclick="bypassCTF()">I don't have patience to do a CTF</button>
-    <p id="message"></p>
+    <h2>Access the Portfolio</h2>
+    <p>You can solve the original CTF <strong>OR</strong> answer a quick chess puzzle.</p>
+    
+    <!-- Original Crypto Puzzle -->
+    <div id="cryptoPuzzle">
+      <h3>1) Find the Hidden Flag</h3>
+      <p>Public &amp; Private Key are hidden in the source. Decrypt the flag and enter it below:</p>
+      <input type="text" id="flagInput" placeholder="Enter decrypted flag" />
+      <br>
+      <button class="button" onclick="checkFlag()">Submit</button>
+      <p id="message"></p>
+    </div>
+    
+    <!-- Button to switch to Chess Puzzle -->
+    <button class="button" onclick="showChessPuzzle()">I'm too lazy</button>
+    
+    <!-- Chess Puzzle -->
+    <div id="chessPuzzle" style="display: none;">
+      <h3>2) Mate in 2</h3>
+      <p>White to move. Enter the moves (for White only) separated by spaces (e.g. "Qh6 Qg7").</p>
+      <!-- Replace with your actual chess puzzle image or the base64-encoded version -->
+      <img src="chessPuzzle.png" alt="Chess Puzzle" style="max-width: 100%; height: auto; margin: 10px 0;" />
+      <br>
+      <input type="text" id="chessMovesInput" placeholder="e.g. Qh6 Qg7" />
+      <br>
+      <button class="button" onclick="checkChessSolution()">Check Moves</button>
+      <p id="chessMessage"></p>
+    </div>
   </div>
   
   <!-- Education Section -->
@@ -318,22 +346,41 @@
   <script>
     // Precomputed SHA-256 hash of the correct flag.
     const flagHash = "ea3396d401dba439de8968fdef106c655f58a7031bb2a86e509819db872d815d";
+    // Correct mate-in-2 solution (White moves only), e.g. "Qh6 Qg7"
+    const correctChessSolution = "Qh6 Qg7";
 
+    // Show the chess puzzle (hide the crypto puzzle)
+    function showChessPuzzle() {
+      document.getElementById('cryptoPuzzle').style.display = 'none';
+      document.getElementById('chessPuzzle').style.display = 'block';
+    }
+
+    // Reveal portfolio sections
+    function revealPortfolio() {
+      document.querySelectorAll('section').forEach(section => section.style.display = 'block');
+      document.getElementById('challenge').style.display = 'none';
+    }
+
+    // Check the decrypted flag from the input
     function checkFlag() {
-      const inputFlag = document.getElementById('flagInput').value;
+      const inputFlag = document.getElementById('flagInput').value.trim();
       const inputHash = CryptoJS.SHA256(inputFlag).toString();
 
       if (inputHash === flagHash) {
-        document.querySelectorAll('section').forEach(section => section.style.display = 'block');
-        document.getElementById('challenge').style.display = 'none';
+        revealPortfolio();
       } else {
         document.getElementById('message').textContent = "Incorrect flag. Try again!";
       }
     }
 
-    function bypassCTF() {
-      document.querySelectorAll('section').forEach(section => section.style.display = 'block');
-      document.getElementById('challenge').style.display = 'none';
+    // Check the chess puzzle solution
+    function checkChessSolution() {
+      const moves = document.getElementById('chessMovesInput').value.trim();
+      if (moves === correctChessSolution) {
+        revealPortfolio();
+      } else {
+        document.getElementById('chessMessage').textContent = "Wrong solution. Try again!";
+      }
     }
   </script>
   
