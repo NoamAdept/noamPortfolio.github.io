@@ -2,95 +2,223 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Noam Yakar - Cybersecurity Portfolio</title>
-  <link rel="stylesheet" href="styles.css">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
+  
+  <!-- External Libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/3.0.0/jsencrypt.min.js"></script>
-  <!-- CryptoJS is used for hashing the flag input -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  
   <style>
-    body {
-      font-family: 'Courier New', monospace;
+    /* Basic Reset */
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+    
+    /* Global Styles */
+    body {
+      font-family: 'Roboto', sans-serif;
       background-color: #0d0d0d;
       color: #33ff33;
-      /* Removed text-shadow to ensure text appears crisp */
+      line-height: 1.6;
     }
+    
+    a {
+      color: #33ff33;
+      text-decoration: none;
+    }
+    
+    a:hover {
+      color: #7fff7f;
+    }
+    
+    /* Header & Navigation */
     header {
       background-color: #111;
-      color: #33ff33;
-      text-align: center;
-      padding: 1em;
+      padding: 10px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
       border-bottom: 2px solid #33ff33;
     }
+    
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 10px;
+      border: 2px solid #33ff33;
+    }
+    
+    .logo span {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    
     nav ul {
-      list-style-type: none;
-      padding: 0;
-      text-align: center;
+      list-style: none;
+      display: flex;
     }
+    
     nav ul li {
-      display: inline;
-      margin: 0 15px;
+      margin-left: 20px;
     }
+    
     nav ul li a {
-      color: #33ff33;
-      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
     }
+    
+    /* Sections */
     section {
-      display: none;
+      display: none; /* Hidden by default until a puzzle is solved */
+      max-width: 1000px;
+      margin: 40px auto;
       padding: 20px;
-      max-width: 800px;
-      margin: auto;
-      background: #111;
+      background-color: #111;
+      border: 1px solid #33ff33;
+      box-shadow: 0 0 10px rgba(51, 255, 51, 0.5);
+      border-radius: 5px;
+    }
+    
+    section h2 {
       margin-bottom: 20px;
-      box-shadow: 0 0 10px #33ff33;
-      border: 1px solid #33ff33;
+      font-size: 2rem;
+      border-bottom: 1px solid #33ff33;
+      padding-bottom: 10px;
     }
-    footer {
-      text-align: center;
-      padding: 1em;
-      background-color: #111;
-      color: #33ff33;
-      border-top: 2px solid #33ff33;
-      margin-top: 20px;
+    
+    section p, section li {
+      font-size: 1rem;
+      margin-bottom: 10px;
     }
-    #challenge {
-      text-align: center;
-      padding: 20px;
-    }
-    input, button {
+    
+    /* Buttons and Inputs */
+    .button {
       background-color: #111;
       color: #33ff33;
       border: 1px solid #33ff33;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      margin: 10px 0;
+    }
+    
+    .button:hover {
+      background-color: #33ff33;
+      color: #111;
+    }
+    
+    input[type="text"] {
       padding: 10px;
       margin: 10px;
+      width: 60%;
+      max-width: 400px;
+      border: 1px solid #33ff33;
+      background-color: #111;
+      color: #33ff33;
+      border-radius: 3px;
     }
-    a {
-      text-decoration: none;
+    
+    /* Challenge Section */
+    #challenge {
+      text-align: center;
+      padding: 40px 20px;
+    }
+    
+    /* Puzzle containers */
+    #cryptoPuzzle,
+    #chessPuzzle {
+      margin-top: 20px;
+    }
+    
+    /* Resume Embed */
+    #resume embed {
+      border: 1px solid #33ff33;
+      border-radius: 5px;
+    }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #111;
+      border-top: 2px solid #33ff33;
+      margin-top: 40px;
     }
   </style>
 </head>
 <body>
+  <!-- Header with Navigation -->
   <header>
-    <h1>Noam Yakar</h1>
-    <p>Cybersecurity | Ethical Hacking | Data Science</p>
-    <p>
-      Contact: 201-494-6306 | 
-      <a href="mailto:nyakar@asu.edu" style="color: #33ff33;">nyakar@asu.edu</a> | 
-      <a href="https://github.com/NoamYakar23" style="color: #33ff33;">NoamYakar23</a>
-    </p>
+    <nav>
+      <div class="logo">
+        <!-- Replace "profile.jpg" with your actual profile image -->
+        <img src="profile.jpg" alt="Profile Picture">
+        <span>Noam Yakar</span>
+      </div>
+      <ul>
+        <li><a href="#challenge">CTF</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#technical-skills">Skills</a></li>
+        <li><a href="#experience-awards">Experience</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#volunteering">Volunteering</a></li>
+        <li><a href="#resume">Resume</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
   </header>
   
+  <!-- Flag Challenge Section -->
   <div id="challenge">
-    <h2>Find the hidden flag to Access the Portfolio</h2>
-    <p>Public Key &amp; Private Key are hidden somewhere in the source (watch out for newlines)</p>
-    <input type="text" id="flagInput" placeholder="Enter decrypted flag">
-    <button onclick="checkFlag()">Submit</button>
-    <button onclick="bypassCTF()">I don't have patience to do a CTF</button>
-    <p id="message"></p>
+    <h2>Access the Portfolio</h2>
+    <p>You can solve the original CTF <strong>OR</strong> answer a quick chess puzzle.</p>
+    
+    <!-- Original Crypto Puzzle -->
+    <div id="cryptoPuzzle">
+      <h3>1) Find the Hidden Flag</h3>
+      <p>Public &amp; Private Key are hidden in the source. Decrypt the flag and enter it below:</p>
+      <input type="text" id="flagInput" placeholder="Enter decrypted flag" />
+      <br>
+      <button class="button" onclick="checkFlag()">Submit</button>
+      <p id="message"></p>
+    </div>
+    
+    <!-- Button to switch to Chess Puzzle -->
+    <button class="button" onclick="showChessPuzzle()">I'm too lazy</button>
+    
+    <!-- Chess Puzzle -->
+    <div id="chessPuzzle" style="display: none;">
+      <h3>2) Mate in 2</h3>
+      <p>White to move. Enter the moves (for White only) separated by spaces (e.g. "Qh6 Qg7").</p>
+      <!-- Replace with your actual chess puzzle image or the base64-encoded version -->
+      <img src="chessPuzzle.png" alt="Chess Puzzle" style="max-width: 100%; height: auto; margin: 10px 0;" />
+      <br>
+      <input type="text" id="chessMovesInput" placeholder="e.g. Qh6 Qg7" />
+      <br>
+      <button class="button" onclick="checkChessSolution()">Check Moves</button>
+      <p id="chessMessage"></p>
+    </div>
   </div>
   
+  <!-- Education Section -->
   <section id="education">
     <h2>Education</h2>
     <p><strong>Arizona State University, Tempe</strong> (2021 – 2025)</p>
@@ -98,6 +226,7 @@
     <p><em>Coursework:</em> Real Analysis, Advanced Linear Algebra, Mathematical Statistics, Data Structures &amp; Algorithms, Operating Systems, Stochastic Processes, Cryptography, Networks, Network Security, Systems Security, Digital Forensics</p>
   </section>
   
+  <!-- Technical Skills Section -->
   <section id="technical-skills">
     <h2>Technical Skills</h2>
     <ul>
@@ -108,6 +237,7 @@
     </ul>
   </section>
   
+  <!-- Experience & Awards Section -->
   <section id="experience-awards">
     <h2>Experience &amp; Awards</h2>
     
@@ -151,6 +281,7 @@
     </ul>
   </section>
   
+  <!-- Projects Section -->
   <section id="projects">
     <h2>Projects</h2>
     
@@ -177,6 +308,7 @@
     </ul>
   </section>
   
+  <!-- Volunteering Section -->
   <section id="volunteering">
     <h2>Volunteering</h2>
     <h3>Machine Learning Club, Tempe, AZ</h3>
@@ -189,44 +321,70 @@
     </ul>
   </section>
   
-  <section id="contact">
-    <h2>Contact &amp; Links</h2>
-    <p><strong>Email:</strong> <a href="mailto:nyakar@asu.edu" style="color: #33ff33;">nyakar@asu.edu</a></p>
-    <p><strong>GitHub:</strong> <a href="https://github.com/NoamYakar23" style="color: #33ff33;">NoamYakar23</a></p>
-    <p><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/" style="color: #33ff33;">linkedin.com/in/</a></p>
-
+  <!-- Resume Section -->
+  <section id="resume">
+    <h2>Resume</h2>
+    <p>You can view my resume below or <a href="resume.pdf" target="_blank" style="color: #7fff7f;">download it here</a>.</p>
+    <!-- Replace "resume.pdf" with the path to your actual resume file -->
+    <embed src="resume.pdf" type="application/pdf" width="100%" height="600px">
   </section>
   
+  <!-- Contact Section -->
+  <section id="contact">
+    <h2>Contact &amp; Links</h2>
+    <p><strong>Email:</strong> <a href="mailto:nyakar@asu.edu">nyakar@asu.edu</a></p>
+    <p><strong>GitHub:</strong> <a href="https://github.com/NoamYakar23">NoamYakar23</a></p>
+    <p><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/">linkedin.com/in/</a></p>
+  </section>
+  
+  <!-- Footer -->
   <footer>
     <p>&copy; 2025 Noam Yakar</p>
   </footer>
   
+  <!-- Scripts -->
   <script>
     // Precomputed SHA-256 hash of the correct flag.
     const flagHash = "ea3396d401dba439de8968fdef106c655f58a7031bb2a86e509819db872d815d";
+    // Correct mate-in-2 solution (White moves only), e.g. "Qh6 Qg7"
+    const correctChessSolution = "Qh6 Qg7";
 
+    // Show the chess puzzle (hide the crypto puzzle)
+    function showChessPuzzle() {
+      document.getElementById('cryptoPuzzle').style.display = 'none';
+      document.getElementById('chessPuzzle').style.display = 'block';
+    }
+
+    // Reveal portfolio sections
+    function revealPortfolio() {
+      document.querySelectorAll('section').forEach(section => section.style.display = 'block');
+      document.getElementById('challenge').style.display = 'none';
+    }
+
+    // Check the decrypted flag from the input
     function checkFlag() {
-      const inputFlag = document.getElementById('flagInput').value;
+      const inputFlag = document.getElementById('flagInput').value.trim();
       const inputHash = CryptoJS.SHA256(inputFlag).toString();
 
       if (inputHash === flagHash) {
-        document.querySelectorAll('section').forEach(section => section.style.display = 'block');
-        document.getElementById('challenge').style.display = 'none';
+        revealPortfolio();
       } else {
         document.getElementById('message').textContent = "Incorrect flag. Try again!";
       }
     }
 
-    function bypassCTF() {
-      document.querySelectorAll('section').forEach(section => section.style.display = 'block');
-      document.getElementById('challenge').style.display = 'none';
+    // Check the chess puzzle solution
+    function checkChessSolution() {
+      const moves = document.getElementById('chessMovesInput').value.trim();
+      if (moves === correctChessSolution) {
+        revealPortfolio();
+      } else {
+        document.getElementById('chessMessage').textContent = "Wrong solution. Try again!";
+      }
     }
   </script>
   
-  <!-- Hidden sensitive data stored in JSON format.
-       This data is not executed and is hidden from the regular DOM.
-       (It is still visible in the page source, so this method is obfuscation rather than full security.)
-  -->
+  <!-- Hidden Sensitive Data (for CTF challenge) -->
   <script id="hiddenData" type="application/json">
   {
     "encryptedFlag": "5c69ca3064c1a48236380094503d4037009d97a8fde3646e2e479bfb408afc8ba737af4f97af3dfe867e39b3e9aa694d6d2044d3c2e61df9d6805e6b7db3e534579ab444ca36103b040b0915c48fd6fd01f215fa1bf0cb7acfd436ecafe9fe2978b1ee131f225ca3c55cd1968cb6b14e1789490996090308d1ca133382d9c030",
