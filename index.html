@@ -83,6 +83,19 @@
       transition: color 0.3s ease;
     }
     
+    /* Terminal-style Opening Screen */
+    #challenge {
+      background-color: #000; /* pure black */
+      color: #33ff33;
+      font-family: 'Courier New', Courier, monospace; /* terminal-like font */
+      border: 2px solid #33ff33;
+      padding: 20px;
+      margin: 40px auto;
+      max-width: 800px;
+      box-shadow: 0 0 15px rgba(51, 255, 51, 0.7);
+      border-radius: 5px;
+    }
+    
     /* Sections */
     section {
       max-width: 1000px;
@@ -138,18 +151,6 @@
       border-radius: 3px;
     }
     
-    /* Challenge Section */
-    #challenge {
-      text-align: center;
-      padding: 40px 20px;
-    }
-    
-    /* Puzzle containers */
-    #cryptoPuzzle,
-    #chessPuzzle {
-      margin-top: 20px;
-    }
-    
     /* Resume Content */
     .resume-content {
       margin-top: 20px;
@@ -187,10 +188,10 @@
     </nav>
   </header>
   
-  <!-- Flag Challenge Section -->
+  <!-- Flag Challenge Section (Terminal Look) -->
   <div id="challenge">
     <h2>Access the Portfolio</h2>
-    <p>You can solve the original CTF <strong>OR</strong> Answer a quick chess puzzle.</p>
+    <p>You can solve the original CTF <strong>OR</strong> answer a quick chess puzzle.</p>
     
     <!-- Original Crypto Puzzle -->
     <div id="cryptoPuzzle">
