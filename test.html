@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Noam Yakar - Cybersecurity Portfolio</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
+  
+  <!-- External Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/3.0.0/jsencrypt.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  
+  <style>
+    /* Basic Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    /* Global Styles */
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #0d0d0d;
+      color: #33ff33;
+      line-height: 1.6;
+    }
+    
+    a {
+      color: #33ff33;
+      text-decoration: none;
+    }
+    
+    a:hover {
+      color: #7fff7f;
+    }
+    
+    /* Header & Navigation */
+    header {
+      background-color: #111;
+      padding: 10px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 2px solid #33ff33;
+    }
+    
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 10px;
+      border: 2px solid #33ff33;
+    }
+    
+    .logo span {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    
+    nav ul {
+      list-style: none;
+      display: flex;
+    }
+    
+    nav ul li {
+      margin-left: 20px;
+    }
+    
+    nav ul li a {
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    
+    /* Sections */
+    section {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #111;
+      border: 1px solid #33ff33;
+      box-shadow: 0 0 10px rgba(51, 255, 51, 0.5);
+      border-radius: 5px;
+    }
+    
+    section h2 {
+      margin-bottom: 20px;
+      font-size: 2rem;
+      border-bottom: 1px solid #33ff33;
+      padding-bottom: 10px;
+    }
+    
+    section p, section li {
+      font-size: 1rem;
+      margin-bottom: 10px;
+    }
+    
+    /* Buttons and Inputs */
+    .button {
+      background-color: #111;
+      color: #33ff33;
+      border: 1px solid #33ff33;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      margin: 10px 0;
+    }
+    
+    .button:hover {
+      background-color: #33ff33;
+      color: #111;
+    }
+    
+    input[type="text"] {
+      padding: 10px;
+      margin: 10px;
+      width: 60%;
+      max-width: 400px;
+      border: 1px solid #33ff33;
+      background-color: #111;
+      color: #33ff33;
+      border-radius: 3px;
+    }
+    
+    /* Challenge Section */
+    #challenge {
+      text-align: center;
+      padding: 40px 20px;
+    }
+    
+    /* Resume Embed */
+    #resume embed {
+      border: 1px solid #33ff33;
+      border-radius: 5px;
+    }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #111;
+      border-top: 2px solid #33ff33;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header with Navigation -->
+  <header>
+    <nav>
+      <div class="logo">
+        <!-- Replace "profile.jpg" with your actual profile image -->
+        <img src="profile.jpg" alt="Profile Picture">
+        <span>Noam Yakar</span>
+      </div>
+      <ul>
+        <li><a href="#challenge">CTF</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#technical-skills">Skills</a></li>
+        <li><a href="#experience-awards">Experience</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#volunteering">Volunteering</a></li>
+        <li><a href="#resume">Resume</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  <!-- Flag Challenge Section -->
+  <div id="challenge">
+    <h2>Find the Hidden Flag to Access the Portfolio</h2>
+    <p>Public Key &amp; Private Key are hidden somewhere in the source (watch out for newlines)</p>
+    <input type="text" id="flagInput" placeholder="Enter decrypted flag">
+    <br>
+    <button class="button" onclick="checkFlag()">Submit</button>
+    <button class="button" onclick="bypassCTF()">I don't have patience to do a CTF</button>
+    <p id="message"></p>
+  </div>
+  
+  <!-- Education Section -->
+  <section id="education">
+    <h2>Education</h2>
+    <p><strong>Arizona State University, Tempe</strong> (2021 – 2025)</p>
+    <p>BSc Computer Science, BSc Mathematics (Statistics Focus) | GPA 4.0</p>
+    <p><em>Coursework:</em> Real Analysis, Advanced Linear Algebra, Mathematical Statistics, Data Structures &amp; Algorithms, Operating Systems, Stochastic Processes, Cryptography, Networks, Network Security, Systems Security, Digital Forensics</p>
+  </section>
+  
+  <!-- Technical Skills Section -->
+  <section id="technical-skills">
+    <h2>Technical Skills</h2>
+    <ul>
+      <li><strong>Languages/Database:</strong> Python, R, SAS, C, C++, SQL, PowerBI</li>
+      <li><strong>Relevant Libraries:</strong> TensorFlow, Keras, PyTorch, Scikit Learn, Shiny, GGplot, Pwntools</li>
+      <li><strong>Software &amp; Tools:</strong> GATK, DeepVariant, BWA-Mem, Snakemake, Databricks, AWS</li>
+      <li><strong>Cybersecurity Competencies:</strong> Buffer Overflow Attacks, Return-Oriented Programming, Shellcode Injection, Race Conditions, Kernel Security Exploitation, Sandboxing, Dynamic Allocator Misuse, MicroArchitectural Exploitation</li>
+    </ul>
+  </section>
+  
+  <!-- Experience & Awards Section -->
+  <section id="experience-awards">
+    <h2>Experience &amp; Awards</h2>
+    
+    <h3>Nike - Data Engineering Intern (Oregon)</h3>
+    <p>Jun 2024 – Aug 2024</p>
+    <ul>
+      <li>Contributed to the development and optimization of data pipelines, ensuring efficient data flow and integration across various systems.</li>
+      <li>Collaborated with cross-functional teams to support data-driven decision-making processes using advanced analytics and machine learning techniques.</li>
+      <li>Implemented data validation and quality assurance protocols to maintain the integrity and reliability of large datasets.</li>
+    </ul>
+    
+    <h3>ASU - Statistical Modeling Analyst (Arizona)</h3>
+    <p>Aug 2023 – May 2024</p>
+    <ul>
+      <li>Developed and implemented robust time series modeling techniques to forecast financial data, providing critical insights for informed decision-making.</li>
+      <li>Applied forecasting methods—including ARIMA, Simple Exponential Smoothing, and Holt-Winters Forecasting—to capture complex temporal dependencies.</li>
+    </ul>
+    
+    <h3>Radware Inc. - Cybersecurity Data Intern (Tel Aviv)</h3>
+    <p>June 2023 – Aug 2023</p>
+    <ul>
+      <li>Developed a robust testing framework for validating a client alerts REST API through meticulous unit testing.</li>
+      <li>Utilized dimensionality reduction techniques (PCA, Kernel PCA, t-SNE, UMAP) to create low-dimensional representations of cyber attacks for efficient clustering and analysis.</li>
+      <li>Optimized tree-based machine learning models (XGBoost, Adaboost, RandomForest) for accurate cyber-attack cluster characterization and improved classification.</li>
+    </ul>
+    
+    <h3>University of Arizona (Kruer Lab) - Software Development Intern (Arizona)</h3>
+    <p>Mar 2022 – Mar 2023</p>
+    <ul>
+      <li>Engineered bioinformatics pipelines for DNA sequence analysis focusing on SNP identification in patients with cerebral palsy using Python, Bash scripting, and HPC platforms.</li>
+      <li>Migrated 70 TB of sequencing data to AWS with meticulous logging and automated budget alerts via Slack.</li>
+      <li>Streamlined dependency management within bioinformatics workflows using Docker and Singularity containers.</li>
+    </ul>
+    
+    <h3>AWS Hackathon: COVID-19 Audio Based Detection API</h3>
+    <p>Nov 2021</p>
+    <ul>
+      <li>Led the development of an API that analyzed cough sounds from patients, using a Convolutional Neural Network to predict COVID status (positive, negative, symptomatic) with an accuracy of 83.2%, comparable to rapid tests at the time.</li>
+      <li>Employed an open-source diverse dataset, preprocessed audio into visual representations, designed and optimized a CNN architecture, and validated the model’s performance for consistent diagnostic results.</li>
+      <li>Selected as the winning team among 200+ participants in the AWS Cloud Scholars Hackathon.</li>
+    </ul>
+  </section>
+  
+  <!-- Projects Section -->
+  <section id="projects">
+    <h2>Projects</h2>
+    
+    <h3>WarGames: Secure Gradebook System</h3>
+    <p><strong>Technologies:</strong> Ethical Hacking, Python, Format String Exploit | Feb 2025</p>
+    <ul>
+      <li>Built a WarGames-inspired hacking simulation featuring admin credential cracking, format string exploits, and a DEFCON-based alert system for educational CTF challenges.</li>
+      <li>Simulated real-world vulnerabilities to teach exploitation techniques through a gameplay-driven cybersecurity concept.</li>
+    </ul>
+    
+    <h3>SneakyPixel - Hack the Pixels, Hide Your Secrets</h3>
+    <p><strong>Technologies:</strong> Steganography, Cryptography, Flask | Jan 2025</p>
+    <ul>
+      <li>Developed a steganography tool to hide and extract encrypted messages in images using custom cryptographic keys.</li>
+      <li>Ensured secure encoding/decoding while preserving image integrity, emphasizing privacy and secure communication.</li>
+    </ul>
+    
+    <h3>Privacy Preserving Tool (Private Repo)</h3>
+    <p><strong>Technologies:</strong> Vega-Lite, Flask, Data Anonymization | Aug 2024 - Present</p>
+    <ul>
+      <li>Developed a Flask-based Vega-Lite editor enabling privacy-preserving visualization using k-anonymity, l-diversity, t-closeness, and differential privacy.</li>
+      <li>Integrated real-time privacy metric computation and dataset transformation to balance data utility with protection.</li>
+      <li>Implemented security measures to defend against statistical attacks and cyber threats, ensuring robust data privacy.</li>
+    </ul>
+  </section>
+  
+  <!-- Volunteering Section -->
+  <section id="volunteering">
+    <h2>Volunteering</h2>
+    <h3>Machine Learning Club, Tempe, AZ</h3>
+    <p>Sep 2021 – Present</p>
+    <ul>
+      <li>Roles: Advisor (May 2023 - Present), President (Nov 2021 - May 2023), Treasurer (Sep 2021 - Nov 2021)</li>
+      <li>Recruited and managed a team of dedicated officers, overseeing meetings, educational sessions, and faculty engagement to drive club growth.</li>
+      <li>Increased monthly meeting attendance from 5 to an average of 60 members per session.</li>
+      <li>Spearheaded the organization of a hackathon with 100+ participants and orchestrated multiple successful club events, fostering cross-campus collaborations.</li>
+    </ul>
+  </section>
+  
+  <!-- Resume Section -->
+  <section id="resume">
+    <h2>Resume</h2>
+    <p>You can view my resume below or <a href="resume.pdf" target="_blank" style="color: #7fff7f;">download it here</a>.</p>
+    <!-- Replace "resume.pdf" with the path to your actual resume file -->
+    <embed src="resume.pdf" type="application/pdf" width="100%" height="600px">
+  </section>
+  
+  <!-- Contact Section -->
+  <section id="contact">
+    <h2>Contact &amp; Links</h2>
+    <p><strong>Email:</strong> <a href="mailto:nyakar@asu.edu">nyakar@asu.edu</a></p>
+    <p><strong>GitHub:</strong> <a href="https://github.com/NoamYakar23">NoamYakar23</a></p>
+    <p><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/">linkedin.com/in/</a></p>
+  </section>
+  
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Noam Yakar</p>
+  </footer>
+  
+  <!-- Scripts -->
+  <script>
+    // Precomputed SHA-256 hash of the correct flag.
+    const flagHash = "ea3396d401dba439de8968fdef106c655f58a7031bb2a86e509819db872d815d";
+
+    function checkFlag() {
+      const inputFlag = document.getElementById('flagInput').value;
+      const inputHash = CryptoJS.SHA256(inputFlag).toString();
+
+      if (inputHash === flagHash) {
+        document.querySelectorAll('section').forEach(section => section.style.display = 'block');
+        document.getElementById('challenge').style.display = 'none';
+      } else {
+        document.getElementById('message').textContent = "Incorrect flag. Try again!";
+      }
+    }
+
+    function bypassCTF() {
+      document.querySelectorAll('section').forEach(section => section.style.display = 'block');
+      document.getElementById('challenge').style.display = 'none';
+    }
+  </script>
+  
+  <!-- Hidden Sensitive Data (for CTF challenge) -->
+  <script id="hiddenData" type="application/json">
+  {
+    "encryptedFlag": "5c69ca3064c1a48236380094503d4037009d97a8fde3646e2e479bfb408afc8ba737af4f97af3dfe867e39b3e9aa694d6d2044d3c2e61df9d6805e6b7db3e534579ab444ca36103b040b0915c48fd6fd01f215fa1bf0cb7acfd436ecafe9fe2978b1ee131f225ca3c55cd1968cb6b14e1789490996090308d1ca133382d9c030",
+    "privateKey": "-----BEGIN PRIVATE KEY-----\nMIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAIkCa11vEoWMrZuE\nRiS6vIeGMcyuopfw1d3w8v/0o9kLEOTy1x7ipY8E4Qmn0YtfjIErIA3rwyEOSy8n\nONybga2acu+CkDzRUlhgid4qtpTpPznHT+nOr9T+kDyeAkxVYVGs94AD43WsYcVU\nEQD8v6M1z3pshyrACUoGHgBBvRtpAgMBAAECgYBggKzA/egs2v65SHzjiAgc6R+Q\njP0HSmJJVlrCgD0cNlgq+wUcwwVb7FLZqzPEGIPtw0NrqsEhOmEokFbTxFCcvSBH\nMBGw0IPI6OLeTronInvyqLxEuMLTcAnT+13QN2Se3Ke3Ets0puXe9x7cABxIBDU4\nNLrTxq7efsUKI+mTlQJBANmD8HHoimpuyEG5LgNVEL5h9iiNmyVcCBR2A7bTfAyu\nqququcmL9p8s2jCVyC7YcAffeRRb+JWnF49+vzdI5+8CQQChQBMFwhtOJU/L35Js\nzQAVwD9oN2YeuqKfdb6fWs4lz2I/I1OThbkry2Na6Dfwd/S0BdH2GLQULLIbkADr\npJonAkBxfgEwPggyvnjoqgmTHYht/cklobVIyftBSc5oT3KTX3OXvK3RtqDIrutt\nnEll//J8eSLA97f9xcBqU9TLsNOrAkAWz5ChVOc189NI/PSizZFAgnS10nhwymgs\n9KQluNvGv4KfeejdyqH6TwhcGNOpAd8tBFHCZZY78GK1wXZP33YrAkEAsbJ/9qsi\nLtv8UQlKlclNvncvxS2im4ZuIz925W3N3KnrnfAVoCwe5WlbMTwcTAIpMUXnMLI3\nmk3N0OpieqEDjw==\n-----END PRIVATE KEY-----",
+    "publicKey": "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJAmtdbxKFjK2bhEYkuryHhjHM\nrqKX8NXd8PL/9KPZCxDk8tce4qWPBOEJp9GLX4yBKyAN68MhDksvJzjcm4GtmnLv\ngpA80VJYYIneKraU6T85x0/pzq/U/pA8ngJMVWFRrPeAA+N1rGHFVBEA/L+jNc96\nbIcqwAlKBh4AQb0baQIDAQAB\n-----END PUBLIC KEY-----"
+  }
+  </script>
+</body>
+</html>
