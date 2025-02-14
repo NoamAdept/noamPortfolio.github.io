@@ -11,6 +11,8 @@
   <!-- External Libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/3.0.0/jsencrypt.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <!-- Confetti Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   
   <style>
     /* Basic Reset */
@@ -58,9 +60,10 @@
       align-items: center;
     }
     
+    /* Enlarged profile picture */
     .logo img {
-      width: 50px;
-      height: 50px;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
       margin-right: 10px;
       border: 2px solid #33ff33;
@@ -169,7 +172,7 @@
   <header>
     <nav>
       <div class="logo">
-        <!-- Replace "profile.jpg" with your actual profile image -->
+        <!-- Replace "profile.png" with your actual profile image -->
         <img src="profile.png" alt="Profile Picture">
         <span>Noam Yakar</span>
       </div>
@@ -350,6 +353,39 @@
     // Correct mate-in-2 solution (White moves only), e.g. "Qh6 Qg7"
     const correctChessSolution = "Qh6 Qg7";
 
+    // Fire confetti for 3 seconds, then scroll to resume.
+    function celebrate() {
+      const duration = 3000; // 3 seconds
+      const end = Date.now() + duration;
+
+      (function frame() {
+        // Launch a small burst of confetti from the left
+        confetti({
+          particleCount: 5,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 }
+        });
+        // Launch a small burst of confetti from the right
+        confetti({
+          particleCount: 5,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 }
+        });
+
+        // Continue as long as we haven't reached the end
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      })();
+
+      // After 3 seconds, navigate to Resume section
+      setTimeout(() => {
+        location.href = '#resume';
+      }, duration);
+    }
+
     // Show the chess puzzle (hide the crypto puzzle)
     function showChessPuzzle() {
       document.getElementById('cryptoPuzzle').style.display = 'none';
@@ -360,6 +396,7 @@
     function revealPortfolio() {
       document.querySelectorAll('section').forEach(section => section.style.display = 'block');
       document.getElementById('challenge').style.display = 'none';
+      celebrate();
     }
 
     // Check the decrypted flag from the input
