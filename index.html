@@ -254,7 +254,8 @@
       </div>
       <ul>
         <li><a href="#terminal">CTF</a></li>
-        <li><a href="projects.html">Projects</a></li>
+        <!-- Projects link now has an ID for access control -->
+        <li><a id="projects-link" href="projects.html">Projects</a></li>
       </ul>
     </nav>
   </header>
@@ -297,8 +298,10 @@
       <!-- Resume Preview Column -->
       <div class="resume-highlights">
         <h2>Resume</h2>
-        <!-- Embedded PDF preview of the resume -->
-        <iframe src="resume1.pdf"></iframe>
+        <!-- Embedded PDF preview of the resume with fallback text -->
+        <iframe src="resume1.pdf" width="100%" height="500px">
+          Your browser does not support PDFs. Please <a href="resume1.pdf">download the PDF</a> to view it.
+        </iframe>
       </div>
     </div>
   </section>
@@ -311,8 +314,20 @@
   
   <!-- Terminal Interaction Script -->
   <script>
+    // Global flag to track CTF completion
+    let ctfSolved = false;
+    
     document.addEventListener("DOMContentLoaded", function () {
       const terminalBody = document.getElementById("terminal-body");
+      
+      // Prevent access to the Projects page until CTF is solved
+      const projectsLink = document.getElementById("projects-link");
+      projectsLink.addEventListener("click", function (e) {
+        if (!ctfSolved) {
+          e.preventDefault();
+          alert("Please solve the CTF challenge to access the Projects page.");
+        }
+      });
       
       // Initial simulated commands before the challenge menu:
       const initialCommands = [
@@ -326,7 +341,8 @@
       function typeCommand(index, commandObj, callback) {
         const commandLine = document.createElement("div");
         commandLine.classList.add("command-line");
-        commandLine.innerHTML = `<span class="cyan">Noam@CyberOps:~$</span> <span class="command"></span>`;
+        // Use innerHTML to incorporate colored span for the prompt.
+        commandLine.innerHTML = '<span class="cyan">Noam@CyberOps:~$</span> <span class="command"></span>';
         terminalBody.appendChild(commandLine);
         const commandEl = commandLine.querySelector(".command");
         let i = 0;
@@ -506,6 +522,7 @@ Enter your moves (White only), separated by spaces:`;
         lockDiv.style.display = 'none';
         document.getElementById("about").style.display = "block";
         document.getElementById("social").style.display = "block";
+        ctfSolved = true; // Now the Projects page is accessible
         celebrate();
       }, 2500);
     }
