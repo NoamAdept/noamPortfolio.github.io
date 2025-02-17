@@ -478,7 +478,7 @@
 
 Enter your moves (White only), separated by spaces:`;
           displayOutput(asciiBoard, function() {
-            displayInputPrompt("e.g. Qh6 Qg7", function(moves) {
+            displayInputPrompt("e.g. Ka2 Ka3", function(moves) {
               const movesNormalized = moves.trim().toLowerCase();
               if (movesNormalized === "qh6 qg7" || movesNormalized === "qg6 qh7") {
                 displayOutput("Correct moves!");
