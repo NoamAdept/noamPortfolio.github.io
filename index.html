@@ -240,6 +240,142 @@
       <p id="chessMessage"></p>
     </div>
   </div>
+
+  <!-- Mac iTerm-Style Terminal (Added Above Resume Section) -->
+<section id="resume-terminal">
+  <div id="terminal">
+    <div class="terminal-header">
+      <div class="buttons">
+        <span class="red"></span>
+        <span class="yellow"></span>
+        <span class="green"></span>
+      </div>
+      <div class="terminal-title">Noam@CyberOps — bash — 80x24</div>
+    </div>
+    <div class="terminal-body" id="terminal-body"></div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const terminalBody = document.getElementById("terminal-body");
+
+    const commands = [
+      { command: "whoami", output: "Noam Yakar" },
+      { command: "ls -l", output: "total 4\nlrwxrwxrwx  1 noam  staff  27 Feb 17 12:00 flag -> /super/secret/flag" },
+      { command: "cat flag", output: "pwn.noam{welcome :)}" }
+    ];
+
+    let index = 0;
+
+    function typeCommand(index) {
+      if (index >= commands.length) return;
+
+      const cmd = commands[index];
+      const commandLine = document.createElement("div");
+      commandLine.classList.add("command-line");
+      commandLine.innerHTML = `<span class="cyan">Noam@CyberOps:~$</span> <span class="command"></span>`;
+      terminalBody.appendChild(commandLine);
+
+      let commandElement = commandLine.querySelector(".command");
+      let i = 0;
+
+      function typeText() {
+        if (i < cmd.command.length) {
+          commandElement.textContent += cmd.command.charAt(i);
+          i++;
+          setTimeout(typeText, 50);
+        } else {
+          setTimeout(() => showOutput(cmd.output), 500);
+        }
+      }
+
+      function showOutput(output) {
+        const outputLine = document.createElement("div");
+        outputLine.classList.add("output-line");
+        outputLine.innerHTML = output.replace(/\n/g, "<br>");
+        terminalBody.appendChild(outputLine);
+
+        setTimeout(() => typeCommand(index + 1), 1000);
+      }
+
+      typeText();
+    }
+
+    typeCommand(0);
+  });
+</script>
+
+<style>
+  /* Terminal Styling (Mac iTerm) */
+  #terminal {
+    background-color: #2d2d2d;
+    color: #33ff33;
+    font-family: "Courier New", Courier, monospace;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    max-width: 650px;
+    margin: 40px auto;
+    overflow: hidden;
+  }
+
+  /* Mac Terminal Title Bar */
+  .terminal-header {
+    display: flex;
+    align-items: center;
+    background: #1e1e1e;
+    padding: 8px 12px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    justify-content: space-between;
+  }
+
+  .terminal-title {
+    color: #aaa;
+    font-size: 0.9rem;
+  }
+
+  .buttons {
+    display: flex;
+    gap: 6px;
+  }
+
+  .buttons span {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .red {
+    background-color: #ff5f56;
+  }
+
+  .yellow {
+    background-color: #ffbd2e;
+  }
+
+  .green {
+    background-color: #27c93f;
+  }
+
+  /* Terminal Body */
+  .terminal-body {
+    padding: 10px;
+    font-size: 1.2rem;
+    white-space: pre-wrap;
+  }
+
+  .command-line, .output-line {
+    margin-top: 5px;
+  }
+
+  .cyan {
+    color: #00ffff;
+  }
+</style>
+
   
   <!-- Education Section with dropdown -->
   <section id="education">
