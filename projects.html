@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Executable Decompiler - Projects</title>
+  
+  <!-- Google Fonts and Font Awesome -->
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P|Roboto:400,500,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* Base styling for an IDA/disassembly & executable feel */
+    body {
+      background: #1e1e1e;
+      color: #c7c7c7;
+      font-family: "Courier New", monospace;
+      margin: 0;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #00ff00;
+      font-family: 'Press Start 2P', sans-serif;
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+    }
+    h2 {
+      margin: 40px 0 20px;
+      font-size: 1.4rem;
+    }
+    .project-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    /* Each project appears as an "executable" file */
+    .project {
+      border: 2px solid #00ff00;
+      padding: 15px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.3s ease, border-color 0.3s ease;
+      background: #2e2e2e;
+      display: flex;
+      align-items: center;
+      border-radius: 5px;
+    }
+    .project:hover {
+      background: #3e3e3e;
+    }
+    .project.active {
+      background: #4e4e4e;
+      border-color: #ffff00;
+    }
+    /* Icon styling to simulate an executable file */
+    .project .icon {
+      font-size: 2rem;
+      margin-right: 15px;
+      color: #00ff00;
+    }
+    .project .info {
+      font-size: 1.2rem;
+      flex: 1;
+    }
+    .project .instruction {
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+    /* Overlay that appears when "decompiling" */
+    .decompiling-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      color: #ffff00;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      border-radius: 5px;
+    }
+    .project.active .decompiling-overlay {
+      opacity: 1;
+    }
+    /* Styling for the embedded preview section */
+    #preview-section {
+      max-width: 900px;
+      margin: 40px auto 0;
+      border: 2px solid #00ff00;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    #preview-section iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Executable Projects</h1>
+  <div class="project-container">
+    <div class="project" data-url="https://github.com/NoamAdept/sneakyPixels">
+      <div class="icon"><i class="fas fa-file-code"></i></div>
+      <div class="info">
+        <div>Executable: sneakyPixels.exe</div>
+        <div class="instruction">Click to select, then press <span style="color:#00ff00;">TAB</span> to decompile.</div>
+      </div>
+      <div class="decompiling-overlay">Decompiling...</div>
+    </div>
+    
+    <div class="project" data-url="https://github.com/NoamAdept/honeyTheBackdoor-">
+      <div class="icon"><i class="fas fa-file-code"></i></div>
+      <div class="info">
+        <div>Executable: honeyTheBackdoor-.exe</div>
+        <div class="instruction">Click to select, then press <span style="color:#00ff00;">TAB</span> to decompile.</div>
+      </div>
+      <div class="decompiling-overlay">Decompiling...</div>
+    </div>
+    
+    <div class="project" data-url="https://github.com/NoamAdept/aTotallyNormalGradebook-">
+      <div class="icon"><i class="fas fa-file-code"></i></div>
+      <div class="info">
+        <div>Executable: aTotallyNormalGradebook-.exe</div>
+        <div class="instruction">Click to select, then press <span style="color:#00ff00;">TAB</span> to decompile.</div>
+      </div>
+      <div class="decompiling-overlay">Decompiling...</div>
+    </div>
+    
+    <div class="project" data-url="https://github.com/NoamYakar23/mvpPlot">
+      <div class="icon"><i class="fas fa-file-code"></i></div>
+      <div class="info">
+        <div>Executable: mvpPlot.exe</div>
+        <div class="instruction">Click to select, then press <span style="color:#00ff00;">TAB</span> to decompile.</div>
+      </div>
+      <div class="decompiling-overlay">Decompiling...</div>
+    </div>
+  </div>
+  
+  <!-- Embedded Preview Section -->
+  <h2>CTF Progress</h2>
+  <section id="preview-section">
+    <iframe src="https://pwn.college/hacker/noamyakar23" allowfullscreen></iframe>
+  </section>
+  
+  <script>
+    // Select all project elements
+    const projects = document.querySelectorAll('.project');
+    let activeProject = null;
+    
+    // When a project is clicked, mark it as active
+    projects.forEach(project => {
+      project.addEventListener('click', function() {
+        projects.forEach(p => p.classList.remove('active'));
+        project.classList.add('active');
+        activeProject = project;
+      });
+    });
+    
+    // Listen for the TAB key to trigger decompilation
+    document.addEventListener('keydown', function(e) {
+      if ((e.key === "Tab" || e.keyCode === 9) && activeProject) {
+        e.preventDefault(); // Prevent the default TAB behavior
+        // Show the decompiling overlay on the active project
+        activeProject.classList.add('active');
+        // Simulate a decompilation delay before redirecting
+        setTimeout(() => {
+          const url = activeProject.getAttribute('data-url');
+          window.location.href = url;
+        }, 1500); // Delay of 1.5 seconds
+      }
+    });
+  </script>
+</body>
+</html>
