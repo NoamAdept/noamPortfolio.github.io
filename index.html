@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Noam Yakar - Cybersecurity Portfolio</title>
   
   <!-- Google Fonts -->
@@ -15,158 +15,170 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   
   <style>
-    /* Basic Reset */
+    /* Global Reset & Fonts */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-    
-    /* Global Styles */
     body {
-      font-family: 'Roboto', sans-serif;
-      background-color: #0d0d0d;
-      color: #33ff33;
+      font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+      background-color: #ffffff;
+      color: #222;
       line-height: 1.6;
     }
     
     a {
-      color: #33ff33;
+      color: #007aff;
       text-decoration: none;
+      transition: color 0.3s ease;
     }
-    
     a:hover {
-      color: #7fff7f;
+      color: #0051a8;
     }
     
-    /* Header & Navigation */
+    /* Header & Navigation (Mac-style clean header) */
     header {
-      background-color: #111;
-      padding: 10px 20px;
+      background: #ffffff;
+      padding: 15px 30px;
       position: sticky;
       top: 0;
       z-index: 1000;
-      border-bottom: 2px solid #33ff33;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
     }
-    
     nav {
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    
     .logo {
       display: flex;
       align-items: center;
     }
-    
-    /* Updated profile picture to be square */
     .logo img {
-      width: 100px;
-      height: 100px;
-      border-radius: 0; /* square shape */
+      width: 80px;
+      height: 80px;
+      border-radius: 12px;
       margin-right: 10px;
-      border: 2px solid #33ff33;
+      border: 1px solid #ddd;
     }
-    
     nav ul {
       list-style: none;
       display: flex;
     }
-    
     nav ul li {
       margin-left: 20px;
     }
-    
     nav ul li a {
       font-weight: 500;
-      transition: color 0.3s ease;
     }
     
-    /* Terminal-style Opening Screen */
+    /* Challenge Section (Terminal Look, now light) */
     #challenge {
-      background-color: #000; /* pure black */
-      color: #33ff33;
-      font-family: 'Courier New', Courier, monospace; /* terminal-like font */
-      border: 2px solid #33ff33;
+      background: #f9f9f9;
+      color: #222;
+      font-family: 'Courier New', Courier, monospace;
+      border: 1px solid #ddd;
       padding: 20px;
       margin: 40px auto;
       max-width: 800px;
-      box-shadow: 0 0 15px rgba(51, 255, 51, 0.7);
-      border-radius: 5px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      border-radius: 8px;
     }
     
-    /* Sections Hidden Until Challenge is Solved */
-    section {
-      display: none;
-      max-width: 1000px;
+    /* Terminal Styling (Mac iTerm Look, light version) */
+    #terminal {
+      background-color: #f9f9f9;
+      color: #222;
+      font-family: "Courier New", Courier, monospace;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      max-width: 650px;
+      margin: 40px auto;
+      overflow: hidden;
+    }
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      background: #eaeaea;
+      padding: 8px 12px;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      justify-content: space-between;
+    }
+    .terminal-title {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    .buttons {
+      display: flex;
+      gap: 6px;
+    }
+    .buttons span {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .red { background-color: #ff5f56; }
+    .yellow { background-color: #ffbd2e; }
+    .green { background-color: #27c93f; }
+    .terminal-body {
+      padding: 10px;
+      font-size: 1.1rem;
+      white-space: pre-wrap;
+    }
+    .command-line,
+    .output-line {
+      margin-top: 5px;
+    }
+    .cyan { color: #00aaff; }
+    
+    /* About Me & Resume Section Styling */
+    #about {
+      max-width: 900px;
       margin: 40px auto;
       padding: 20px;
-      background-color: #111;
-      border: 1px solid #33ff33;
-      box-shadow: 0 0 10px rgba(51, 255, 51, 0.5);
-      border-radius: 5px;
+      background: #ffffff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
-    
-    section details {
-      cursor: pointer;
-    }
-    
-    section details summary {
-      font-size: 2rem;
-      font-weight: 700;
-      border-bottom: 1px solid #33ff33;
-      padding-bottom: 10px;
-      outline: none;
-    }
-    
-    section p, section li {
-      font-size: 1rem;
+    #about h1,
+    #about h2,
+    #about h3 {
       margin-bottom: 10px;
     }
-    
-    /* Buttons and Inputs */
-    .button {
-      background-color: #111;
-      color: #33ff33;
-      border: 1px solid #33ff33;
-      padding: 10px 20px;
-      cursor: pointer;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      margin: 10px 0;
-    }
-    
-    .button:hover {
-      background-color: #33ff33;
-      color: #111;
-    }
-    
-    input[type="text"] {
-      padding: 10px;
-      margin: 10px;
-      width: 60%;
-      max-width: 400px;
-      border: 1px solid #33ff33;
-      background-color: #111;
-      color: #33ff33;
-      border-radius: 3px;
-    }
-    
-    /* Resume Content */
-    .resume-content {
+    .about-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
       margin-top: 20px;
+    }
+    .about-intro,
+    .resume-highlights {
+      flex: 1 1 300px;
+    }
+    .resume-highlights ul {
+      list-style: disc inside;
+      margin-left: 20px;
+    }
+    .resume-highlights p {
+      margin-bottom: 15px;
     }
     
     /* Footer */
     footer {
       text-align: center;
       padding: 20px;
-      background-color: #111;
-      border-top: 2px solid #33ff33;
+      background: #ffffff;
+      border-top: 1px solid #ddd;
       margin-top: 40px;
+      color: #666;
     }
     
-    /* Lock Animation Overlay */
+    /* Lock Animation Overlay (Mac-style overlay) */
     #lockAnimation {
       display: none;
       position: fixed;
@@ -174,17 +186,21 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.9);
+      background: rgba(255, 255, 255, 0.95);
       z-index: 2000;
       text-align: center;
-      padding-top: 25%;
-      color: #33ff33;
-      font-family: 'Courier New', Courier, monospace;
+      padding-top: 30%;
+      color: #222;
+      font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
     }
-    
     #lockIcon {
       font-size: 80px;
       transition: transform 0.5s ease;
+    }
+    
+    /* Initially hide the portfolio sections */
+    #resume-terminal, #about {
+      display: none;
     }
   </style>
 </head>
@@ -193,24 +209,18 @@
   <header>
     <nav>
       <div class="logo">
-        <!-- Replace "profile.png" with your actual profile image -->
-        <img src="profile.png" alt="Profile Picture">
+        <img src="profile.png" alt="Profile Picture" />
         <span>Noam Yakar</span>
       </div>
       <ul>
         <li><a href="#challenge">CTF</a></li>
-        <li><a href="#education">Education</a></li>
-        <li><a href="#technical-skills">Skills</a></li>
-        <li><a href="#experience-awards">Experience</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#volunteering">Volunteering</a></li>
-        <li><a href="#resume">Resume</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li><a href="#resume-terminal">Terminal</a></li>
+        <li><a href="#about">About Me & Resume</a></li>
       </ul>
     </nav>
   </header>
   
-  <!-- Flag Challenge Section (Terminal Look) -->
+  <!-- Flag Challenge Section -->
   <div id="challenge">
     <h2>Access the Portfolio</h2>
     <p>You can solve the original CTF <strong>OR</strong> answer a quick chess puzzle.</p>
@@ -234,278 +244,72 @@
       <p>White to move. Enter the moves (for White only) separated by spaces</p>
       <img src="chess.png" alt="Chess Puzzle" style="max-width: 100%; height: auto; margin: 10px 0;" />
       <br>
-      <input type="text" id="chessMovesInput" placeholder="e.g. Ka3 Ka4" />
+      <input type="text" id="chessMovesInput" placeholder="e.g. Qh6 Qg7" />
       <br>
       <button class="button" onclick="checkChessSolution()">Check Moves</button>
       <p id="chessMessage"></p>
     </div>
   </div>
-
-  <!-- Mac iTerm-Style Terminal (Added Above Resume Section) -->
-<section id="resume-terminal">
-  <div id="terminal">
-    <div class="terminal-header">
-      <div class="buttons">
-        <span class="red"></span>
-        <span class="yellow"></span>
-        <span class="green"></span>
+  
+  <!-- Mac iTerm-Style Terminal Section (initially hidden) -->
+  <section id="resume-terminal">
+    <div id="terminal">
+      <div class="terminal-header">
+        <div class="buttons">
+          <span class="red"></span>
+          <span class="yellow"></span>
+          <span class="green"></span>
+        </div>
+        <div class="terminal-title">Noam@CyberOps — bash — 80x24</div>
       </div>
-      <div class="terminal-title">Noam@CyberOps — bash — 80x24</div>
+      <div class="terminal-body" id="terminal-body"></div>
     </div>
-    <div class="terminal-body" id="terminal-body"></div>
-  </div>
-</section>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const terminalBody = document.getElementById("terminal-body");
-
-    const commands = [
-      { command: "whoami", output: "Noam Yakar" },
-      { command: "ls -l", output: "total 4\nlrwxrwxrwx  1 noam  staff  27 Feb 17 12:00 flag -> /super/secret/flag" },
-      { command: "cat flag", output: "pwn.noam{welcome :)}" }
-    ];
-
-    let index = 0;
-
-    function typeCommand(index) {
-      if (index >= commands.length) return;
-
-      const cmd = commands[index];
-      const commandLine = document.createElement("div");
-      commandLine.classList.add("command-line");
-      commandLine.innerHTML = `<span class="cyan">Noam@CyberOps:~$</span> <span class="command"></span>`;
-      terminalBody.appendChild(commandLine);
-
-      let commandElement = commandLine.querySelector(".command");
-      let i = 0;
-
-      function typeText() {
-        if (i < cmd.command.length) {
-          commandElement.textContent += cmd.command.charAt(i);
-          i++;
-          setTimeout(typeText, 50);
-        } else {
-          setTimeout(() => showOutput(cmd.output), 500);
-        }
-      }
-
-      function showOutput(output) {
-        const outputLine = document.createElement("div");
-        outputLine.classList.add("output-line");
-        outputLine.innerHTML = output.replace(/\n/g, "<br>");
-        terminalBody.appendChild(outputLine);
-
-        setTimeout(() => typeCommand(index + 1), 1000);
-      }
-
-      typeText();
-    }
-
-    typeCommand(0);
-  });
-</script>
-
-<style>
-  /* Terminal Styling (Mac iTerm) */
-  #terminal {
-    background-color: #2d2d2d;
-    color: #33ff33;
-    font-family: "Courier New", Courier, monospace;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    max-width: 650px;
-    margin: 40px auto;
-    overflow: hidden;
-  }
-
-  /* Mac Terminal Title Bar */
-  .terminal-header {
-    display: flex;
-    align-items: center;
-    background: #1e1e1e;
-    padding: 8px 12px;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    justify-content: space-between;
-  }
-
-  .terminal-title {
-    color: #aaa;
-    font-size: 0.9rem;
-  }
-
-  .buttons {
-    display: flex;
-    gap: 6px;
-  }
-
-  .buttons span {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    display: inline-block;
-  }
-
-  .red {
-    background-color: #ff5f56;
-  }
-
-  .yellow {
-    background-color: #ffbd2e;
-  }
-
-  .green {
-    background-color: #27c93f;
-  }
-
-  /* Terminal Body */
-  .terminal-body {
-    padding: 10px;
-    font-size: 1.2rem;
-    white-space: pre-wrap;
-  }
-
-  .command-line, .output-line {
-    margin-top: 5px;
-  }
-
-  .cyan {
-    color: #00ffff;
-  }
-</style>
-
-  
-  <!-- Education Section with dropdown -->
-  <section id="education">
-    <details open>
-      <summary>Education</summary>
-      <p><strong>Arizona State University, Tempe</strong> (2021 – 2025)</p>
-      <p>BSc Computer Science, BSc Mathematics (Statistics Focus) | GPA 4.0</p>
-      <p><em>Coursework:</em> Real Analysis, Advanced Linear Algebra, Mathematical Statistics, Data Structures &amp; Algorithms, Operating Systems, Stochastic Processes, Cryptography, Networks, Network Security, Systems Security, Digital Forensics</p>
-    </details>
   </section>
-  
-  <!-- Technical Skills Section with dropdown -->
-  <section id="technical-skills">
-    <details open>
-      <summary>Technical Skills</summary>
-      <ul>
-        <li><strong>Languages/Database:</strong> Python, R, SAS, C, C++, SQL, PowerBI</li>
-        <li><strong>Relevant Libraries:</strong> TensorFlow, Keras, PyTorch, Scikit Learn, Shiny, GGplot, Pwntools</li>
-        <li><strong>Software &amp; Tools:</strong> GATK, DeepVariant, BWA-Mem, Snakemake, Databricks, AWS</li>
-        <li><strong>Cybersecurity Competencies:</strong> Buffer Overflow Attacks, Return-Oriented Programming, Shellcode Injection, Race Conditions, Kernel Security Exploitation, Sandboxing, Dynamic Allocator Misuse, MicroArchitectural Exploitation</li>
-      </ul>
-    </details>
-  </section>
-  
-  <!-- Experience & Awards Section with dropdown -->
-  <section id="experience-awards">
-    <details open>
-      <summary>Experience &amp; Awards</summary>
-      
-      <h3>Nike - Data Engineering Intern (Oregon)</h3>
-      <p>Jun 2024 – Aug 2024</p>
-      <ul>
-        <li>Contributed to the development and optimization of data pipelines, ensuring efficient data flow and integration across various systems.</li>
-        <li>Collaborated with cross-functional teams to support data-driven decision-making processes using advanced analytics and machine learning techniques.</li>
-        <li>Implemented data validation and quality assurance protocols to maintain the integrity and reliability of large datasets.</li>
-      </ul>
-      
-      <h3>ASU - Statistical Modeling Analyst (Arizona)</h3>
-      <p>Aug 2023 – May 2024</p>
-      <ul>
-        <li>Developed and implemented robust time series modeling techniques to forecast financial data, providing critical insights for informed decision-making.</li>
-        <li>Applied forecasting methods—including ARIMA, Simple Exponential Smoothing, and Holt-Winters Forecasting—to capture complex temporal dependencies.</li>
-      </ul>
-      
-      <h3>Radware Inc. - Cybersecurity Data Intern (Tel Aviv)</h3>
-      <p>June 2023 – Aug 2023</p>
-      <ul>
-        <li>Developed a robust testing framework for validating a client alerts REST API through meticulous unit testing.</li>
-        <li>Utilized dimensionality reduction techniques (PCA, Kernel PCA, t-SNE, UMAP) to create low-dimensional representations of cyber attacks for efficient clustering and analysis.</li>
-        <li>Optimized tree-based machine learning models (XGBoost, Adaboost, RandomForest) for accurate cyber-attack cluster characterization and improved classification.</li>
-      </ul>
-      
-      <h3>University of Arizona (Kruer Lab) - Software Development Intern (Arizona)</h3>
-      <p>Mar 2022 – Mar 2023</p>
-      <ul>
-        <li>Engineered bioinformatics pipelines for DNA sequence analysis focusing on SNP identification in patients with cerebral palsy using Python, Bash scripting, and HPC platforms.</li>
-        <li>Migrated 70 TB of sequencing data to AWS with meticulous logging and automated budget alerts via Slack.</li>
-        <li>Streamlined dependency management within bioinformatics workflows using Docker and Singularity containers.</li>
-      </ul>
-      
-      <h3>AWS Hackathon: COVID-19 Audio Based Detection API</h3>
-      <p>Nov 2021</p>
-      <ul>
-        <li>Led the development of an API that analyzed cough sounds from patients, using a Convolutional Neural Network to predict COVID status with an accuracy of 83.2%.</li>
-        <li>Employed an open-source diverse dataset, preprocessed audio into visual representations, designed and optimized a CNN architecture, and validated the model’s performance.</li>
-        <li>Selected as the winning team among 200+ participants in the AWS Cloud Scholars Hackathon.</li>
-      </ul>
-    </details>
-  </section>
-  
-  <!-- Projects Section with dropdown -->
-  <section id="projects">
-    <details open>
-      <summary>Projects</summary>
-      
-      <h3>WarGames: Secure Gradebook System</h3>
-      <p><strong>Technologies:</strong> Ethical Hacking, Python, Format String Exploit | Feb 2025</p>
-      <ul>
-        <li>Built a WarGames-inspired hacking simulation featuring admin credential cracking, format string exploits, and a DEFCON-based alert system for educational CTF challenges.</li>
-        <li>Simulated real-world vulnerabilities to teach exploitation techniques through a gameplay-driven cybersecurity concept.</li>
-      </ul>
-      
-      <h3>SneakyPixel - Hack the Pixels, Hide Your Secrets</h3>
-      <p><strong>Technologies:</strong> Steganography, Cryptography, Flask | Jan 2025</p>
-      <ul>
-        <li>Developed a steganography tool to hide and extract encrypted messages in images using custom cryptographic keys.</li>
-        <li>Ensured secure encoding/decoding while preserving image integrity, emphasizing privacy and secure communication.</li>
-      </ul>
-      
-      <h3>Privacy Preserving Tool (Private Repo)</h3>
-      <p><strong>Technologies:</strong> Vega-Lite, Flask, Data Anonymization | Aug 2024 - Present</p>
-      <ul>
-        <li>Developed a Flask-based Vega-Lite editor enabling privacy-preserving visualization using k-anonymity, l-diversity, t-closeness, and differential privacy.</li>
-        <li>Integrated real-time privacy metric computation and dataset transformation to balance data utility with protection.</li>
-        <li>Implemented security measures to defend against statistical attacks and cyber threats.</li>
-      </ul>
-    </details>
-  </section>
-  
-  <!-- Volunteering Section with dropdown -->
-  <section id="volunteering">
-    <details open>
-      <summary>Volunteering</summary>
-      <h3>Machine Learning Club, Tempe, AZ</h3>
-      <p>Sep 2021 – Present</p>
-      <ul>
-        <li>Roles: Advisor (May 2023 - Present), President (Nov 2021 - May 2023), Treasurer (Sep 2021 - Nov 2021)</li>
-        <li>Recruited and managed a team of dedicated officers, overseeing meetings, educational sessions, and faculty engagement to drive club growth.</li>
-        <li>Increased monthly meeting attendance from 5 to an average of 60 members per session.</li>
-        <li>Spearheaded the organization of a hackathon with 100+ participants and orchestrated multiple successful club events.</li>
-      </ul>
-    </details>
-  </section>
-  
-  <!-- Resume Section with updated content and dropdown -->
-  <section id="resume">
-    <details open>
-      <summary>Resume</summary>
-      <p>You can view my resume below or <a href="resume1.pdf" target="_blank" style="color: #7fff7f;">download it here</a>.</p>
-      
-  </section>
-  
-  <!-- Contact Section with dropdown -->
-  <section id="contact">
-    <details open>
-      <summary>Contact &amp; Links</summary>
-      <p><strong>Email:</strong> <a href="mailto:nyakar@asu.edu">nyakar@asu.edu</a></p>
-      <p><strong>GitHub:</strong> <a href="https://github.com/NoamYakar23">NoamYakar23</a></p>
-      <p><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/">linkedin.com/in/</a></p>
-    </details>
+
+  <!-- About Me & Resume Section (initially hidden) -->
+  <section id="about">
+    <h1>About Me & Resume</h1>
+    <div class="about-container">
+      <!-- Introduction Column -->
+      <div class="about-intro">
+        <h2>Hello, I'm Noam Yakar</h2>
+        <p>
+          I’m a cybersecurity enthusiast and dual-degree student in Computer Science and Mathematics at Arizona State University. My passion spans data engineering, statistical modeling, and advanced cybersecurity challenges.
+        </p>
+        <p>
+          With internships at Nike, ASU, and Radware Inc., I thrive in turning complex challenges into innovative solutions, whether it’s building secure systems or competing in high-stakes CTFs.
+        </p>
+      </div>
+
+      <!-- Resume Highlights Column -->
+      <div class="resume-highlights">
+        <h2>Resume Highlights</h2>
+        <h3>Education</h3>
+        <p>
+          <strong>Arizona State University, Tempe</strong> (2021 – 2025)<br>
+          BSc Computer Science, BSc Mathematics (Statistics Focus) | GPA 4.0
+        </p>
+        <h3>Technical Skills</h3>
+        <ul>
+          <li>Python, R, SAS, C, C++, SQL</li>
+          <li>PowerBI, TensorFlow, Keras, PyTorch, Scikit Learn, Pwntools</li>
+          <li>Cybersecurity: Buffer Overflow, ROP, Shellcode Injection, Kernel Exploitation</li>
+        </ul>
+        <h3>Experience</h3>
+        <ul>
+          <li><strong>Nike</strong> – Data Engineering Intern (Oregon)</li>
+          <li><strong>ASU</strong> – Statistical Modeling Analyst (Arizona)</li>
+          <li><strong>Radware Inc.</strong> – Cybersecurity Data Intern (Tel Aviv)</li>
+        </ul>
+        <h3>Projects</h3>
+        <ul>
+          <li><strong>WarGames:</strong> Secure Gradebook System</li>
+          <li><strong>SneakyPixel:</strong> Hack the Pixels, Hide Your Secrets</li>
+          <li><strong>Privacy Preserving Tool:</strong> Data Anonymization with Vega-Lite &amp; Flask</li>
+        </ul>
+        <p>For full details, <a href="resume1.pdf" target="_blank">download my resume</a>.</p>
+      </div>
+    </div>
   </section>
   
   <!-- Lock Animation Overlay -->
@@ -523,7 +327,7 @@
   <script>
     // Precomputed SHA-256 hash of the correct flag.
     const flagHash = "ea3396d401dba439de8968fdef106c655f58a7031bb2a86e509819db872d815d";
-    // Correct mate-in-2 solution (White moves only), e.g. "Qh6 Qg7"
+    // Correct mate-in-2 solution (White moves only)
     const correctChessSolution = "Qh6 Qg7";
 
     // Function to fire confetti after the animation
@@ -537,32 +341,30 @@
           requestAnimationFrame(frame);
         }
       })();
-      setTimeout(() => { location.href = '#resume'; }, duration);
+      setTimeout(() => { location.href = '#about'; }, duration);
     }
 
-    // Display lock unlocking animation before revealing portfolio and confetti
+    // Display lock unlocking animation and reveal portfolio sections
     function unlockAnimation() {
       const lockDiv = document.getElementById('lockAnimation');
       lockDiv.style.display = 'block';
-      // Animate the lock (for example, change icon and scale)
       setTimeout(() => {
         document.getElementById('lockIcon').textContent = "🔓";
         document.getElementById('lockIcon').style.transform = "scale(1.5)";
         document.getElementById('unlockText').textContent = "Unlocked!";
       }, 1500);
-      // After animation, hide overlay and launch confetti
       setTimeout(() => {
         lockDiv.style.display = 'none';
+        // Reveal the portfolio sections
+        document.getElementById('resume-terminal').style.display = 'block';
+        document.getElementById('about').style.display = 'block';
         celebrate();
       }, 2500);
     }
 
     function revealPortfolio() {
-      // Reveal all sections
-      document.querySelectorAll('section').forEach(section => section.style.display = 'block');
-      // Hide the challenge screen
+      // Hide the challenge and initiate unlocking
       document.getElementById('challenge').style.display = 'none';
-      // Start the lock animation then confetti
       unlockAnimation();
     }
 
@@ -589,6 +391,45 @@
       document.getElementById('cryptoPuzzle').style.display = 'none';
       document.getElementById('chessPuzzle').style.display = 'block';
     }
+
+    // Terminal typing simulation
+    document.addEventListener("DOMContentLoaded", function () {
+      const terminalBody = document.getElementById("terminal-body");
+      const commands = [
+        { command: "whoami", output: "Noam Yakar" },
+        { command: "ls -l", output: "total 4\nlrwxrwxrwx  1 noam  staff  27 Feb 17 12:00 flag -> /super/secret/flag" },
+        { command: "cat flag", output: "pwn.noam{welcome :)}" }
+      ];
+
+      function typeCommand(index) {
+        if (index >= commands.length) return;
+        const cmd = commands[index];
+        const commandLine = document.createElement("div");
+        commandLine.classList.add("command-line");
+        commandLine.innerHTML = `<span class="cyan">Noam@CyberOps:~$</span> <span class="command"></span>`;
+        terminalBody.appendChild(commandLine);
+        const commandElement = commandLine.querySelector(".command");
+        let i = 0;
+        function typeText() {
+          if (i < cmd.command.length) {
+            commandElement.textContent += cmd.command.charAt(i);
+            i++;
+            setTimeout(typeText, 50);
+          } else {
+            setTimeout(() => showOutput(cmd.output), 500);
+          }
+        }
+        function showOutput(output) {
+          const outputLine = document.createElement("div");
+          outputLine.classList.add("output-line");
+          outputLine.innerHTML = output.replace(/\n/g, "<br>");
+          terminalBody.appendChild(outputLine);
+          setTimeout(() => typeCommand(index + 1), 1000);
+        }
+        typeText();
+      }
+      typeCommand(0);
+    });
   </script>
   
   <!-- Hidden Sensitive Data (for CTF challenge) -->
