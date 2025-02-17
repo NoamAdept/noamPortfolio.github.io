@@ -27,7 +27,6 @@
       color: #222;
       line-height: 1.6;
     }
-    
     a {
       color: #007aff;
       text-decoration: none;
@@ -37,7 +36,7 @@
       color: #0051a8;
     }
     
-    /* Header & Navigation (Mac-style clean header) */
+    /* Header & Navigation */
     header {
       background: #ffffff;
       padding: 15px 30px;
@@ -73,51 +72,39 @@
       font-weight: 500;
     }
     
-    /* Challenge Section (Terminal Look, now light) */
-    #challenge {
-      background: #f9f9f9;
-      color: #222;
-      font-family: 'Courier New', Courier, monospace;
-      border: 1px solid #ddd;
-      padding: 20px;
-      margin: 40px auto;
-      max-width: 800px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      border-radius: 8px;
-    }
-    
-    /* Terminal Styling (Mac iTerm Look, light version) */
+    /* Terminal Styling (Mac iTerm Look) */
     #terminal {
-      background-color: #f9f9f9;
-      color: #222;
+      background-color: #1a1a1a;
+      color: #33ff99;
       font-family: "Courier New", Courier, monospace;
       padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      max-width: 650px;
+      border-radius: 10px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+      max-width: 750px;
       margin: 40px auto;
       overflow: hidden;
     }
     .terminal-header {
       display: flex;
       align-items: center;
-      background: #eaeaea;
-      padding: 8px 12px;
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
+      background: #252525;
+      padding: 10px 15px;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
       justify-content: space-between;
+      border-bottom: 2px solid #333;
     }
     .terminal-title {
-      color: #666;
+      color: #ccc;
       font-size: 0.9rem;
     }
     .buttons {
       display: flex;
-      gap: 6px;
+      gap: 8px;
     }
     .buttons span {
-      width: 12px;
-      height: 12px;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
       display: inline-block;
     }
@@ -125,17 +112,26 @@
     .yellow { background-color: #ffbd2e; }
     .green { background-color: #27c93f; }
     .terminal-body {
-      padding: 10px;
-      font-size: 1.1rem;
+      padding: 15px;
+      font-size: 1.2rem;
       white-space: pre-wrap;
     }
-    .command-line,
-    .output-line {
-      margin-top: 5px;
+    .command-line, .output-line {
+      margin-top: 8px;
     }
-    .cyan { color: #00aaff; }
+    .cyan { color: #00ffff; }
+    .terminal-input {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #ccc;
+      font-family: inherit;
+      font-size: 1.2rem;
+      outline: none;
+      color: inherit;
+      margin-left: 10px;
+    }
     
-    /* About Me & Resume Section Styling */
+    /* About Me & Resume Section (Hidden Until Challenge Solved) */
     #about {
       max-width: 900px;
       margin: 40px auto;
@@ -144,6 +140,7 @@
       border: 1px solid #ddd;
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      display: none;
     }
     #about h1,
     #about h2,
@@ -168,17 +165,7 @@
       margin-bottom: 15px;
     }
     
-    /* Footer */
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #ffffff;
-      border-top: 1px solid #ddd;
-      margin-top: 40px;
-      color: #666;
-    }
-    
-    /* Lock Animation Overlay (Mac-style overlay) */
+    /* Lock Animation Overlay */
     #lockAnimation {
       display: none;
       position: fixed;
@@ -198,14 +185,19 @@
       transition: transform 0.5s ease;
     }
     
-    /* Initially hide the portfolio sections */
-    #resume-terminal, #about {
-      display: none;
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #ffffff;
+      border-top: 1px solid #ddd;
+      margin-top: 40px;
+      color: #666;
     }
   </style>
 </head>
 <body>
-  <!-- Header with Navigation -->
+  <!-- Header with Navigation (Resume remains locked until challenge solved) -->
   <header>
     <nav>
       <div class="logo">
@@ -213,60 +205,25 @@
         <span>Noam Yakar</span>
       </div>
       <ul>
-        <li><a href="#challenge">CTF</a></li>
-        <li><a href="#resume-terminal">Terminal</a></li>
-        <li><a href="#about">About Me & Resume</a></li>
+        <li><a href="#terminal">CTF</a></li>
       </ul>
     </nav>
   </header>
   
-  <!-- Flag Challenge Section -->
-  <div id="challenge">
-    <h2>Access the Portfolio</h2>
-    <p>You can solve the original CTF <strong>OR</strong> answer a quick chess puzzle.</p>
-    
-    <!-- Original Crypto Puzzle -->
-    <div id="cryptoPuzzle">
-      <h3>1) Find the Hidden Flag</h3>
-      <p>Public &amp; Private Key are hidden in the source. Decrypt the flag and enter it below:</p>
-      <input type="text" id="flagInput" placeholder="Enter decrypted flag" />
-      <br>
-      <button class="button" onclick="checkFlag()">Submit</button>
-      <p id="message"></p>
-    </div>
-    
-    <!-- Button to switch to Chess Puzzle -->
-    <button class="button" onclick="showChessPuzzle()">I'm too lazy</button>
-    
-    <!-- Chess Puzzle -->
-    <div id="chessPuzzle" style="display: none;">
-      <h3>2) Mate in 2</h3>
-      <p>White to move. Enter the moves (for White only) separated by spaces</p>
-      <img src="chess.png" alt="Chess Puzzle" style="max-width: 100%; height: auto; margin: 10px 0;" />
-      <br>
-      <input type="text" id="chessMovesInput" placeholder="e.g. Qh6 Qg7" />
-      <br>
-      <button class="button" onclick="checkChessSolution()">Check Moves</button>
-      <p id="chessMessage"></p>
-    </div>
-  </div>
-  
-  <!-- Mac iTerm-Style Terminal Section (initially hidden) -->
-  <section id="resume-terminal">
-    <div id="terminal">
-      <div class="terminal-header">
-        <div class="buttons">
-          <span class="red"></span>
-          <span class="yellow"></span>
-          <span class="green"></span>
-        </div>
-        <div class="terminal-title">Noam@CyberOps — bash — 80x24</div>
+  <!-- Terminal Section (The entire interaction happens here) -->
+  <section id="terminal">
+    <div class="terminal-header">
+      <div class="buttons">
+        <span class="red"></span>
+        <span class="yellow"></span>
+        <span class="green"></span>
       </div>
-      <div class="terminal-body" id="terminal-body"></div>
+      <div class="terminal-title">Noam@CyberOps — bash — 80x24</div>
     </div>
+    <div class="terminal-body" id="terminal-body"></div>
   </section>
-
-  <!-- About Me & Resume Section (initially hidden) -->
+  
+  <!-- About Me & Resume Section (Revealed after challenge solved) -->
   <section id="about">
     <h1>About Me & Resume</h1>
     <div class="about-container">
@@ -280,7 +237,6 @@
           With internships at Nike, ASU, and Radware Inc., I thrive in turning complex challenges into innovative solutions, whether it’s building secure systems or competing in high-stakes CTFs.
         </p>
       </div>
-
       <!-- Resume Highlights Column -->
       <div class="resume-highlights">
         <h2>Resume Highlights</h2>
@@ -318,19 +274,197 @@
     <div id="unlockText" style="font-size: 24px; margin-top: 20px;">Unlocking...</div>
   </div>
   
-  <!-- Footer -->
-  <footer>
-    <p>&copy; 2025 Noam Yakar</p>
-  </footer>
-  
-  <!-- Scripts -->
+  <!-- Terminal Interaction Script -->
   <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const terminalBody = document.getElementById("terminal-body");
+      
+      // Initial simulated commands before the challenge menu:
+      const initialCommands = [
+        { command: "whoami", output: "Noam Yakar" },
+        { command: "ls -l", output: "total 4\nlrwxrwxrwx  1 noam  staff  27 Feb 17 12:00 flag -> /super/secret/flag" },
+        { command: "cat flag", requiresInput: true, prompt: "Want to play a game? [Y / N]" }
+      ];
+      
+      let cmdIndex = 0;
+      
+      function typeCommand(index, commandObj, callback) {
+        const commandLine = document.createElement("div");
+        commandLine.classList.add("command-line");
+        commandLine.innerHTML = `<span class="cyan">Noam@CyberOps:~$</span> <span class="command"></span>`;
+        terminalBody.appendChild(commandLine);
+        const commandEl = commandLine.querySelector(".command");
+        let i = 0;
+        
+        function typeText() {
+          if (i < commandObj.command.length) {
+            commandEl.textContent += commandObj.command.charAt(i);
+            i++;
+            setTimeout(typeText, 50);
+          } else {
+            // After command is typed:
+            if (commandObj.requiresInput) {
+              displayInputPrompt(commandObj.prompt, callback);
+            } else {
+              setTimeout(() => {
+                displayOutput(commandObj.output, callback);
+              }, 500);
+            }
+          }
+        }
+        typeText();
+      }
+      
+      function displayOutput(text, callback) {
+        const outputLine = document.createElement("div");
+        outputLine.classList.add("output-line");
+        outputLine.innerHTML = text.replace(/\n/g, "<br>");
+        terminalBody.appendChild(outputLine);
+        if (callback) setTimeout(callback, 1000);
+      }
+      
+      // Display an input prompt with the given promptText.
+      function displayInputPrompt(promptText, callback) {
+        const promptLine = document.createElement("div");
+        promptLine.classList.add("output-line");
+        promptLine.innerHTML = promptText;
+        terminalBody.appendChild(promptLine);
+        const inputField = document.createElement("input");
+        inputField.type = "text";
+        inputField.className = "terminal-input";
+        promptLine.appendChild(inputField);
+        inputField.focus();
+        inputField.addEventListener("keydown", function(e) {
+          if (e.key === "Enter") {
+            const userInput = inputField.value.trim().toUpperCase();
+            inputField.disabled = true;
+            if (callback) callback(userInput);
+          }
+        });
+      }
+      
+      // Run the initial sequence of commands.
+      function runInitialCommands() {
+        if (cmdIndex < initialCommands.length) {
+          typeCommand(cmdIndex, initialCommands[cmdIndex], function(userResponse) {
+            // For the last command ("cat flag") which requires input:
+            if (initialCommands[cmdIndex].requiresInput) {
+              if (userResponse === "Y") {
+                // Display challenge selection menu.
+                displayChallengeMenu();
+              } else {
+                displayOutput("Maybe next time.");
+              }
+            } else {
+              cmdIndex++;
+              runInitialCommands();
+            }
+          });
+        }
+      }
+      
+      runInitialCommands();
+      
+      // Display a menu for selecting the challenge.
+      function displayChallengeMenu() {
+        displayOutput("Select Challenge: Type '1' for Crypto Challenge or '2' for Chess Puzzle.", function() {
+          displayInputPrompt("Your Choice:", function(choice) {
+            if (choice === "1") {
+              // Clear the terminal and show crypto challenge
+              terminalBody.innerHTML = "";
+              displayCryptoPuzzle();
+            } else if (choice === "2") {
+              // Clear the terminal and show chess challenge
+              terminalBody.innerHTML = "";
+              displayChessPuzzle();
+            } else {
+              displayOutput("Invalid choice. Please type '1' or '2'.", displayChallengeMenu);
+            }
+          });
+        });
+      }
+      
+      // Display the crypto (hash) challenge.
+      function displayCryptoPuzzle() {
+        displayOutput("Crypto Challenge:", function() {
+          displayOutput("Public & Private keys are hidden in the source. Decrypt the flag and enter it below:", function() {
+            displayInputPrompt("Enter decrypted flag:", function(answer) {
+              // Check flag (using precomputed hash)
+              const inputHash = CryptoJS.SHA256(answer).toString();
+              if (inputHash === flagHash) {
+                displayOutput("Correct flag!");
+                unlockPortfolio();
+              } else {
+                displayOutput("Incorrect flag. Try again.");
+                displayCryptoPuzzle();
+              }
+            });
+          });
+        });
+      }
+      
+      // Display the chess challenge (ASCII board + puzzle).
+      function displayChessPuzzle() {
+        displayOutput("Chess Challenge:", function() {
+          // ASCII board representation
+          const asciiBoard = 
+`Mate in 2. White to move. Here's the ASCII board:
+
+   -------------------------
+8 | .  .  .  .  .  r  k  . |
+7 | p  p  .  .  .  p  .  p |
+6 | .  .  .  .  .  P  p  . |
+5 | .  .  .  .  .  .  Q  . |
+4 | q  .  .  .  .  .  .  . |
+3 | .  .  .  .  .  .  .  . |
+2 | P  .  .  .  .  P  P  P |
+1 | .  .  .  .  .  R  K  . |
+   -------------------------
+     a  b  c  d  e  f  g  h
+
+Enter your moves (White only), separated by spaces:`;
+          
+          displayOutput(asciiBoard, function() {
+            displayInputPrompt("e.g. Ka2 Ka3", function(moves) {
+              // Normalize user input
+              const movesNormalized = moves.trim().toLowerCase();
+              // Accept either Qh6 Qg7 OR Qg6 Qh7
+              if (movesNormalized === "qh6 qg7" || movesNormalized === "qg6 qh7") {
+                displayOutput("Correct moves!");
+                unlockPortfolio();
+              } else {
+                displayOutput("Wrong solution. Try again.");
+                displayChessPuzzle();
+              }
+            });
+          });
+        });
+      }
+    });
+    
     // Precomputed SHA-256 hash of the correct flag.
     const flagHash = "ea3396d401dba439de8968fdef106c655f58a7031bb2a86e509819db872d815d";
-    // Correct mate-in-2 solution (White moves only)
-    const correctChessSolution = "Qh6 Qg7";
-
-    // Function to fire confetti after the animation
+    // We'll accept either Qh6 Qg7 or Qg6 Qh7 as correct moves
+    // (logic is in displayChessPuzzle())
+    
+    // Unlocking animation and reveal resume.
+    function unlockPortfolio() {
+      const lockDiv = document.getElementById('lockAnimation');
+      lockDiv.style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('lockIcon').textContent = "🔓";
+        document.getElementById('lockIcon').style.transform = "scale(1.5)";
+        document.getElementById('unlockText').textContent = "Unlocked!";
+      }, 1500);
+      setTimeout(() => {
+        lockDiv.style.display = 'none';
+        // Reveal the resume section while the terminal remains visible.
+        document.getElementById("about").style.display = "block";
+        celebrate();
+      }, 2500);
+    }
+    
+    // Confetti animation function.
     function celebrate() {
       const duration = 3000;
       const end = Date.now() + duration;
@@ -341,95 +475,7 @@
           requestAnimationFrame(frame);
         }
       })();
-      setTimeout(() => { location.href = '#about'; }, duration);
     }
-
-    // Display lock unlocking animation and reveal portfolio sections
-    function unlockAnimation() {
-      const lockDiv = document.getElementById('lockAnimation');
-      lockDiv.style.display = 'block';
-      setTimeout(() => {
-        document.getElementById('lockIcon').textContent = "🔓";
-        document.getElementById('lockIcon').style.transform = "scale(1.5)";
-        document.getElementById('unlockText').textContent = "Unlocked!";
-      }, 1500);
-      setTimeout(() => {
-        lockDiv.style.display = 'none';
-        // Reveal the portfolio sections
-        document.getElementById('resume-terminal').style.display = 'block';
-        document.getElementById('about').style.display = 'block';
-        celebrate();
-      }, 2500);
-    }
-
-    function revealPortfolio() {
-      // Hide the challenge and initiate unlocking
-      document.getElementById('challenge').style.display = 'none';
-      unlockAnimation();
-    }
-
-    function checkFlag() {
-      const inputFlag = document.getElementById('flagInput').value.trim();
-      const inputHash = CryptoJS.SHA256(inputFlag).toString();
-      if (inputHash === flagHash) {
-        revealPortfolio();
-      } else {
-        document.getElementById('message').textContent = "Incorrect flag. Try again!";
-      }
-    }
-
-    function checkChessSolution() {
-      const moves = document.getElementById('chessMovesInput').value.trim();
-      if (moves === correctChessSolution) {
-        revealPortfolio();
-      } else {
-        document.getElementById('chessMessage').textContent = "Wrong solution. Try again!";
-      }
-    }
-
-    function showChessPuzzle() {
-      document.getElementById('cryptoPuzzle').style.display = 'none';
-      document.getElementById('chessPuzzle').style.display = 'block';
-    }
-
-    // Terminal typing simulation
-    document.addEventListener("DOMContentLoaded", function () {
-      const terminalBody = document.getElementById("terminal-body");
-      const commands = [
-        { command: "whoami", output: "Noam Yakar" },
-        { command: "ls -l", output: "total 4\nlrwxrwxrwx  1 noam  staff  27 Feb 17 12:00 flag -> /super/secret/flag" },
-        { command: "cat flag", output: "pwn.noam{welcome :)}" }
-      ];
-
-      function typeCommand(index) {
-        if (index >= commands.length) return;
-        const cmd = commands[index];
-        const commandLine = document.createElement("div");
-        commandLine.classList.add("command-line");
-        commandLine.innerHTML = `<span class="cyan">Noam@CyberOps:~$</span> <span class="command"></span>`;
-        terminalBody.appendChild(commandLine);
-        const commandElement = commandLine.querySelector(".command");
-        let i = 0;
-        function typeText() {
-          if (i < cmd.command.length) {
-            commandElement.textContent += cmd.command.charAt(i);
-            i++;
-            setTimeout(typeText, 50);
-          } else {
-            setTimeout(() => showOutput(cmd.output), 500);
-          }
-        }
-        function showOutput(output) {
-          const outputLine = document.createElement("div");
-          outputLine.classList.add("output-line");
-          outputLine.innerHTML = output.replace(/\n/g, "<br>");
-          terminalBody.appendChild(outputLine);
-          setTimeout(() => typeCommand(index + 1), 1000);
-        }
-        typeText();
-      }
-      typeCommand(0);
-    });
   </script>
   
   <!-- Hidden Sensitive Data (for CTF challenge) -->
