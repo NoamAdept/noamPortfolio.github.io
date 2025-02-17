@@ -6,7 +6,9 @@
   <title>Noam Yakar - Cybersecurity Portfolio</title>
   
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P|Roboto:400,500,700&display=swap" rel="stylesheet">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <!-- External Libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/3.0.0/jsencrypt.min.js"></script>
@@ -15,35 +17,45 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   
   <style>
+    /* 
+      Synthwave + Retro Mac Style for Terminal and Header
+    */
+    
     /* Global Reset & Fonts */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
+    /* Background with a synthwave gradient vibe */
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
-      background-color: #ffffff;
-      color: #222;
+      font-family: 'Press Start 2P', 'Roboto', sans-serif;
+      background: linear-gradient(120deg, #2A006E 0%, #000000 100%);
+      color: #fff;
       line-height: 1.6;
+      background-attachment: fixed;
+      background-size: cover;
+      min-height: 100vh;
     }
+    
     a {
-      color: #007aff;
+      color: #ff6ff8;
       text-decoration: none;
       transition: color 0.3s ease;
     }
     a:hover {
-      color: #0051a8;
+      color: #ff00de;
     }
     
-    /* Header & Navigation */
+    /* Header & Navigation (Retro Mac-style top bar) */
     header {
-      background: #ffffff;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(6px);
       padding: 15px 30px;
       position: sticky;
       top: 0;
       z-index: 1000;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.2);
     }
     nav {
       display: flex;
@@ -53,13 +65,15 @@
     .logo {
       display: flex;
       align-items: center;
+      font-size: 1.1rem;
+      color: #ff6ff8;
     }
     .logo img {
-      width: 80px;
-      height: 80px;
-      border-radius: 12px;
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
       margin-right: 10px;
-      border: 1px solid #ddd;
+      border: 2px solid #ff6ff8;
     }
     nav ul {
       list-style: none;
@@ -70,29 +84,31 @@
     }
     nav ul li a {
       font-weight: 500;
+      color: #ff6ff8;
     }
     
-    /* Terminal Styling (Mac iTerm Look) */
+    /* Terminal Styling (Synthwave Retro Look) */
     #terminal {
-      background-color: #1a1a1a;
-      color: #33ff99;
+      background: rgba(0, 0, 0, 0.7);
+      color: #00f5ff;
       font-family: "Courier New", Courier, monospace;
       padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 20px rgba(255, 0, 255, 0.2), 0 0 50px rgba(0, 255, 255, 0.1);
       max-width: 750px;
       margin: 40px auto;
       overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.2);
     }
     .terminal-header {
       display: flex;
       align-items: center;
-      background: #252525;
+      background: rgba(255, 255, 255, 0.1);
       padding: 10px 15px;
       border-top-left-radius: 10px;
       border-top-right-radius: 10px;
       justify-content: space-between;
-      border-bottom: 2px solid #333;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.2);
     }
     .terminal-title {
       color: #ccc;
@@ -113,7 +129,7 @@
     .green { background-color: #27c93f; }
     .terminal-body {
       padding: 15px;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       white-space: pre-wrap;
     }
     .command-line, .output-line {
@@ -125,27 +141,31 @@
       border: none;
       border-bottom: 1px solid #ccc;
       font-family: inherit;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       outline: none;
       color: inherit;
       margin-left: 10px;
     }
     
-    /* About Me & Resume Section (Hidden Until Challenge Solved) */
+    /* About Me & Resume Section (Professional Look) */
     #about {
       max-width: 900px;
       margin: 40px auto;
       padding: 20px;
-      background: #ffffff;
+      background: #fff;
+      color: #333;
       border: 1px solid #ddd;
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       display: none;
+      font-size: 1rem;
+      font-family: 'Roboto', sans-serif;
     }
     #about h1,
     #about h2,
     #about h3 {
       margin-bottom: 10px;
+      color: #222;
     }
     .about-container {
       display: flex;
@@ -153,16 +173,43 @@
       gap: 20px;
       margin-top: 20px;
     }
-    .about-intro,
+    .about-intro {
+      flex: 1 1 300px;
+    }
+    .about-intro img {
+      width: 200px;
+      height: auto;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
     .resume-highlights {
       flex: 1 1 300px;
     }
-    .resume-highlights ul {
-      list-style: disc inside;
-      margin-left: 20px;
+    .resume-highlights h2 {
+      margin-bottom: 10px;
     }
-    .resume-highlights p {
-      margin-bottom: 15px;
+    .resume-highlights iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+    }
+    
+    /* Social Links Section (Hidden Until Unlocked) */
+    #social {
+      display: none;
+      text-align: center;
+      margin: 40px auto;
+      font-size: 1rem;
+    }
+    #social a {
+      margin: 0 10px;
+      color: #ff6ff8;
+      text-decoration: none;
+      font-size: 1.5rem;
+    }
+    #social a:hover {
+      color: #ff00de;
     }
     
     /* Lock Animation Overlay */
@@ -173,12 +220,12 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(10, 0, 40, 0.95);
       z-index: 2000;
       text-align: center;
       padding-top: 30%;
-      color: #222;
-      font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+      color: #fff;
+      font-family: 'Press Start 2P', sans-serif;
     }
     #lockIcon {
       font-size: 80px;
@@ -189,23 +236,25 @@
     footer {
       text-align: center;
       padding: 20px;
-      background: #ffffff;
-      border-top: 1px solid #ddd;
+      background: rgba(0, 0, 0, 0.5);
+      border-top: 2px solid rgba(255, 255, 255, 0.2);
       margin-top: 40px;
-      color: #666;
+      color: #fff;
+      font-family: 'Press Start 2P', sans-serif;
     }
   </style>
 </head>
 <body>
-  <!-- Header with Navigation (Resume remains locked until challenge solved) -->
+  <!-- Header with Navigation -->
   <header>
     <nav>
       <div class="logo">
         <img src="profile.png" alt="Profile Picture" />
-        <span>Noam Yakar</span>
+        <span>Welcome!</span>
       </div>
       <ul>
         <li><a href="#terminal">CTF</a></li>
+        <li><a href="projects.html">Projects</a></li>
       </ul>
     </nav>
   </header>
@@ -223,13 +272,21 @@
     <div class="terminal-body" id="terminal-body"></div>
   </section>
   
+  <!-- Social Links Section (Appears after unlocking) -->
+  <section id="social">
+    <h2>Find Me On</h2>
+    <a href="https://github.com/NoamAdept" target="_blank"><i class="fab fa-github"></i></a>
+    <a href="https://www.linkedin.com/in/noam-yakar/" target="_blank"><i class="fab fa-linkedin"></i></a>
+  </section>
+  
   <!-- About Me & Resume Section (Revealed after challenge solved) -->
   <section id="about">
     <h1>About Me & Resume</h1>
     <div class="about-container">
-      <!-- Introduction Column -->
+      <!-- About Me Column with Picture -->
       <div class="about-intro">
-        <h2>Hello, I'm Noam Yakar</h2>
+        <img src="profile2.jpg" alt="Noam Yakar" />
+        <h2>Hi, I'm Noam!</h2>
         <p>
           I’m a cybersecurity enthusiast and dual-degree student in Computer Science and Mathematics at Arizona State University. My passion spans data engineering, statistical modeling, and advanced cybersecurity challenges.
         </p>
@@ -237,33 +294,11 @@
           With internships at Nike, ASU, and Radware Inc., I thrive in turning complex challenges into innovative solutions, whether it’s building secure systems or competing in high-stakes CTFs.
         </p>
       </div>
-      <!-- Resume Highlights Column -->
+      <!-- Resume Preview Column -->
       <div class="resume-highlights">
-        <h2>Resume Highlights</h2>
-        <h3>Education</h3>
-        <p>
-          <strong>Arizona State University, Tempe</strong> (2021 – 2025)<br>
-          BSc Computer Science, BSc Mathematics (Statistics Focus) | GPA 4.0
-        </p>
-        <h3>Technical Skills</h3>
-        <ul>
-          <li>Python, R, SAS, C, C++, SQL</li>
-          <li>PowerBI, TensorFlow, Keras, PyTorch, Scikit Learn, Pwntools</li>
-          <li>Cybersecurity: Buffer Overflow, ROP, Shellcode Injection, Kernel Exploitation</li>
-        </ul>
-        <h3>Experience</h3>
-        <ul>
-          <li><strong>Nike</strong> – Data Engineering Intern (Oregon)</li>
-          <li><strong>ASU</strong> – Statistical Modeling Analyst (Arizona)</li>
-          <li><strong>Radware Inc.</strong> – Cybersecurity Data Intern (Tel Aviv)</li>
-        </ul>
-        <h3>Projects</h3>
-        <ul>
-          <li><strong>WarGames:</strong> Secure Gradebook System</li>
-          <li><strong>SneakyPixel:</strong> Hack the Pixels, Hide Your Secrets</li>
-          <li><strong>Privacy Preserving Tool:</strong> Data Anonymization with Vega-Lite &amp; Flask</li>
-        </ul>
-        <p>For full details, <a href="resume1.pdf" target="_blank">download my resume</a>.</p>
+        <h2>Resume</h2>
+        <!-- Embedded PDF preview of the resume -->
+        <iframe src="resume1.pdf"></iframe>
       </div>
     </div>
   </section>
@@ -282,8 +317,8 @@
       // Initial simulated commands before the challenge menu:
       const initialCommands = [
         { command: "whoami", output: "Noam Yakar" },
-        { command: "ls -l", output: "total 4\nlrwxrwxrwx  1 noam  staff  27 Feb 17 12:00 flag -> /super/secret/flag" },
-        { command: "cat flag", requiresInput: true, prompt: "Want to play a game? [Y / N]" }
+        { command: "ls -l", output: "total 4<br>lrwxrwxrwx  1 noam  staff  27 Feb 17 12:00 ctf -> /super/secret/ctf" },
+        { command: "./ctf", requiresInput: true, prompt: "Shall we play a game? [Y / N]" }
       ];
       
       let cmdIndex = 0;
@@ -302,7 +337,6 @@
             i++;
             setTimeout(typeText, 50);
           } else {
-            // After command is typed:
             if (commandObj.requiresInput) {
               displayInputPrompt(commandObj.prompt, callback);
             } else {
@@ -318,12 +352,11 @@
       function displayOutput(text, callback) {
         const outputLine = document.createElement("div");
         outputLine.classList.add("output-line");
-        outputLine.innerHTML = text.replace(/\n/g, "<br>");
+        outputLine.innerHTML = text;
         terminalBody.appendChild(outputLine);
         if (callback) setTimeout(callback, 1000);
       }
       
-      // Display an input prompt with the given promptText.
       function displayInputPrompt(promptText, callback) {
         const promptLine = document.createElement("div");
         promptLine.classList.add("output-line");
@@ -343,14 +376,11 @@
         });
       }
       
-      // Run the initial sequence of commands.
       function runInitialCommands() {
         if (cmdIndex < initialCommands.length) {
           typeCommand(cmdIndex, initialCommands[cmdIndex], function(userResponse) {
-            // For the last command ("cat flag") which requires input:
             if (initialCommands[cmdIndex].requiresInput) {
               if (userResponse === "Y") {
-                // Display challenge selection menu.
                 displayChallengeMenu();
               } else {
                 displayOutput("Maybe next time.");
@@ -365,16 +395,13 @@
       
       runInitialCommands();
       
-      // Display a menu for selecting the challenge.
       function displayChallengeMenu() {
         displayOutput("Select Challenge: Type '1' for Crypto Challenge or '2' for Chess Puzzle.", function() {
           displayInputPrompt("Your Choice:", function(choice) {
             if (choice === "1") {
-              // Clear the terminal and show crypto challenge
               terminalBody.innerHTML = "";
               displayCryptoPuzzle();
             } else if (choice === "2") {
-              // Clear the terminal and show chess challenge
               terminalBody.innerHTML = "";
               displayChessPuzzle();
             } else {
@@ -384,29 +411,40 @@
         });
       }
       
-      // Display the crypto (hash) challenge.
       function displayCryptoPuzzle() {
         displayOutput("Crypto Challenge:", function() {
           displayOutput("Public & Private keys are hidden in the source. Decrypt the flag and enter it below:", function() {
             displayInputPrompt("Enter decrypted flag:", function(answer) {
-              // Check flag (using precomputed hash)
               const inputHash = CryptoJS.SHA256(answer).toString();
               if (inputHash === flagHash) {
                 displayOutput("Correct flag!");
                 unlockPortfolio();
               } else {
-                displayOutput("Incorrect flag. Try again.");
-                displayCryptoPuzzle();
+                displayOutput("Incorrect flag. [R]etry or [S]witch to Chess?", function() {
+                  displayInputPrompt("R or S:", function(choice) {
+                    if (choice === "R") {
+                      terminalBody.innerHTML = "";
+                      displayCryptoPuzzle();
+                    } else if (choice === "S") {
+                      terminalBody.innerHTML = "";
+                      displayChessPuzzle();
+                    } else {
+                      displayOutput("Invalid choice. Let's try again!");
+                      setTimeout(() => {
+                        terminalBody.innerHTML = "";
+                        displayCryptoPuzzle();
+                      }, 1500);
+                    }
+                  });
+                });
               }
             });
           });
         });
       }
       
-      // Display the chess challenge (ASCII board + puzzle).
       function displayChessPuzzle() {
         displayOutput("Chess Challenge:", function() {
-          // ASCII board representation
           const asciiBoard = 
 `Mate in 2. White to move. Here's the ASCII board:
 
@@ -423,18 +461,30 @@
      a  b  c  d  e  f  g  h
 
 Enter your moves (White only), separated by spaces:`;
-          
           displayOutput(asciiBoard, function() {
-            displayInputPrompt("e.g. Ka2 Ka3", function(moves) {
-              // Normalize user input
+            displayInputPrompt("e.g. Qh6 Qg7", function(moves) {
               const movesNormalized = moves.trim().toLowerCase();
-              // Accept either Qh6 Qg7 OR Qg6 Qh7
               if (movesNormalized === "qh6 qg7" || movesNormalized === "qg6 qh7") {
                 displayOutput("Correct moves!");
                 unlockPortfolio();
               } else {
-                displayOutput("Wrong solution. Try again.");
-                displayChessPuzzle();
+                displayOutput("Wrong solution. [R]etry or [S]witch to Crypto?", function() {
+                  displayInputPrompt("R or S:", function(choice) {
+                    if (choice === "R") {
+                      terminalBody.innerHTML = "";
+                      displayChessPuzzle();
+                    } else if (choice === "S") {
+                      terminalBody.innerHTML = "";
+                      displayCryptoPuzzle();
+                    } else {
+                      displayOutput("Invalid choice. Let's try again!");
+                      setTimeout(() => {
+                        terminalBody.innerHTML = "";
+                        displayChessPuzzle();
+                      }, 1500);
+                    }
+                  });
+                });
               }
             });
           });
@@ -442,12 +492,8 @@ Enter your moves (White only), separated by spaces:`;
       }
     });
     
-    // Precomputed SHA-256 hash of the correct flag.
     const flagHash = "ea3396d401dba439de8968fdef106c655f58a7031bb2a86e509819db872d815d";
-    // We'll accept either Qh6 Qg7 or Qg6 Qh7 as correct moves
-    // (logic is in displayChessPuzzle())
     
-    // Unlocking animation and reveal resume.
     function unlockPortfolio() {
       const lockDiv = document.getElementById('lockAnimation');
       lockDiv.style.display = 'block';
@@ -458,13 +504,12 @@ Enter your moves (White only), separated by spaces:`;
       }, 1500);
       setTimeout(() => {
         lockDiv.style.display = 'none';
-        // Reveal the resume section while the terminal remains visible.
         document.getElementById("about").style.display = "block";
+        document.getElementById("social").style.display = "block";
         celebrate();
       }, 2500);
     }
     
-    // Confetti animation function.
     function celebrate() {
       const duration = 3000;
       const end = Date.now() + duration;
@@ -486,5 +531,9 @@ Enter your moves (White only), separated by spaces:`;
     "publicKey": "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJAmtdbxKFjK2bhEYkuryHhjHM\nrqKX8NXd8PL/9KPZCxDk8tce4qWPBOEJp9GLX4yBKyAN68MhDksvJzjcm4GtmnLv\ngpA80VJYYIneKraU6T85x0/pzq/U/pA8ngJMVWFRrPeAA+N1rGHFVBEA/L+jNc96\nbIcqwAlKBh4AQb0baQIDAQAB\n-----END PUBLIC KEY-----"
   }
   </script>
+  
+  <footer>
+    <p>&copy; 2025 Retro Portfolio - Noam Yakar</p>
+  </footer>
 </body>
 </html>
