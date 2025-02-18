@@ -13,4 +13,4 @@ An **interactive retro-themed** cybersecurity portfolio with **CTF challenges, e
 - **Libraries:** CryptoJS, JSEncrypt, Confetti.js  
 
 ## 🚀 Live Demo  
-🔗 **[Visit Here](https://noamadept.github.io/)**  
+🔗 **[Visit Here]([https://noamadept.github.io/](https://noamadept.github.io/noamPortfolio.github.io/))**  
