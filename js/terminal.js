@@ -32,7 +32,7 @@
   ];
 
   const state = {
-    unlocked: localStorage.getItem(STORAGE_KEY) === "1",
+    unlocked: true,
     mode: "boot", // boot | shell | challenge-menu | crypto | chess
     history: [],
   };
@@ -56,21 +56,14 @@
 
   function syncChrome() {
     if (statusPill) {
-      statusPill.textContent = isUnlocked() ? "ACCESS GRANTED" : "LOCKED";
-      statusPill.classList.toggle("unlocked", isUnlocked());
+      statusPill.textContent = "ONLINE";
+      statusPill.classList.add("unlocked");
     }
     if (projectsLink) {
-      projectsLink.classList.toggle("locked", !isUnlocked());
-      projectsLink.setAttribute(
-        "title",
-        isUnlocked()
-          ? "Open projects decompiler"
-          : "Solve the CTF or run unlock (if cleared) to access"
-      );
+      projectsLink.classList.remove("locked");
+      projectsLink.setAttribute("title", "FILEZ — warez board");
     }
-    if (dossier) {
-      dossier.classList.toggle("open", isUnlocked());
-    }
+    dossier?.classList.add("open");
   }
 
   function scrollTerminal() {
@@ -87,7 +80,7 @@
   }
 
   function promptHtml() {
-    return '<span class="prompt"><span class="host">noam</span>@cyberops:<span class="dim">~</span>$</span>';
+    return '<span class="prompt"><span class="host">guest</span>@bbs:<span class="dim">/node23</span>&gt;</span>';
   }
 
   function typeCommand(cmd, then) {
@@ -135,7 +128,7 @@
   function startShell() {
     state.mode = "shell";
     appendLine(
-      '<span class="hint">Type <span class="ok">help</span> for commands. Try <span class="ok">ctf</span> to begin.</span>'
+      '<span class="hint">Type <span class="ok">help</span> · <span class="ok">filez</span> · <span class="ok">mail</span> · <span class="ok">games</span> (optional)</span>'
     );
     shellPrompt();
   }
@@ -158,38 +151,39 @@
         shellPrompt();
         break;
       case "help":
+      case "?":
+      case "menu":
         appendLine(
           [
-            "Available commands:",
-            "  <span class='ok'>whoami</span>          — identity",
-            "  <span class='ok'>ls</span>              — list filesystem",
-            "  <span class='ok'>cat &lt;file&gt;</span>      — read a file",
-            "  <span class='ok'>ctf</span>             — launch challenge menu",
-            "  <span class='ok'>hint</span>            — soft nudge",
-            "  <span class='ok'>projects</span>        — open decompiler (if unlocked)",
-            "  <span class='ok'>resume</span> / <span class='ok'>about</span> — jump to profile",
-            "  <span class='ok'>clear</span>           — clear screen",
-            "  <span class='ok'>status</span>          — access state",
-            "  <span class='ok'>reset</span>           — clear unlock + re-lock",
-            "  <span class='ok'>ascii-chess</span>     — text board for chess CTF",
+            "CYBEROPS BBS — commands",
+            "  <span class='ok'>whoami</span>       — handle",
+            "  <span class='ok'>ls</span> / <span class='ok'>dir</span>     — filez on this node",
+            "  <span class='ok'>cat &lt;file&gt;</span>   — read",
+            "  <span class='ok'>filez</span>        — warez board (projects)",
+            "  <span class='ok'>mail</span>         — about / resume",
+            "  <span class='ok'>dumpster</span>    — rummage (same as globe node)",
+            "  <span class='ok'>phone</span>        — payphone",
+            "  <span class='ok'>games</span>        — optional chess / crypto (not a gate)",
+            "  <span class='ok'>planet</span>       — HACK THE PLANET",
+            "  <span class='ok'>clear</span>        — wipe screen",
           ].join("\n")
         );
         shellPrompt();
         break;
       case "whoami":
-        appendLine("Noam Yakar — CyberOps / CS + Math @ ASU");
+        appendLine("noam // dual CS+Math @ ASU // nike · radware · junkyard cryptographer");
         shellPrompt();
         break;
       case "ls":
+      case "dir":
         appendLine(
           [
-            "drwxr-xr-x  ctf/",
-            "-rw-r--r--  about.txt",
-            "-rw-r--r--  resume.pdf",
-            isUnlocked()
-              ? "drwxr-xr-x  projects/"
-              : "d---------  projects/  <span class='warn'>[LOCKED]</span>",
-            "-rw-r--r--  socials.txt",
+            "MAIL     about.txt",
+            "MAIL     resume.pdf",
+            "FILEZ    projects/",
+            "JUNK     dumpster/",
+            "PHREAK   payphone.nfo",
+            "GAMES    chess.exe  crypto.exe   <span class='dim'>(optional)</span>",
           ].join("\n")
         );
         shellPrompt();
@@ -199,44 +193,49 @@
         break;
       case "ctf":
       case "./ctf":
+      case "games":
         beginCtf();
         break;
       case "hint":
         appendLine(
-          "Crypto: keys live in page source under <span class='warn'>#hiddenData</span>. Chess: mate in 2, queen sacrifices look tasty."
+          "No lock. Globe is the hook. Games: keys in <span class='warn'>#hiddenData</span>. Chess mate-in-2. Payphone: 311 / 1995 / 7734."
         );
         shellPrompt();
         break;
       case "projects":
-        if (!isUnlocked()) {
-          appendLine(
-            '<span class="err">Permission denied.</span> Solve <span class="ok">ctf</span> first.'
-          );
-          shellPrompt();
-        } else {
-          appendLine("Opening /projects …");
-          setTimeout(() => {
-            window.location.href = "projects.html";
-          }, 400);
-        }
+      case "filez":
+      case "warez":
+        appendLine("Connecting to FILEZ…");
+        setTimeout(() => {
+          window.location.href = "projects.html";
+        }, 280);
         break;
       case "resume":
       case "dossier":
       case "about":
-        if (!isUnlocked()) {
-          appendLine('<span class="err">Profile locked.</span> Clear CTF to unlock.');
-        } else {
-          dossier.scrollIntoView({ behavior: "smooth" });
-          appendLine("Profile mounted at #dossier");
-        }
+      case "mail":
+        dossier?.scrollIntoView({ behavior: "smooth" });
+        appendLine("Opening MAIL…");
+        shellPrompt();
+        break;
+      case "dumpster":
+        window.dispatchEvent(new CustomEvent("cyberops:dumpster"));
+        appendLine("You climb into the dumpster.");
+        shellPrompt();
+        break;
+      case "phone":
+      case "payphone":
+        window.dispatchEvent(new CustomEvent("cyberops:phone"));
+        appendLine("Payphone off the hook.");
+        shellPrompt();
+        break;
+      case "planet":
+        appendLine('<span class="ok">HACK THE PLANET</span>\nthis is our world now… the world is wired.');
+        document.getElementById("gibson")?.scrollIntoView({ behavior: "smooth" });
         shellPrompt();
         break;
       case "status":
-        appendLine(
-          isUnlocked()
-            ? '<span class="ok">ACCESS GRANTED</span> — projects & dossier available'
-            : '<span class="warn">LOCKED</span> — run ctf'
-        );
+        appendLine('<span class="ok">CARRIER DETECTED</span> — node 23 online. nothing locked.');
         shellPrompt();
         break;
       case "clear":
@@ -244,8 +243,7 @@
         shellPrompt();
         break;
       case "reset":
-        setUnlocked(false);
-        appendLine('<span class="warn">Session cleared. Access revoked.</span>');
+        appendLine('<span class="warn">Nothing to lock. This BBS stays open.</span>');
         shellPrompt();
         break;
       case "ascii-chess":
@@ -269,27 +267,19 @@
     const key = name.replace(/^\.\//, "").toLowerCase();
     if (key === "about.txt") {
       appendLine(
-        isUnlocked()
-          ? "Cybersecurity enthusiast. Dual-degree CS + Math @ ASU. Internships: Nike, ASU, Radware. CTF competitor."
-          : "████████ ████ encrypted — solve ctf ████████"
+        "Cybersecurity junkyard poet. Dual-degree CS + Math @ ASU. Internships: Nike, ASU, Radware. pwn.college regular."
       );
     } else if (key === "resume.pdf" || key === "resume1.pdf") {
-      if (isUnlocked()) {
-        appendLine("Opening resume1.pdf …");
-        window.open("resume1.pdf", "_blank");
-      } else {
-        appendLine('<span class="err">Permission denied.</span>');
-      }
+      appendLine("Opening coffee-stained resume1.pdf …");
+      window.open("resume1.pdf", "_blank");
     } else if (key === "socials.txt") {
-      if (isUnlocked()) {
-        appendLine(
-          "github: https://github.com/NoamAdept\nlinkedin: https://www.linkedin.com/in/noam-yakar/"
-        );
-      } else {
-        appendLine('<span class="err">Permission denied.</span>');
-      }
+      appendLine(
+        "github: https://github.com/NoamAdept\nlinkedin: https://www.linkedin.com/in/noam-yakar/"
+      );
     } else if (key === "projects" || key === "projects/") {
-      appendLine("projects is a directory — use <span class='ok'>projects</span>");
+      appendLine("projects is a directory — use <span class='ok'>filez</span>");
+    } else if (key === "payphone.nfo") {
+      appendLine("DTMF secrets: 311 · 1995 · 7734 (hELLO). Use the PAYPHONE node.");
     } else {
       appendLine(`cat: ${escapeHtml(name)}: No such file`);
     }
@@ -305,12 +295,13 @@
 
   function beginCtf() {
     state.mode = "challenge-menu";
-    appendLine("Shall we play a game?");
+    appendLine("GAMES board — optional. Mail and filez are already open.");
+    appendLine("Shall we play a game anyway?");
     askInput("[Y / N]", (ans) => {
       if (ans.trim().toUpperCase() === "Y") {
         showChallengeMenu();
       } else {
-        appendLine("Maybe next time.");
+        appendLine("Later, then. Try the globe.");
         startShell();
       }
     });
@@ -346,8 +337,9 @@
     askInput("Enter decrypted flag:", (answer) => {
       const inputHash = CryptoJS.SHA256(answer.trim()).toString();
       if (inputHash === flagHash) {
-        appendLine('<span class="ok">Correct flag!</span>');
-        unlockPortfolio();
+        appendLine('<span class="ok">Nice. You still didn\'t need that to get in.</span>');
+        celebrateScan();
+        startShell();
       } else {
         appendLine('<span class="err">Incorrect flag.</span> [R]etry / [S]witch to Chess / [Q]uit');
         askInput("R / S / Q:", (choice) => {
@@ -431,8 +423,9 @@
     askInput("Your moves:", (moves) => {
       const movesNormalized = moves.trim().toLowerCase().replace(/\s+/g, " ");
       if (movesNormalized === "qh6 qg7" || movesNormalized === "qg6 qh7") {
-        appendLine('<span class="ok">Correct moves!</span>');
-        unlockPortfolio();
+        appendLine('<span class="ok">Mate. Optional high-score logged. Nothing was locked.</span>');
+        celebrateScan();
+        startShell();
       } else {
         appendLine('<span class="err">Wrong solution.</span> [R]etry / [S]witch to Crypto / [Q]uit');
         askInput("R / S / Q:", (choice) => {
@@ -452,35 +445,8 @@
   }
 
   function unlockPortfolio() {
-    setUnlocked(true);
-    lockOverlay.classList.add("active");
-    const ring = document.getElementById("lockRing");
-    const glyph = document.getElementById("lockGlyph");
-    const copy = document.getElementById("lockCopy");
-    const sub = document.getElementById("lockSub");
-
-    glyph.textContent = "🔒";
-    copy.textContent = "Decrypting dossier…";
-    sub.textContent = "scanning /home/noam/*";
-    ring.classList.remove("done");
-
-    setTimeout(() => {
-      glyph.textContent = "🔓";
-      ring.classList.add("done");
-      copy.textContent = "Access granted";
-      sub.textContent = "projects/ mounted · about decrypted";
-      celebrateScan();
-    }, 1400);
-
-    setTimeout(() => {
-      lockOverlay.classList.remove("active");
-      dossier.classList.add("open");
-      dossier.scrollIntoView({ behavior: "smooth", block: "start" });
-      appendLine(
-        '<span class="ok">Unlocked.</span> Dossier online. Run <span class="ok">projects</span> or click Projects.'
-      );
-      startShell();
-    }, 2600);
+    celebrateScan();
+    startShell();
   }
 
   function celebrateScan() {
@@ -499,66 +465,52 @@
     }
   }
 
-  // Projects nav gate
-  if (projectsLink) {
-    projectsLink.addEventListener("click", (e) => {
-      if (!isUnlocked()) {
-        e.preventDefault();
-        appendLine(
-          '<span class="warn">Projects locked.</span> Run <span class="ok">ctf</span> and clear a challenge.'
-        );
-        scrollTerminal();
-        document.getElementById("terminal")?.scrollIntoView({ behavior: "smooth" });
-      }
-    });
-  }
-
-  // Boot sequence
+  // Boot sequence — modem / BBS, not a lock
   function boot() {
     syncChrome();
-    const bootFlash = document.getElementById("bootFlash");
-    setTimeout(() => bootFlash?.classList.add("hide"), 700);
-
-    const sequence = [
-      { cmd: "whoami", out: "Noam Yakar" },
-      {
-        cmd: "ls -la",
-        out: isUnlocked()
-          ? "drwxr-xr-x  ctf/\ndrwxr-xr-x  projects/\n-rw-r--r--  about.txt\n-rw-r--r--  resume.pdf"
-          : "drwxr-xr-x  ctf/\nd---------  projects/  [LOCKED]\n-rw-------  about.txt  [ENCRYPTED]\n-rw-------  resume.pdf [ENCRYPTED]",
-      },
-    ];
-
-    let idx = 0;
-    function next() {
-      if (idx >= sequence.length) {
-        if (isUnlocked()) {
-          appendLine(
-            '<span class="ok">Session restored — ACCESS GRANTED.</span> Type <span class="ok">help</span> or <span class="ok">ctf</span> to replay.'
-          );
-          dossier.classList.add("open");
-        } else {
-          appendLine(
-            'Challenge ready. Type <span class="ok">ctf</span> to begin — or <span class="ok">help</span>.'
-          );
-        }
-        startShell();
-        return;
-      }
-      const step = sequence[idx++];
-      typeCommand(step.cmd, () => {
-        appendLine(step.out);
-        setTimeout(next, 350);
-      });
+    if (statusPill) {
+      statusPill.textContent = "ONLINE";
+      statusPill.classList.add("unlocked");
     }
-    setTimeout(next, 850);
+    dossier?.classList.add("open");
+    const bootFlash = document.getElementById("bootFlash");
+    setTimeout(() => bootFlash?.classList.add("hide"), 900);
+
+    const banner = [
+      "  CONNECT 2400",
+      "  Welcome to CYBEROPS BBS  ·  node 23",
+      "  .................................",
+      "  (1) MAIL   (2) FILEZ   (3) GAMES",
+      "  (4) DUMPSTER   (5) PAYPHONE",
+    ].join("\n");
+
+    setTimeout(() => {
+      appendLine(banner);
+      appendLine('<span class="ok">HACK THE PLANET</span> — jack in via the globe, or type <span class="ok">help</span>.');
+      startShell();
+    }, 1050);
   }
+
+  window.addEventListener("cyberops:games", () => {
+    if (state.mode === "shell") {
+      appendLine("GAMES node selected.");
+      beginCtf();
+    } else if (state.mode === "boot") {
+      const wait = () => {
+        if (state.mode === "shell") {
+          appendLine("GAMES node selected.");
+          beginCtf();
+        } else setTimeout(wait, 200);
+      };
+      wait();
+    }
+  });
 
   document.getElementById("cta-ctf")?.addEventListener("click", () => {
     document.getElementById("terminal")?.scrollIntoView({ behavior: "smooth" });
     const launch = () => {
       if (state.mode === "shell") {
-        appendLine("Launching CTF…");
+        appendLine("Optional games…");
         beginCtf();
       } else if (state.mode === "boot") {
         setTimeout(launch, 200);
