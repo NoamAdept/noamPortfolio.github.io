@@ -1,16 +1,17 @@
-# 🚀 Noam Yakar - Cybersecurity Portfolio  
+# Noam Yakar — CyberOps Portfolio
 
-An **interactive retro-themed** cybersecurity portfolio with **CTF challenges, encryption puzzles, and secure projects**. Unlock hidden content by solving **crypto and chess-based challenges**!  
+Interactive cybersecurity portfolio: a branded terminal CTF unlocks a themed dossier and a decompiler-style projects browser.
 
-## 🔑 Features  
-✅ **Hacker-style terminal UI**  
-✅ **CTF & encryption puzzles**  
-✅ **Dynamic resume & projects**  
-✅ **Synthwave aesthetics**  
+## Features
+- Shared CyberOps visual system across home + projects
+- Terminal shell (`help`, `ctf`, `ls`, `cat`, `projects`, `reset`, …)
+- Crypto + chess challenges (interactive board + `chess.png` reference)
+- Unlock persistence via `localStorage`
+- Projects decompiler UI (summary / pseudocode / strings)
+- pwn.college proof panel
 
-## 🛠️ Tech Stack  
-- **Frontend:** HTML, CSS, JavaScript  
-- **Libraries:** CryptoJS, JSEncrypt, Confetti.js  
+## Tech
+HTML, CSS, JavaScript · CryptoJS · JSEncrypt
 
-## 🚀 Live Demo  
-🔗 **[Visit Here](https://noamadept.github.io/noamPortfolio.github.io/)**  
+## Live
+[Portfolio](https://noamadept.github.io/noamPortfolio.github.io/)
