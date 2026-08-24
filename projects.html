@@ -10,12 +10,15 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="css/cyberops.css" />
+  <link rel="stylesheet" href="css/hacktheplanet.css" />
 </head>
 <body>
   <div class="atmosphere" aria-hidden="true"></div>
+  <div class="crt-vignette" aria-hidden="true"></div>
+  <div class="crt-flicker" aria-hidden="true"></div>
 
   <div class="boot-flash" id="bootFlash">
-    <div class="boot-text">LOADING_PROJECTS</div>
+    <div class="boot-text">FILEZ</div>
   </div>
 
   <header class="site-header">
@@ -24,7 +27,7 @@
         <img src="profile.png" alt="" width="44" height="44" />
         <span class="brand-text">
           <span class="brand-name">Noam Yakar</span>
-          <span class="brand-tag">Selected projects</span>
+          <span class="brand-tag">FILEZ · warez board</span>
         </span>
       </a>
       <button
@@ -38,40 +41,29 @@
         <span class="nav-toggle-bars" aria-hidden="true"></span>
       </button>
       <ul class="nav-links" id="primary-nav" data-nav-panel>
-        <li><a href="index.html">Terminal</a></li>
-        <li><a href="projects.html" aria-current="page">Projects</a></li>
-        <li><a href="index.html#dossier">About</a></li>
-        <li><span id="status-pill" class="status-pill">LOCKED</span></li>
+        <li><a href="index.html">Gibson</a></li>
+        <li><a href="projects.html" aria-current="page">Filez</a></li>
+        <li><a href="index.html#dossier">Mail</a></li>
+        <li><span id="status-pill" class="status-pill unlocked">ONLINE</span></li>
       </ul>
     </nav>
   </header>
 
   <main class="page">
     <section class="hero" aria-labelledby="projects-hero">
-      <p class="hero-kicker">Selected from GitHub</p>
-      <h1 id="projects-hero" class="hero-title">Projects</h1>
+      <p class="hero-kicker">0-day adjacent · coffee-stained repos</p>
+      <h1 id="projects-hero" class="hero-title">Filez</h1>
       <p class="hero-lead">
-        Highlighted work in systems security, cryptography, SDR/DSP labs, and teaching CTFs —
-        with deeper inspection in the workspace below.
+        The good boards always had a FILEZ section. These are the disks worth copying —
+        stack canaries, SDR labs, leaky Feistels, a WarGames gradebook.
       </p>
     </section>
 
-    <div id="gate" class="panel gate" hidden>
-      <h1>Projects locked</h1>
-      <p>
-        Clear the short CTF on the home terminal to unlock this page.
-        It takes a minute and keeps the portfolio interactive.
-      </p>
-      <a class="btn btn-primary" href="index.html#terminal">
-        <i class="fas fa-terminal" aria-hidden="true"></i> Go to terminal
-      </a>
-    </div>
-
-    <div id="decompiler-app" class="decompiler" hidden>
+    <div id="decompiler-app" class="decompiler">
       <section class="featured-section" aria-label="Featured projects">
         <div class="featured-head">
-          <h2>Featured</h2>
-          <p>Strongest signals for recruiters &amp; collaborators</p>
+          <h2>Hot filez</h2>
+          <p>the disks you’d actually keep</p>
         </div>
         <div class="featured-grid" id="featured-grid"></div>
       </section>
@@ -81,7 +73,7 @@
           <div class="traffic" aria-hidden="true">
             <span class="r"></span><span class="y"></span><span class="g"></span>
           </div>
-          <div class="panel-title">project workspace</div>
+          <div class="panel-title">warez workspace</div>
           <div class="panel-meta" id="tab-label">libCanary.so</div>
         </div>
         <div class="decompile-bar" id="decompile-bar"><span></span></div>
@@ -142,7 +134,7 @@
   </main>
 
   <footer class="site-footer">
-    <p>© 2026 Noam Yakar — selected projects from GitHub</p>
+    <p>© 2026 Noam Yakar — FILEZ from the junkyard</p>
   </footer>
 
   <script src="js/nav.js"></script>

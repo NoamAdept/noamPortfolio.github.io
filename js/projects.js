@@ -245,7 +245,7 @@
     },
   ];
 
-  const unlocked = localStorage.getItem(STORAGE_KEY) === "1";
+  const unlocked = true;
   const gate = document.getElementById("gate");
   const app = document.getElementById("decompiler-app");
   const featuredGrid = document.getElementById("featured-grid");
@@ -262,19 +262,17 @@
 
   function syncChrome() {
     if (statusPill) {
-      statusPill.textContent = unlocked ? "ACCESS GRANTED" : "LOCKED";
-      statusPill.classList.toggle("unlocked", unlocked);
+      statusPill.textContent = "ONLINE";
+      statusPill.classList.add("unlocked");
     }
-  }
-
-  function showGate() {
-    if (gate) gate.hidden = false;
-    if (app) app.hidden = true;
   }
 
   function showApp() {
     if (gate) gate.hidden = true;
-    if (app) app.hidden = false;
+    if (app) {
+      app.hidden = false;
+      app.removeAttribute("hidden");
+    }
     renderFeatured();
     renderFileList();
     selectProject(projects[0].id);
@@ -450,6 +448,5 @@
   setTimeout(() => bootFlash?.classList.add("hide"), 500);
 
   syncChrome();
-  if (!unlocked) showGate();
-  else showApp();
+  showApp();
 })();

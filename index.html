@@ -3,21 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Noam Yakar — Cybersecurity Portfolio</title>
-  <meta name="description" content="Noam Yakar — cybersecurity, systems, and applied math. Interactive CTF-gated portfolio with featured security projects." />
+  <title>Noam Yakar — HACK THE PLANET</title>
+  <meta name="description" content="Noam Yakar — rustic hacker BBS portfolio. Jack into The Gibson: filez, mail, dumpster, payphone. Cybersecurity, systems, applied math." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Share+Tech+Mono&family=Special+Elite&family=VT323&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="css/cyberops.css" />
+  <link rel="stylesheet" href="css/hacktheplanet.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/3.0.0/jsencrypt.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
 <body>
   <div class="atmosphere" aria-hidden="true"></div>
+  <div class="crt-vignette" aria-hidden="true"></div>
+  <div class="crt-flicker" aria-hidden="true"></div>
 
   <div class="boot-flash" id="bootFlash">
-    <div class="boot-text">CYBEROPS_BOOT</div>
+    <div class="boot-text">HACK THE PLANET</div>
   </div>
 
   <header class="site-header">
@@ -26,7 +29,7 @@
         <img src="profile.png" alt="" width="44" height="44" />
         <span class="brand-text">
           <span class="brand-name">Noam Yakar</span>
-          <span class="brand-tag">Cybersecurity · CS + Math @ ASU</span>
+          <span class="brand-tag">NODE 23 · 2400 baud · CS + Math</span>
         </span>
       </a>
       <button
@@ -40,62 +43,85 @@
         <span class="nav-toggle-bars" aria-hidden="true"></span>
       </button>
       <ul class="nav-links" id="primary-nav" data-nav-panel>
-        <li><a href="#terminal" aria-current="page">Terminal</a></li>
-        <li><a id="projects-link" class="locked" href="projects.html">Projects</a></li>
-        <li><a href="#dossier">About</a></li>
-        <li><span id="status-pill" class="status-pill">LOCKED</span></li>
+        <li><a href="#gibson" aria-current="page">Gibson</a></li>
+        <li><a id="projects-link" href="projects.html">Filez</a></li>
+        <li><a href="#dossier">Mail</a></li>
+        <li><span id="status-pill" class="status-pill unlocked">ONLINE</span></li>
       </ul>
     </nav>
   </header>
 
   <main class="page">
     <section class="hero" aria-labelledby="hero-title">
-      <p class="hero-kicker">Cybersecurity · systems · applied math</p>
-      <h1 id="hero-title" class="hero-title">Noam Yakar</h1>
+      <p class="hero-kicker">// this is our world now…</p>
+      <h1 id="hero-title" class="hero-title">Hack the Planet</h1>
+      <p class="planet-quote">the world is wired. rummage. dial. dumpster-dive. no gatekeeping.</p>
       <p class="hero-lead">
-        Dual-degree CS &amp; Mathematics student at Arizona State University.
-        Experience at Nike, Radware, and ASU — with research and tooling across
-        crypto, systems hardening, and adversarial ML. Clear a short CTF to unlock the full dossier and projects.
+        Dual-degree CS &amp; Mathematics @ ASU. Nike, Radware, ASU.
+        Crypto, systems hardening, SDR labs, adversarial ML.
+        Click a node on the globe — that’s the hook. Games in the BBS are optional.
       </p>
       <div class="cta-row">
-        <button type="button" class="btn btn-primary" id="cta-ctf">
-          <i class="fas fa-terminal" aria-hidden="true"></i> Launch CTF
-        </button>
-        <a class="btn btn-ghost" href="#terminal">Open terminal</a>
+        <a class="btn btn-primary" href="#gibson">Jack in</a>
+        <a class="btn btn-ghost" href="projects.html">Warez / filez</a>
+        <a class="btn btn-ghost" href="#dossier">Read mail</a>
       </div>
     </section>
 
-    <section id="terminal" class="panel" aria-label="Interactive terminal">
+    <section class="gibson" id="gibson" aria-label="The Gibson — clickable network">
+      <div class="featured-head">
+        <h2>The Gibson</h2>
+        <p>click a node. 1995 energy. rustic junk included.</p>
+      </div>
+      <div class="gibson-stage">
+        <div class="globe" aria-hidden="true">
+          <span class="globe-lat"></span>
+          <span class="globe-lat"></span>
+          <span class="globe-lat"></span>
+        </div>
+        <button type="button" class="node" data-node="mail"><small>inbox</small>MAIL</button>
+        <button type="button" class="node" data-node="filez"><small>warez</small>FILEZ</button>
+        <button type="button" class="node" data-node="games"><small>optional</small>GAMES</button>
+        <button type="button" class="node" data-node="dumpster"><small>rummage</small>DUMPSTER</button>
+        <button type="button" class="node" data-node="phone"><small>phreak</small>PAYPHONE</button>
+      </div>
+      <p class="gibson-caption">
+        MAIL = about + resume. FILEZ = GitHub highlights. DUMPSTER = rummage junk for the PDF.
+        PAYPHONE = DTMF easter egg. GAMES = old crypto/chess board if you want it — not required.
+      </p>
+    </section>
+
+    <section id="terminal" class="panel" aria-label="BBS terminal">
       <div class="panel-header">
         <div class="traffic" aria-hidden="true">
           <span class="r"></span><span class="y"></span><span class="g"></span>
         </div>
-        <div class="panel-title">noam@cyberops — bash — 80×24</div>
-        <div class="panel-meta">LIVE</div>
+        <div class="panel-title">CYBEROPS BBS — 2400-N-8-1</div>
+        <div class="panel-meta">CARRIER</div>
       </div>
       <div class="terminal-body" id="terminal-body"></div>
     </section>
 
-    <section id="dossier" aria-label="About and resume">
+    <section id="dossier" class="open" aria-label="About and resume">
       <div class="dossier-grid">
         <article class="panel dossier-panel">
-          <p class="section-label">Profile</p>
-          <h2>About</h2>
+          <p class="section-label">Mail // about.txt</p>
+          <h2>Handle: noam</h2>
           <div class="profile-row">
             <img src="profile.png" alt="Noam Yakar" width="110" height="110" />
             <div>
               <p>
                 I build and break systems at the intersection of cybersecurity,
                 cryptography, and data. Dual-degree Computer Science and Mathematics
-                at Arizona State University; active CTF competitor (pwn.college and beyond).
+                at Arizona State University; active on pwn.college and in the junk drawer of the internet.
               </p>
             </div>
           </div>
           <ul class="cred-list">
-            <li><strong>Nike</strong> — internship experience in large-scale technical environments</li>
-            <li><strong>Radware Inc.</strong> — cybersecurity / security engineering exposure</li>
-            <li><strong>ASU</strong> — academic research &amp; engineering roles</li>
-            <li><strong>Focus areas</strong> — systems hardening, crypto tooling, SDR/DSP labs, adversarial ML</li>
+            <li><strong>Nike</strong> — internship in large-scale technical environments</li>
+            <li><strong>Radware Inc.</strong> — cybersecurity / security engineering</li>
+            <li><strong>ASU</strong> — academic research &amp; engineering</li>
+            <li><strong>Focus</strong> — systems hardening, crypto tooling, SDR/DSP, adversarial ML</li>
           </ul>
           <div class="social-row">
             <a class="social-chip" href="https://github.com/NoamAdept" target="_blank" rel="noopener noreferrer">
@@ -111,8 +137,8 @@
         </article>
 
         <article class="panel dossier-panel">
-          <p class="section-label">Resume</p>
-          <h2>Curriculum vitae</h2>
+          <p class="section-label">Attached // resume.pdf</p>
+          <h2>The paper trail</h2>
           <div class="resume-actions cta-row">
             <a class="btn btn-primary" href="resume1.pdf" target="_blank" rel="noopener noreferrer">
               <i class="fas fa-download" aria-hidden="true"></i> Download resume
@@ -127,17 +153,51 @@
     </section>
   </main>
 
+  <div class="hack-modal" id="dumpster-modal" aria-hidden="true" role="dialog" aria-label="Dumpster dive">
+    <div class="hack-sheet">
+      <h2>Dumpster</h2>
+      <p>Behind the machine shop. Pizza grease, floppies, secrets. Click junk.</p>
+      <div class="dump-pile" id="dump-pile"></div>
+      <p id="dump-msg">Rummage. The good stuff is never on top.</p>
+      <button type="button" class="btn btn-ghost" data-close-modal="dumpster-modal">Crawl out</button>
+    </div>
+  </div>
+
+  <div class="hack-modal" id="phone-modal" aria-hidden="true" role="dialog" aria-label="Payphone">
+    <div class="hack-sheet">
+      <h2>Payphone</h2>
+      <p>Red box energy. No coins required. Dial a memory.</p>
+      <div class="phone-screen" id="phone-screen">_</div>
+      <div class="phone-pad">
+        <button type="button" data-digit="1">1</button>
+        <button type="button" data-digit="2">2</button>
+        <button type="button" data-digit="3">3</button>
+        <button type="button" data-digit="4">4</button>
+        <button type="button" data-digit="5">5</button>
+        <button type="button" data-digit="6">6</button>
+        <button type="button" data-digit="7">7</button>
+        <button type="button" data-digit="8">8</button>
+        <button type="button" data-digit="9">9</button>
+        <button type="button" data-digit="clr">CLR</button>
+        <button type="button" data-digit="0">0</button>
+        <button type="button" data-digit="snd">SND</button>
+      </div>
+      <p id="phone-msg">Drop a dime. Try 311.</p>
+      <button type="button" class="btn btn-ghost" data-close-modal="phone-modal">Hang up</button>
+    </div>
+  </div>
+
   <div id="lockOverlay" aria-live="polite">
     <div class="hex-rain" id="hexRain" aria-hidden="true"></div>
     <div class="lock-ring" id="lockRing">
-      <span class="lock-glyph" id="lockGlyph">🔒</span>
+      <span class="lock-glyph" id="lockGlyph">📡</span>
     </div>
-    <div class="lock-copy" id="lockCopy">Decrypting dossier…</div>
-    <div class="lock-sub" id="lockSub">scanning /home/noam/*</div>
+    <div class="lock-copy" id="lockCopy">Carrier detected…</div>
+    <div class="lock-sub" id="lockSub">CONNECT 2400</div>
   </div>
 
   <footer class="site-footer">
-    <p>© 2026 Noam Yakar — cybersecurity portfolio</p>
+    <p>© 2026 Noam Yakar — mess with the best, die like the rest · BBS node 23</p>
   </footer>
 
   <script id="hiddenData" type="application/json">
@@ -149,5 +209,6 @@
   </script>
   <script src="js/nav.js"></script>
   <script src="js/terminal.js"></script>
+  <script src="js/gibson.js"></script>
 </body>
 </html>
