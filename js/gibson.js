@@ -2,7 +2,7 @@
 (function () {
   const dumpsterLoot = [
     { id: "pizza", label: "greasy pizza box — 'HACKERS extra large'", payload: "Nothing but oregano. Keep digging." },
-    { id: "floppy", label: "3.5\" floppy: WAR_GAMES.BAS", payload: "Shall we play a game? Try the GAMES node — optional, not a gate." },
+    { id: "floppy", label: "3.5\" floppy: WAR_GAMES.BAS", payload: "egg", egg: true },
     { id: "printout", label: "dot-matrix printout (smeared)", payload: "Nike · Radware · ASU. Dual-degree CS + Math. That's the real loot." },
     { id: "resume", label: "★ coffee-stained RESUME.PDF", payload: "resume", special: true },
     { id: "sticker", label: "peeled 'HACK THE PLANET' sticker", payload: "This is our world now. Click FILEZ for the warez board." },
@@ -78,7 +78,7 @@
   window.addEventListener("cyberops:phone", () => {
     dialed = "";
     if ($("phone-screen")) $("phone-screen").textContent = "_";
-    if ($("phone-msg")) $("phone-msg").textContent = "Drop a dime. Try 311.";
+    if ($("phone-msg")) $("phone-msg").textContent = "…";
     openModal("phone-modal");
   });
 
@@ -93,7 +93,10 @@
       btn.textContent = item.label;
       btn.addEventListener("click", () => {
         const msg = $("dump-msg");
-        if (item.special) {
+        if (item.egg) {
+          if (msg) msg.textContent = "The disk spins up…";
+          setTimeout(() => window.dispatchEvent(new CustomEvent("cyberops:games")), 350);
+        } else if (item.special) {
           if (msg) msg.textContent = "Jackpot. Opening the coffee-stained resume…";
           setTimeout(() => window.open("resume1.pdf", "_blank", "noopener"), 400);
         } else if (msg) {
@@ -127,14 +130,16 @@
       if (d === "clr") {
         dialed = "";
       } else if (d === "snd") {
-        if (dialed === phoneSecret || dialed === "1995" || dialed === "7734") {
+        if (dialed === "1995") {
+          $("phone-msg").textContent = "1995. The line opens a back channel…";
+          beep(880, 200);
+          setTimeout(() => window.dispatchEvent(new CustomEvent("cyberops:games")), 400);
+        } else if (dialed === phoneSecret || dialed === "7734") {
           $("phone-msg").textContent =
-            dialed === "1995"
-              ? "1995. Cereal Killer would be proud. You're in — FILEZ are open."
-              : "Line's hot. Operator's not listening. Jump to FILEZ or MAIL.";
+            "Line's hot. Operator's not listening. MAIL and FILEZ are already yours.";
           beep(880, 200);
         } else {
-          $("phone-msg").textContent = "BUSY SIGNAL. (hint: 311, 1995, or 7734)";
+          $("phone-msg").textContent = "BUSY SIGNAL.";
           beep(140, 300);
         }
       } else {
@@ -144,5 +149,32 @@
       }
       if ($("phone-screen")) $("phone-screen").textContent = dialed || "_";
     });
+  });
+  const konami = [
+    "ArrowUp",
+    "ArrowUp",
+    "ArrowDown",
+    "ArrowDown",
+    "ArrowLeft",
+    "ArrowRight",
+    "ArrowLeft",
+    "ArrowRight",
+    "b",
+    "a",
+  ];
+  let konamiIdx = 0;
+  document.addEventListener("keydown", (e) => {
+    const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    const want = konami[konamiIdx];
+    const match = key === want || key === want.toLowerCase();
+    if (match) {
+      konamiIdx += 1;
+      if (konamiIdx === konami.length) {
+        konamiIdx = 0;
+        window.dispatchEvent(new CustomEvent("cyberops:games"));
+      }
+    } else if (e.key !== "Shift") {
+      konamiIdx = 0;
+    }
   });
 })();
