@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Projects Decompiler — Noam Yakar CyberOps</title>
-  <meta name="description" content="Decompiler-style project browser and CTF proof for Noam Yakar's CyberOps portfolio." />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Projects — Noam Yakar</title>
+  <meta name="description" content="Featured cybersecurity and systems projects by Noam Yakar — libCanary, pi-sdr-academy, provenance, leakyFeistel, and more." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Orbitron:wght@600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="css/cyberops.css" />
 </head>
@@ -15,7 +15,7 @@
   <div class="atmosphere" aria-hidden="true"></div>
 
   <div class="boot-flash" id="bootFlash">
-    <div class="boot-text">MOUNTING_PROJECTS</div>
+    <div class="boot-text">LOADING_PROJECTS</div>
   </div>
 
   <header class="site-header">
@@ -24,13 +24,23 @@
         <img src="profile.png" alt="" width="44" height="44" />
         <span class="brand-text">
           <span class="brand-name">Noam Yakar</span>
-          <span class="brand-tag">CyberOps // decompiler</span>
+          <span class="brand-tag">Selected projects</span>
         </span>
       </a>
-      <ul class="nav-links">
+      <button
+        type="button"
+        class="nav-toggle"
+        data-nav-toggle
+        aria-expanded="false"
+        aria-controls="primary-nav"
+        aria-label="Open menu"
+      >
+        <span class="nav-toggle-bars" aria-hidden="true"></span>
+      </button>
+      <ul class="nav-links" id="primary-nav" data-nav-panel>
         <li><a href="index.html">Terminal</a></li>
         <li><a href="projects.html" aria-current="page">Projects</a></li>
-        <li><a href="index.html#dossier">Dossier</a></li>
+        <li><a href="index.html#dossier">About</a></li>
         <li><span id="status-pill" class="status-pill">LOCKED</span></li>
       </ul>
     </nav>
@@ -38,37 +48,46 @@
 
   <main class="page">
     <section class="hero" aria-labelledby="projects-hero">
-      <p class="hero-kicker">~/captures &amp; binaries</p>
+      <p class="hero-kicker">Selected from GitHub</p>
       <h1 id="projects-hero" class="hero-title">Projects</h1>
       <p class="hero-lead">
-        Select a binary, inspect summary / pseudocode / strings, then decompile to the repo.
-        TAB still works as an easter-egg shortcut.
+        Highlighted work in systems security, cryptography, SDR/DSP labs, and teaching CTFs —
+        with deeper inspection in the workspace below.
       </p>
     </section>
 
     <div id="gate" class="panel gate" hidden>
-      <h1>Access denied</h1>
+      <h1>Projects locked</h1>
       <p>
-        <code>projects/</code> is encrypted until you clear the CTF on the home terminal.
+        Clear the short CTF on the home terminal to unlock this page.
+        It takes a minute and keeps the portfolio interactive.
       </p>
       <a class="btn btn-primary" href="index.html#terminal">
-        <i class="fas fa-terminal" aria-hidden="true"></i> Return to terminal
+        <i class="fas fa-terminal" aria-hidden="true"></i> Go to terminal
       </a>
     </div>
 
     <div id="decompiler-app" class="decompiler" hidden>
-      <section class="panel" aria-label="Project decompiler">
+      <section class="featured-section" aria-label="Featured projects">
+        <div class="featured-head">
+          <h2>Featured</h2>
+          <p>Strongest signals for recruiters &amp; collaborators</p>
+        </div>
+        <div class="featured-grid" id="featured-grid"></div>
+      </section>
+
+      <section class="panel" id="decompiler-panel" aria-label="Project workspace">
         <div class="panel-header">
           <div class="traffic" aria-hidden="true">
             <span class="r"></span><span class="y"></span><span class="g"></span>
           </div>
-          <div class="panel-title">cyberops-decompiler — workspace</div>
-          <div class="panel-meta" id="tab-label">sneakyPixels.exe</div>
+          <div class="panel-title">project workspace</div>
+          <div class="panel-meta" id="tab-label">libCanary.so</div>
         </div>
         <div class="decompile-bar" id="decompile-bar"><span></span></div>
         <div class="decompiler-shell">
           <aside class="side-rail">
-            <h3>Functions / files</h3>
+            <h3>All repositories</h3>
             <ul class="file-list" id="file-list"></ul>
           </aside>
           <div class="workspace">
@@ -79,13 +98,13 @@
             </div>
             <div class="workspace-body" id="workspace-body"></div>
             <div class="workspace-footer">
-              <span class="hint dim" style="font-family: var(--font-mono); font-size: 0.75rem;">
-                Tip: focus here + TAB to decompile
+              <span class="hint dim desktop-only" style="font-family: var(--font-mono); font-size: 0.75rem;">
+                Tip: focus here + TAB to open GitHub
               </span>
               <div class="cta-row">
                 <button type="button" class="btn btn-ghost" id="open-repo">Open repo</button>
                 <button type="button" class="btn btn-primary" id="decompile-btn">
-                  Decompile → GitHub
+                  Open on GitHub
                 </button>
               </div>
             </div>
@@ -98,12 +117,17 @@
           <div class="traffic" aria-hidden="true">
             <span class="r"></span><span class="y"></span><span class="g"></span>
           </div>
-          <div class="panel-title">~/captures — pwn.college</div>
-          <div class="panel-meta">PROOF</div>
+          <div class="panel-title">CTF proof — pwn.college</div>
+          <div class="panel-meta">LIVE</div>
         </div>
         <div class="panel-body">
           <p class="proof-note">
-            Live dojo profile. Modules rotate over time — some cleared challenges may have been replaced upstream.
+            Live dojo profile. Upstream modules change over time; some cleared challenges may have been rotated out.
+          </p>
+          <p class="proof-note" style="margin-top:-0.4rem;">
+            <a href="https://pwn.college/hacker/noamyakar23" target="_blank" rel="noopener noreferrer">
+              Open profile in a new tab ↗
+            </a>
           </p>
           <iframe
             class="proof-frame"
@@ -118,9 +142,10 @@
   </main>
 
   <footer class="site-footer">
-    <p>© 2026 Noam Yakar — CyberOps console · projects mounted after CTF</p>
+    <p>© 2026 Noam Yakar — selected projects from GitHub</p>
   </footer>
 
+  <script src="js/nav.js"></script>
   <script src="js/projects.js"></script>
 </body>
 </html>
