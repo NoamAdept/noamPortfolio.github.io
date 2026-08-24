@@ -55,16 +55,14 @@
     <section class="hero" aria-labelledby="hero-title">
       <p class="hero-kicker">// this is our world now…</p>
       <h1 id="hero-title" class="hero-title">Hack the Planet</h1>
-      <p class="planet-quote">the world is wired. rummage. dial. dumpster-dive. no gatekeeping.</p>
+      <p class="planet-quote">the world is wired.</p>
       <p class="hero-lead">
-        Dual-degree CS &amp; Mathematics @ ASU. Nike, Radware, ASU.
+        Dual-degree CS &amp; Mathematics @ ASU. Internships at Nike, Radware, and ASU.
         Crypto, systems hardening, SDR labs, adversarial ML.
-        Click a node on the globe — that’s the hook. Games in the BBS are optional.
       </p>
       <div class="cta-row">
-        <a class="btn btn-primary" href="#gibson">Jack in</a>
-        <a class="btn btn-ghost" href="projects.html">Warez / filez</a>
-        <a class="btn btn-ghost" href="#dossier">Read mail</a>
+        <a class="btn btn-primary" href="projects.html">Filez</a>
+        <a class="btn btn-ghost" href="#dossier">About / resume</a>
       </div>
     </section>
 
@@ -81,25 +79,14 @@
         </div>
         <button type="button" class="node" data-node="mail"><small>inbox</small>MAIL</button>
         <button type="button" class="node" data-node="filez"><small>warez</small>FILEZ</button>
-        <button type="button" class="node" data-node="games"><small>optional</small>GAMES</button>
         <button type="button" class="node" data-node="dumpster"><small>rummage</small>DUMPSTER</button>
         <button type="button" class="node" data-node="phone"><small>phreak</small>PAYPHONE</button>
+        <button type="button" class="globe-core" data-node="games" aria-label=" " title=""></button>
       </div>
       <p class="gibson-caption">
-        MAIL = about + resume. FILEZ = GitHub highlights. DUMPSTER = rummage junk for the PDF.
-        PAYPHONE = DTMF easter egg. GAMES = old crypto/chess board if you want it — not required.
+        MAIL = about + resume. FILEZ = selected GitHub work.
+        DUMPSTER / PAYPHONE = the scenic route.
       </p>
-    </section>
-
-    <section id="terminal" class="panel" aria-label="BBS terminal">
-      <div class="panel-header">
-        <div class="traffic" aria-hidden="true">
-          <span class="r"></span><span class="y"></span><span class="g"></span>
-        </div>
-        <div class="panel-title">CYBEROPS BBS — 2400-N-8-1</div>
-        <div class="panel-meta">CARRIER</div>
-      </div>
-      <div class="terminal-body" id="terminal-body"></div>
     </section>
 
     <section id="dossier" class="open" aria-label="About and resume">
@@ -151,6 +138,17 @@
         </article>
       </div>
     </section>
+
+    <section id="terminal" class="panel egg-hidden" hidden aria-label="Hidden BBS">
+      <div class="panel-header">
+        <div class="traffic" aria-hidden="true">
+          <span class="r"></span><span class="y"></span><span class="g"></span>
+        </div>
+        <div class="panel-title">CYBEROPS BBS — 2400-N-8-1</div>
+        <div class="panel-meta">EGG</div>
+      </div>
+      <div class="terminal-body" id="terminal-body"></div>
+    </section>
   </main>
 
   <div class="hack-modal" id="dumpster-modal" aria-hidden="true" role="dialog" aria-label="Dumpster dive">
@@ -166,7 +164,7 @@
   <div class="hack-modal" id="phone-modal" aria-hidden="true" role="dialog" aria-label="Payphone">
     <div class="hack-sheet">
       <h2>Payphone</h2>
-      <p>Red box energy. No coins required. Dial a memory.</p>
+      <p>Drop a dime.</p>
       <div class="phone-screen" id="phone-screen">_</div>
       <div class="phone-pad">
         <button type="button" data-digit="1">1</button>
@@ -182,7 +180,7 @@
         <button type="button" data-digit="0">0</button>
         <button type="button" data-digit="snd">SND</button>
       </div>
-      <p id="phone-msg">Drop a dime. Try 311.</p>
+      <p id="phone-msg">…</p>
       <button type="button" class="btn btn-ghost" data-close-modal="phone-modal">Hang up</button>
     </div>
   </div>

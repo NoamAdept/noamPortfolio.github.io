@@ -128,7 +128,7 @@
   function startShell() {
     state.mode = "shell";
     appendLine(
-      '<span class="hint">Type <span class="ok">help</span> · <span class="ok">filez</span> · <span class="ok">mail</span> · <span class="ok">games</span> (optional)</span>'
+      '<span class="hint">Type <span class="ok">help</span> · <span class="ok">filez</span> · <span class="ok">mail</span></span>'
     );
     shellPrompt();
   }
@@ -161,11 +161,11 @@
             "  <span class='ok'>cat &lt;file&gt;</span>   — read",
             "  <span class='ok'>filez</span>        — warez board (projects)",
             "  <span class='ok'>mail</span>         — about / resume",
-            "  <span class='ok'>dumpster</span>    — rummage (same as globe node)",
+            "  <span class='ok'>dumpster</span>    — rummage",
             "  <span class='ok'>phone</span>        — payphone",
-            "  <span class='ok'>games</span>        — optional chess / crypto (not a gate)",
             "  <span class='ok'>planet</span>       — HACK THE PLANET",
             "  <span class='ok'>clear</span>        — wipe screen",
+            "  <span class='dim'>undocumented commands exist.</span>",
           ].join("\n")
         );
         shellPrompt();
@@ -183,7 +183,6 @@
             "FILEZ    projects/",
             "JUNK     dumpster/",
             "PHREAK   payphone.nfo",
-            "GAMES    chess.exe  crypto.exe   <span class='dim'>(optional)</span>",
           ].join("\n")
         );
         shellPrompt();
@@ -197,9 +196,7 @@
         beginCtf();
         break;
       case "hint":
-        appendLine(
-          "No lock. Globe is the hook. Games: keys in <span class='warn'>#hiddenData</span>. Chess mate-in-2. Payphone: 311 / 1995 / 7734."
-        );
+        appendLine("Globe, dumpster, payphone. Some disks still boot.");
         shellPrompt();
         break;
       case "projects":
@@ -293,18 +290,43 @@
       .replace(/>/g, "&gt;");
   }
 
+  let eggOpened = false;
+
+  function revealEgg() {
+    const term = document.getElementById("terminal");
+    if (!term || !terminalBody) return;
+    term.hidden = false;
+    term.classList.remove("egg-hidden");
+    term.classList.add("egg-found");
+    closeNearbyModals();
+    term.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (eggOpened) return;
+    eggOpened = true;
+    if (state.mode === "boot") {
+      terminalBody.innerHTML = "";
+      appendLine('<span class="ok">you found it.</span>');
+      appendLine("Shall we play a game?");
+      startShellSoonThenGames();
+    } else if (state.mode === "shell") {
+      appendLine('<span class="ok">you found it.</span>');
+      beginCtf();
+    }
+  }
+
+  function startShellSoonThenGames() {
+    state.mode = "shell";
+    beginCtf();
+  }
+
+  function closeNearbyModals() {
+    document.getElementById("dumpster-modal")?.classList.remove("open");
+    document.getElementById("phone-modal")?.classList.remove("open");
+  }
+
   function beginCtf() {
     state.mode = "challenge-menu";
-    appendLine("GAMES board — optional. Mail and filez are already open.");
-    appendLine("Shall we play a game anyway?");
-    askInput("[Y / N]", (ans) => {
-      if (ans.trim().toUpperCase() === "Y") {
-        showChallengeMenu();
-      } else {
-        appendLine("Later, then. Try the globe.");
-        startShell();
-      }
-    });
+    appendLine("Hidden board. Crypto or chess — your call.");
+    showChallengeMenu();
   }
 
   function showChallengeMenu() {
@@ -465,7 +487,7 @@
     }
   }
 
-  // Boot sequence — modem / BBS, not a lock
+  // Page load: splash only. Terminal stays hidden until the egg is found.
   function boot() {
     syncChrome();
     if (statusPill) {
@@ -475,49 +497,9 @@
     dossier?.classList.add("open");
     const bootFlash = document.getElementById("bootFlash");
     setTimeout(() => bootFlash?.classList.add("hide"), 900);
-
-    const banner = [
-      "  CONNECT 2400",
-      "  Welcome to CYBEROPS BBS  ·  node 23",
-      "  .................................",
-      "  (1) MAIL   (2) FILEZ   (3) GAMES",
-      "  (4) DUMPSTER   (5) PAYPHONE",
-    ].join("\n");
-
-    setTimeout(() => {
-      appendLine(banner);
-      appendLine('<span class="ok">HACK THE PLANET</span> — jack in via the globe, or type <span class="ok">help</span>.');
-      startShell();
-    }, 1050);
   }
 
-  window.addEventListener("cyberops:games", () => {
-    if (state.mode === "shell") {
-      appendLine("GAMES node selected.");
-      beginCtf();
-    } else if (state.mode === "boot") {
-      const wait = () => {
-        if (state.mode === "shell") {
-          appendLine("GAMES node selected.");
-          beginCtf();
-        } else setTimeout(wait, 200);
-      };
-      wait();
-    }
-  });
-
-  document.getElementById("cta-ctf")?.addEventListener("click", () => {
-    document.getElementById("terminal")?.scrollIntoView({ behavior: "smooth" });
-    const launch = () => {
-      if (state.mode === "shell") {
-        appendLine("Optional games…");
-        beginCtf();
-      } else if (state.mode === "boot") {
-        setTimeout(launch, 200);
-      }
-    };
-    launch();
-  });
+  window.addEventListener("cyberops:games", revealEgg);
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", boot);

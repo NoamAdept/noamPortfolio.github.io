@@ -309,7 +309,37 @@ body {
 .node[data-node="filez"] { left: 82%; top: 32%; }
 .node[data-node="dumpster"] { left: 22%; top: 78%; }
 .node[data-node="phone"] { left: 78%; top: 76%; }
-.node[data-node="games"] { left: 50%; top: 50%; border-color: var(--magenta); color: var(--magenta); }
+.globe-core {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: 14px;
+  height: 14px;
+  transform: translate(-50%, -50%);
+  border: none;
+  border-radius: 50%;
+  padding: 0;
+  background: rgba(226, 61, 122, 0.35);
+  box-shadow: 0 0 10px rgba(226, 61, 122, 0.4);
+  cursor: pointer;
+  z-index: 3;
+  opacity: 0.45;
+}
+
+.globe-core:hover {
+  opacity: 1;
+  background: var(--magenta);
+}
+
+#terminal.egg-hidden,
+#terminal[hidden] {
+  display: none !important;
+}
+
+#terminal.egg-found {
+  display: block !important;
+  margin-top: 1.75rem;
+}
 
 .gibson-caption {
   font-family: var(--font-zine);
@@ -492,7 +522,6 @@ body {
   .node[data-node="filez"] { left: 80%; top: 20%; }
   .node[data-node="dumpster"] { left: 22%; top: 86%; }
   .node[data-node="phone"] { left: 80%; top: 84%; }
-  .node[data-node="games"] { left: 50%; top: 50%; }
 
   .hero-title {
     text-shadow: 1px 0 var(--magenta), 0 0 12px rgba(143, 227, 90, 0.4);
