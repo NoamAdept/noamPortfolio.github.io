@@ -167,7 +167,7 @@
             "  <span class='ok'>ctf</span>             — launch challenge menu",
             "  <span class='ok'>hint</span>            — soft nudge",
             "  <span class='ok'>projects</span>        — open decompiler (if unlocked)",
-            "  <span class='ok'>resume</span>          — jump to dossier",
+            "  <span class='ok'>resume</span> / <span class='ok'>about</span> — jump to profile",
             "  <span class='ok'>clear</span>           — clear screen",
             "  <span class='ok'>status</span>          — access state",
             "  <span class='ok'>reset</span>           — clear unlock + re-lock",
@@ -222,11 +222,12 @@
         break;
       case "resume":
       case "dossier":
+      case "about":
         if (!isUnlocked()) {
-          appendLine('<span class="err">Dossier encrypted.</span> Clear CTF to decrypt.');
+          appendLine('<span class="err">Profile locked.</span> Clear CTF to unlock.');
         } else {
           dossier.scrollIntoView({ behavior: "smooth" });
-          appendLine("Dossier mounted at #dossier");
+          appendLine("Profile mounted at #dossier");
         }
         shellPrompt();
         break;
