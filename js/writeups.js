@@ -126,13 +126,18 @@
       const title = meta.title || listed.title || slug;
       const date = meta.date || listed.date || "";
       const description = meta.description || listed.description || "";
+      const series = meta.series || listed.series || "";
 
       document.title = `${title} — Writeups`;
       const titleEl = document.getElementById("writeup-title");
       const dateEl = document.getElementById("writeup-date");
       const descEl = document.getElementById("writeup-desc");
       if (titleEl) titleEl.textContent = title;
-      if (dateEl) dateEl.textContent = formatDate(date);
+      if (dateEl) {
+        dateEl.textContent = series
+          ? `${series} · ${formatDate(date)}`
+          : formatDate(date);
+      }
       if (descEl) {
         descEl.textContent = description;
         descEl.hidden = !description;
