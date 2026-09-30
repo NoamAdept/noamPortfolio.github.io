@@ -158,4 +158,9 @@
       idx = 0;
     }
   });
+
+  window.noamOpenEgg = openEgg;
+  if (location.hash === "#egg") {
+    document.addEventListener("DOMContentLoaded", openEgg);
+  }
 })();

@@ -4,115 +4,123 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#88191A" />
-  <title>Noam Yakar — cybersecurity portfolio</title>
-  <meta name="description" content="Noam Yakar — cybersecurity, systems, and applied math. Dual-degree CS + Math @ ASU. Work across crypto, hardening, SDR, and adversarial ML." />
+  <title>Noam Yakar</title>
+  <meta name="description" content="Noam Yakar — cybersecurity, systems, CS + Math @ ASU." />
   <link rel="stylesheet" href="css/site.css" />
 </head>
-<body>
-  <nav class="topbar" aria-label="Primary">
-    <div class="topbar-inner">
-      <a class="topbar-brand" href="index.html">
-        <img class="topbar-avatar" src="profile.png" alt="" width="30" height="30" />
-        <span class="topbar-title">noam.yakar</span>
-      </a>
-      <div class="topbar-links">
-        <a href="index.html" aria-current="page">work</a>
-        <a href="projects.html">projects</a>
-        <a href="#about">about</a>
-        <a href="resume1.pdf" target="_blank" rel="noopener noreferrer">resume</a>
+<body class="landing">
+  <main class="stage" aria-label="Noam Yakar">
+    <div class="glow" aria-hidden="true"></div>
+    <div class="card">
+      <div class="portrait">
+        <img src="profile.png" alt="Noam Yakar" width="480" height="640" />
       </div>
+
+      <div class="panel">
+        <a class="panel-link" href="projects.html">&gt; projects</a>
+
+        <section class="section" aria-labelledby="socials-title">
+          <h2 id="socials-title">Socials</h2>
+          <ul class="list">
+            <li>
+              <a href="https://github.com/NoamAdept" target="_blank" rel="noopener noreferrer">
+                <span class="prompt">&gt;</span> GitHub
+              </a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/in/noam-yakar/" target="_blank" rel="noopener noreferrer">
+                <span class="prompt">&gt;</span> LinkedIn
+              </a>
+            </li>
+            <li>
+              <a href="https://pwn.college/hacker/noamyakar23" target="_blank" rel="noopener noreferrer">
+                <span class="prompt">&gt;</span> pwn.college
+              </a>
+            </li>
+            <li>
+              <a href="resume1.pdf" target="_blank" rel="noopener noreferrer">
+                <span class="prompt">&gt;</span> Resume
+              </a>
+            </li>
+          </ul>
+        </section>
+
+        <section class="section" aria-labelledby="exp-title">
+          <h2 id="exp-title">Experience</h2>
+          <ul class="list">
+            <li>
+              <span class="prompt">&gt;</span> Nike
+              <span class="role">intern</span>
+            </li>
+            <li>
+              <span class="prompt">&gt;</span> Radware Inc.
+              <span class="role">security</span>
+            </li>
+            <li>
+              <span class="prompt">&gt;</span> ASU
+              <span class="role">CS + Math</span>
+            </li>
+            <li>
+              <a href="https://github.com/NoamAdept/libCanary" target="_blank" rel="noopener noreferrer">
+                <span class="prompt">&gt;</span> libCanary
+                <span class="role">systems</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/NoamAdept/pi-sdr-academy" target="_blank" rel="noopener noreferrer">
+                <span class="prompt">&gt;</span> pi-sdr-academy
+                <span class="role">SDR lab</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/NoamAdept/provenance" target="_blank" rel="noopener noreferrer">
+                <span class="prompt">&gt;</span> provenance
+                <span class="role">crypto</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/NoamAdept/leakyFeistel" target="_blank" rel="noopener noreferrer">
+                <span class="prompt">&gt;</span> leakyFeistel
+                <span class="role">research</span>
+              </a>
+            </li>
+          </ul>
+        </section>
+
+        <section class="section" aria-labelledby="skills-title">
+          <h2 id="skills-title">Skills</h2>
+          <ul class="list">
+            <li><span class="prompt">&gt;</span> Cybersecurity</li>
+            <li><span class="prompt">&gt;</span> Cryptography</li>
+            <li><span class="prompt">&gt;</span> Systems / C</li>
+            <li><span class="prompt">&gt;</span> Python</li>
+            <li><span class="prompt">&gt;</span> SDR / DSP</li>
+            <li><span class="prompt">&gt;</span> CTFs</li>
+          </ul>
+        </section>
+      </div>
+
+      <div class="brand"><span>&gt;</span> noam.yakar</div>
     </div>
-  </nav>
+  </main>
 
-  <div class="page-layout">
-    <main class="content">
-      <h1>Selected work</h1>
-      <p class="lead">
-        Security engineering, crypto tooling, and systems labs —
-        dual-degree CS &amp; Mathematics at Arizona State University.
-      </p>
-
-      <div class="posts-list" id="work-list">
-        <!-- filled by js/work.js -->
-      </div>
-
-      <section class="about-block" id="about" aria-labelledby="about-title">
-        <h2 id="about-title">About</h2>
-        <p>
-          I build and break systems at the intersection of cybersecurity,
-          cryptography, and data. Active on pwn.college; interested in
-          exploit mitigation, applied crypto, and RF/SDR labs.
-        </p>
-        <ul class="cred-list">
-          <li><strong>Nike</strong> — internship in large-scale technical environments</li>
-          <li><strong>Radware Inc.</strong> — cybersecurity / security engineering</li>
-          <li><strong>ASU</strong> — academic research &amp; engineering roles</li>
-        </ul>
-        <div class="btn-row">
-          <a class="btn btn-accent" href="resume1.pdf" target="_blank" rel="noopener noreferrer">Download resume</a>
-          <a class="btn" href="https://github.com/NoamAdept" target="_blank" rel="noopener noreferrer">GitHub</a>
-          <a class="btn" href="https://www.linkedin.com/in/noam-yakar/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        </div>
-        <iframe class="resume-frame" src="resume1.pdf" title="Noam Yakar resume"></iframe>
-      </section>
-
-      <section id="egg-terminal" aria-label="Hidden console">
-        <div class="egg-bar">guest@node23 — undocumented</div>
-        <div class="terminal-body" id="terminal-body"></div>
-      </section>
-    </main>
-
-    <aside class="sidebar">
-      <div class="sidebar-card bio-card">
-        <img class="sidebar-avatar" src="profile.png" alt="Noam Yakar" width="52" height="52" />
-        <div>
-          <h3 class="sidebar-name">Noam Yakar</h3>
-          <p class="sidebar-bio">
-            Hacker &amp; student. CS + Math @ ASU. Hunting bugs, building tools.
-          </p>
-        </div>
-      </div>
-
-      <div class="sidebar-card links-card">
-        <a href="https://github.com/NoamAdept" target="_blank" rel="noopener noreferrer">
-          <span class="link-arrow">&gt;</span>GitHub
-        </a>
-        <a href="https://www.linkedin.com/in/noam-yakar/" target="_blank" rel="noopener noreferrer">
-          <span class="link-arrow">&gt;</span>LinkedIn
-        </a>
-        <a href="https://pwn.college/hacker/noamyakar23" target="_blank" rel="noopener noreferrer">
-          <span class="link-arrow">&gt;</span>pwn.college
-        </a>
-        <a href="resume1.pdf" target="_blank" rel="noopener noreferrer">
-          <span class="link-arrow">&gt;</span>Resume
-        </a>
-        <a href="projects.html">
-          <span class="link-arrow">&gt;</span>All projects
-        </a>
-      </div>
-
-      <div class="sidebar-card">
-        <h4 class="sidebar-card-title">Focus</h4>
-        <p class="sidebar-bio">
-          Systems hardening · crypto tooling · SDR/DSP · adversarial ML · CTFs
-        </p>
-      </div>
-    </aside>
-  </div>
-
-  <footer class="site-footer">
-    <p>© 2026 Noam Yakar <span class="egg-hint" aria-hidden="true">· ↑↑↓↓←→←→BA</span></p>
-  </footer>
-
-  <script id="hiddenData" type="application/json">
-  {
-    "encryptedFlag": "5c69ca3064c1a48236380094503d4037009d97a8fde3646e2e479bfb408afc8ba737af4f97af3dfe867e39b3e9aa694d6d2044d3c2e61df9d6805e6b7db3e534579ab444ca36103b040b0915c48fd6fd01f215fa1bf0cb7acfd436ecafe9fe2978b1ee131f225ca3c55cd1968cb6b14e1789490996090308d1ca133382d9c030",
-    "privateKey": "-----BEGIN PRIVATE KEY-----\nMIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAIkCa11vEoWMrZuE\nRiS6vIeGMcyuopfw1d3w8v/0o9kLEOTy1x7ipY8E4Qmn0YtfjIErIA3rwyEOSy8n\nONybga2acu+CkDzRUlhgid4qtpTpPznHT+nOr9T+kDyeAkxVYVGs94AD43WsYcVU\nEQD8v6M1z3pshyrACUoGHgBBvRtpAgMBAAECgYBggKzA/egs2v65SHzjiAgc6R+Q\njP0HSmJJVlrCgD0cNlgq+wUcwwVb7FLZqzPEGIPtw0NrqsEhOmEokFbTxFCcvSBH\nMBGw0IPI6OLeTronInvyqLxEuMLTcAnT+13QN2Se3Ke3Ets0puXe9x7cABxIBDU4\nNLrTxq7efsUKI+mTlQJBANmD8HHoimpuyEG5LgNVEL5h9iiNmyVcCBR2A7bTfAyu\nqququcmL9p8s2jCVyC7YcAffeRRb+JWnF49+vzdI5+8CQQChQBMFwhtOJU/L35Js\nzQAVwD9oN2YeuqKfdb6fWs4lz2I/I1OThbkry2Na6Dfwd/S0BdH2GLQULLIbkADr\npJonAkBxfgEwPggyvnjoqgmTHYht/cklobVIyftBSc5oT3KTX3OXvK3RtqDIrutt\nnEll//J8eSLA97f9xcBqU9TLsNOrAkAWz5ChVOc189NI/PSizZFAgnS10nhwymgs\n9KQluNvGv4KfeejdyqH6TwhcGNOpAd8tBFHCZZY78GK1wXZP33YrAkEAsbJ/9qsi\nLtv8UQlKlclNvncvxS2im4ZuIz925W3N3KnrnfAVoCwe5WlbMTwcTAIpMUXnMLI3\nmk3N0OpieqEDjw==\n-----END PRIVATE KEY-----",
-    "publicKey": "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJAmtdbxKFjK2bhEYkuryHhjHM\nrqKX8NXd8PL/9KPZCxDk8tce4qWPBOEJp9GLX4yBKyAN68MhDksvJzjcm4GtmnLv\ngpA80VJYYIneKraU6T85x0/pzq/U/pA8ngJMVWFRrPeAA+N1rGHFVBEA/L+jNc96\nbIcqwAlKBh4AQb0baQIDAQAB\n-----END PUBLIC KEY-----"
-  }
+  <script>
+    /* Konami opens projects with #egg — quiet easter egg */
+    (function () {
+      const seq = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"];
+      let i = 0;
+      document.addEventListener("keydown", (e) => {
+        const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+        const want = seq[i];
+        if (key === want || key === (want && want.toLowerCase())) {
+          i++;
+          if (i === seq.length) {
+            i = 0;
+            window.location.href = "projects.html#egg";
+          }
+        } else if (e.key !== "Shift") i = 0;
+      });
+    })();
   </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-  <script src="js/work.js"></script>
-  <script src="js/egg.js"></script>
 </body>
 </html>
