@@ -44,3 +44,5 @@ Current series: **pwnable.kr** (starts with `fd`).
 
 ## Stack
 HTML, CSS, JavaScript · [marked](https://marked.js.org/) for markdown
+
+GitHub Pages: `.nojekyll` is required so frontmatter Markdown files are served as static assets (otherwise Jekyll hides them and posts 404).

@@ -5,11 +5,5 @@
     "date": "2026-09-30",
     "description": "Toddler's Bottle · Linux file descriptors via stdin (fd 0).",
     "series": "pwnable.kr"
-  },
-  {
-    "slug": "welcome",
-    "title": "Welcome to writeups",
-    "date": "2026-09-30",
-    "description": "How to add new markdown writeups to this site."
   }
 ]
