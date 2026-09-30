@@ -1,17 +1,14 @@
-# Noam Yakar — CyberOps Portfolio
+# Noam Yakar — Portfolio
 
-Interactive cybersecurity portfolio: a branded terminal CTF unlocks a themed dossier and a decompiler-style projects browser.
+Security / systems portfolio in a clean black + red monospace style
+(inspired by research blogs like [blog.faav.net](https://blog.faav.net/)).
 
-## Features
-- Shared CyberOps visual system across home + projects
-- Terminal shell (`help`, `ctf`, `ls`, `cat`, `projects`, `reset`, …)
-- Crypto + chess challenges (interactive board + `chess.png` reference)
-- Unlock persistence via `localStorage`
-- Projects decompiler UI (summary / pseudocode / strings)
-- pwn.college proof panel
+## Pages
+- `index.html` — selected work + about + resume
+- `projects.html` — full project list
 
-## Tech
-HTML, CSS, JavaScript · CryptoJS · JSEncrypt
+## Stack
+HTML, CSS, JavaScript
 
-## Live
-[Portfolio](https://noamadept.github.io/noamPortfolio.github.io/)
+## Note
+An undocumented console exists for anyone who knows old cheat codes.

@@ -2,202 +2,106 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Noam Yakar — HACK THE PLANET</title>
-  <meta name="description" content="Noam Yakar — rustic hacker BBS portfolio. Jack into The Gibson: filez, mail, dumpster, payphone. Cybersecurity, systems, applied math." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Share+Tech+Mono&family=Special+Elite&family=VT323&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="css/cyberops.css" />
-  <link rel="stylesheet" href="css/hacktheplanet.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/3.0.0/jsencrypt.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#88191A" />
+  <title>Noam Yakar — cybersecurity portfolio</title>
+  <meta name="description" content="Noam Yakar — cybersecurity, systems, and applied math. Dual-degree CS + Math @ ASU. Work across crypto, hardening, SDR, and adversarial ML." />
+  <link rel="stylesheet" href="css/site.css" />
 </head>
 <body>
-  <div class="atmosphere" aria-hidden="true"></div>
-  <div class="crt-vignette" aria-hidden="true"></div>
-  <div class="crt-flicker" aria-hidden="true"></div>
-
-  <div class="boot-flash" id="bootFlash">
-    <div class="boot-text">HACK THE PLANET</div>
-  </div>
-
-  <header class="site-header">
-    <nav class="site-nav" aria-label="Primary">
-      <a class="brand" href="index.html">
-        <img src="profile.png" alt="" width="44" height="44" />
-        <span class="brand-text">
-          <span class="brand-name">Noam Yakar</span>
-          <span class="brand-tag">NODE 23 · 2400 baud · CS + Math</span>
-        </span>
+  <nav class="topbar" aria-label="Primary">
+    <div class="topbar-inner">
+      <a class="topbar-brand" href="index.html">
+        <img class="topbar-avatar" src="profile.png" alt="" width="30" height="30" />
+        <span class="topbar-title">noam.yakar</span>
       </a>
-      <button
-        type="button"
-        class="nav-toggle"
-        data-nav-toggle
-        aria-expanded="false"
-        aria-controls="primary-nav"
-        aria-label="Open menu"
-      >
-        <span class="nav-toggle-bars" aria-hidden="true"></span>
-      </button>
-      <ul class="nav-links" id="primary-nav" data-nav-panel>
-        <li><a href="#gibson" aria-current="page">Gibson</a></li>
-        <li><a id="projects-link" href="projects.html">Filez</a></li>
-        <li><a href="#dossier">Mail</a></li>
-        <li><span id="status-pill" class="status-pill unlocked">ONLINE</span></li>
-      </ul>
-    </nav>
-  </header>
+      <div class="topbar-links">
+        <a href="index.html" aria-current="page">work</a>
+        <a href="projects.html">projects</a>
+        <a href="#about">about</a>
+        <a href="resume1.pdf" target="_blank" rel="noopener noreferrer">resume</a>
+      </div>
+    </div>
+  </nav>
 
-  <main class="page">
-    <section class="hero" aria-labelledby="hero-title">
-      <p class="hero-kicker">// this is our world now…</p>
-      <h1 id="hero-title" class="hero-title">Hack the Planet</h1>
-      <p class="planet-quote">the world is wired. rummage. dial. dumpster-dive. no gatekeeping.</p>
-      <p class="hero-lead">
-        Dual-degree CS &amp; Mathematics @ ASU. Nike, Radware, ASU.
-        Crypto, systems hardening, SDR labs, adversarial ML.
-        Click a node on the globe — that’s the hook. Games in the BBS are optional.
+  <div class="page-layout">
+    <main class="content">
+      <h1>Selected work</h1>
+      <p class="lead">
+        Security engineering, crypto tooling, and systems labs —
+        dual-degree CS &amp; Mathematics at Arizona State University.
       </p>
-      <div class="cta-row">
-        <a class="btn btn-primary" href="#gibson">Jack in</a>
-        <a class="btn btn-ghost" href="projects.html">Warez / filez</a>
-        <a class="btn btn-ghost" href="#dossier">Read mail</a>
-      </div>
-    </section>
 
-    <section class="gibson" id="gibson" aria-label="The Gibson — clickable network">
-      <div class="featured-head">
-        <h2>The Gibson</h2>
-        <p>click a node. 1995 energy. rustic junk included.</p>
+      <div class="posts-list" id="work-list">
+        <!-- filled by js/work.js -->
       </div>
-      <div class="gibson-stage">
-        <div class="globe" aria-hidden="true">
-          <span class="globe-lat"></span>
-          <span class="globe-lat"></span>
-          <span class="globe-lat"></span>
+
+      <section class="about-block" id="about" aria-labelledby="about-title">
+        <h2 id="about-title">About</h2>
+        <p>
+          I build and break systems at the intersection of cybersecurity,
+          cryptography, and data. Active on pwn.college; interested in
+          exploit mitigation, applied crypto, and RF/SDR labs.
+        </p>
+        <ul class="cred-list">
+          <li><strong>Nike</strong> — internship in large-scale technical environments</li>
+          <li><strong>Radware Inc.</strong> — cybersecurity / security engineering</li>
+          <li><strong>ASU</strong> — academic research &amp; engineering roles</li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-accent" href="resume1.pdf" target="_blank" rel="noopener noreferrer">Download resume</a>
+          <a class="btn" href="https://github.com/NoamAdept" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a class="btn" href="https://www.linkedin.com/in/noam-yakar/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         </div>
-        <button type="button" class="node" data-node="mail"><small>inbox</small>MAIL</button>
-        <button type="button" class="node" data-node="filez"><small>warez</small>FILEZ</button>
-        <button type="button" class="node" data-node="games"><small>optional</small>GAMES</button>
-        <button type="button" class="node" data-node="dumpster"><small>rummage</small>DUMPSTER</button>
-        <button type="button" class="node" data-node="phone"><small>phreak</small>PAYPHONE</button>
-      </div>
-      <p class="gibson-caption">
-        MAIL = about + resume. FILEZ = GitHub highlights. DUMPSTER = rummage junk for the PDF.
-        PAYPHONE = DTMF easter egg. GAMES = old crypto/chess board if you want it — not required.
-      </p>
-    </section>
+        <iframe class="resume-frame" src="resume1.pdf" title="Noam Yakar resume"></iframe>
+      </section>
 
-    <section id="terminal" class="panel" aria-label="BBS terminal">
-      <div class="panel-header">
-        <div class="traffic" aria-hidden="true">
-          <span class="r"></span><span class="y"></span><span class="g"></span>
+      <section id="egg-terminal" aria-label="Hidden console">
+        <div class="egg-bar">guest@node23 — undocumented</div>
+        <div class="terminal-body" id="terminal-body"></div>
+      </section>
+    </main>
+
+    <aside class="sidebar">
+      <div class="sidebar-card bio-card">
+        <img class="sidebar-avatar" src="profile.png" alt="Noam Yakar" width="52" height="52" />
+        <div>
+          <h3 class="sidebar-name">Noam Yakar</h3>
+          <p class="sidebar-bio">
+            Hacker &amp; student. CS + Math @ ASU. Hunting bugs, building tools.
+          </p>
         </div>
-        <div class="panel-title">CYBEROPS BBS — 2400-N-8-1</div>
-        <div class="panel-meta">CARRIER</div>
       </div>
-      <div class="terminal-body" id="terminal-body"></div>
-    </section>
 
-    <section id="dossier" class="open" aria-label="About and resume">
-      <div class="dossier-grid">
-        <article class="panel dossier-panel">
-          <p class="section-label">Mail // about.txt</p>
-          <h2>Handle: noam</h2>
-          <div class="profile-row">
-            <img src="profile.png" alt="Noam Yakar" width="110" height="110" />
-            <div>
-              <p>
-                I build and break systems at the intersection of cybersecurity,
-                cryptography, and data. Dual-degree Computer Science and Mathematics
-                at Arizona State University; active on pwn.college and in the junk drawer of the internet.
-              </p>
-            </div>
-          </div>
-          <ul class="cred-list">
-            <li><strong>Nike</strong> — internship in large-scale technical environments</li>
-            <li><strong>Radware Inc.</strong> — cybersecurity / security engineering</li>
-            <li><strong>ASU</strong> — academic research &amp; engineering</li>
-            <li><strong>Focus</strong> — systems hardening, crypto tooling, SDR/DSP, adversarial ML</li>
-          </ul>
-          <div class="social-row">
-            <a class="social-chip" href="https://github.com/NoamAdept" target="_blank" rel="noopener noreferrer">
-              <i class="fab fa-github" aria-hidden="true"></i> GitHub
-            </a>
-            <a class="social-chip" href="https://www.linkedin.com/in/noam-yakar/" target="_blank" rel="noopener noreferrer">
-              <i class="fab fa-linkedin" aria-hidden="true"></i> LinkedIn
-            </a>
-            <a class="social-chip" href="resume1.pdf" target="_blank" rel="noopener noreferrer">
-              <i class="fas fa-file-pdf" aria-hidden="true"></i> Resume PDF
-            </a>
-          </div>
-        </article>
-
-        <article class="panel dossier-panel">
-          <p class="section-label">Attached // resume.pdf</p>
-          <h2>The paper trail</h2>
-          <div class="resume-actions cta-row">
-            <a class="btn btn-primary" href="resume1.pdf" target="_blank" rel="noopener noreferrer">
-              <i class="fas fa-download" aria-hidden="true"></i> Download resume
-            </a>
-          </div>
-          <iframe class="resume-frame" src="resume1.pdf" title="Noam Yakar resume">
-            Your browser does not support PDFs.
-            <a href="resume1.pdf">Download the PDF</a>
-          </iframe>
-        </article>
+      <div class="sidebar-card links-card">
+        <a href="https://github.com/NoamAdept" target="_blank" rel="noopener noreferrer">
+          <span class="link-arrow">&gt;</span>GitHub
+        </a>
+        <a href="https://www.linkedin.com/in/noam-yakar/" target="_blank" rel="noopener noreferrer">
+          <span class="link-arrow">&gt;</span>LinkedIn
+        </a>
+        <a href="https://pwn.college/hacker/noamyakar23" target="_blank" rel="noopener noreferrer">
+          <span class="link-arrow">&gt;</span>pwn.college
+        </a>
+        <a href="resume1.pdf" target="_blank" rel="noopener noreferrer">
+          <span class="link-arrow">&gt;</span>Resume
+        </a>
+        <a href="projects.html">
+          <span class="link-arrow">&gt;</span>All projects
+        </a>
       </div>
-    </section>
-  </main>
 
-  <div class="hack-modal" id="dumpster-modal" aria-hidden="true" role="dialog" aria-label="Dumpster dive">
-    <div class="hack-sheet">
-      <h2>Dumpster</h2>
-      <p>Behind the machine shop. Pizza grease, floppies, secrets. Click junk.</p>
-      <div class="dump-pile" id="dump-pile"></div>
-      <p id="dump-msg">Rummage. The good stuff is never on top.</p>
-      <button type="button" class="btn btn-ghost" data-close-modal="dumpster-modal">Crawl out</button>
-    </div>
-  </div>
-
-  <div class="hack-modal" id="phone-modal" aria-hidden="true" role="dialog" aria-label="Payphone">
-    <div class="hack-sheet">
-      <h2>Payphone</h2>
-      <p>Red box energy. No coins required. Dial a memory.</p>
-      <div class="phone-screen" id="phone-screen">_</div>
-      <div class="phone-pad">
-        <button type="button" data-digit="1">1</button>
-        <button type="button" data-digit="2">2</button>
-        <button type="button" data-digit="3">3</button>
-        <button type="button" data-digit="4">4</button>
-        <button type="button" data-digit="5">5</button>
-        <button type="button" data-digit="6">6</button>
-        <button type="button" data-digit="7">7</button>
-        <button type="button" data-digit="8">8</button>
-        <button type="button" data-digit="9">9</button>
-        <button type="button" data-digit="clr">CLR</button>
-        <button type="button" data-digit="0">0</button>
-        <button type="button" data-digit="snd">SND</button>
+      <div class="sidebar-card">
+        <h4 class="sidebar-card-title">Focus</h4>
+        <p class="sidebar-bio">
+          Systems hardening · crypto tooling · SDR/DSP · adversarial ML · CTFs
+        </p>
       </div>
-      <p id="phone-msg">Drop a dime. Try 311.</p>
-      <button type="button" class="btn btn-ghost" data-close-modal="phone-modal">Hang up</button>
-    </div>
-  </div>
-
-  <div id="lockOverlay" aria-live="polite">
-    <div class="hex-rain" id="hexRain" aria-hidden="true"></div>
-    <div class="lock-ring" id="lockRing">
-      <span class="lock-glyph" id="lockGlyph">📡</span>
-    </div>
-    <div class="lock-copy" id="lockCopy">Carrier detected…</div>
-    <div class="lock-sub" id="lockSub">CONNECT 2400</div>
+    </aside>
   </div>
 
   <footer class="site-footer">
-    <p>© 2026 Noam Yakar — mess with the best, die like the rest · BBS node 23</p>
+    <p>© 2026 Noam Yakar <span class="egg-hint" aria-hidden="true">· ↑↑↓↓←→←→BA</span></p>
   </footer>
 
   <script id="hiddenData" type="application/json">
@@ -207,8 +111,8 @@
     "publicKey": "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJAmtdbxKFjK2bhEYkuryHhjHM\nrqKX8NXd8PL/9KPZCxDk8tce4qWPBOEJp9GLX4yBKyAN68MhDksvJzjcm4GtmnLv\ngpA80VJYYIneKraU6T85x0/pzq/U/pA8ngJMVWFRrPeAA+N1rGHFVBEA/L+jNc96\nbIcqwAlKBh4AQb0baQIDAQAB\n-----END PUBLIC KEY-----"
   }
   </script>
-  <script src="js/nav.js"></script>
-  <script src="js/terminal.js"></script>
-  <script src="js/gibson.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <script src="js/work.js"></script>
+  <script src="js/egg.js"></script>
 </body>
 </html>
