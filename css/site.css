@@ -573,6 +573,151 @@ body.site::before {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+/* Writeup / markdown body */
+.page-layout-narrow .content {
+  max-width: 48rem;
+}
+
+.back-link {
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.back-link a {
+  color: var(--accent);
+}
+
+.back-link a:hover {
+  color: #ff5555;
+}
+
+.post-date-meta {
+  color: #4a4a4a;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.35rem;
+}
+
+.md-body {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: #d4d4d4;
+}
+
+.md-body > *:first-child {
+  margin-top: 0;
+}
+
+.md-body h1,
+.md-body h2,
+.md-body h3 {
+  color: #e8e8e8;
+  margin: 1.6rem 0 0.75rem;
+  line-height: 1.25;
+}
+
+.md-body h1 {
+  font-size: 1.65rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 0.5rem;
+}
+
+.md-body h2 {
+  font-size: 1.35rem;
+}
+
+.md-body h2::before,
+.md-body h3::before {
+  content: "> ";
+  color: var(--accent);
+  opacity: 0.6;
+  font-weight: 400;
+}
+
+.md-body p,
+.md-body ul,
+.md-body ol {
+  margin-bottom: 1rem;
+}
+
+.md-body ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.md-body ul > li::before {
+  content: "> ";
+  color: var(--accent);
+  opacity: 0.6;
+}
+
+.md-body ol {
+  padding-left: 1.25rem;
+}
+
+.md-body a {
+  color: var(--accent);
+}
+
+.md-body a:hover {
+  color: #ff5555;
+}
+
+.md-body code {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  padding: 0.15em 0.4em;
+  font-size: 0.9em;
+}
+
+.md-body pre {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 1rem 1.15rem;
+  overflow-x: auto;
+  margin-bottom: 1.15rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.md-body pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+.md-body blockquote {
+  border-left: 2px solid rgba(255, 26, 26, 0.4);
+  padding-left: 1rem;
+  color: #888;
+  margin: 0 0 1rem;
+}
+
+.md-body hr {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin: 1.75rem 0;
+}
+
+.md-body img {
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin: 0.75rem 0 1.15rem;
+}
+
+.err-msg {
+  color: #ff5555;
+}
+
+.panel-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+}
+
 @media (max-width: 760px) {
   .card {
     grid-template-columns: 1fr;
