@@ -14,25 +14,33 @@ Faav-inspired portfolio:
 title: My writeup
 date: 2026-10-01
 description: One-line summary
+series: pwnable.kr
 ---
 
 # My writeup
 
 Body in markdown…
+
+![screenshot](img/pwnable-kr/example.png)
 ```
 
-2. Add an entry to `writeups/manifest.json`:
+Images go under `writeups/img/…` and are referenced with relative paths from the post.
+
+2. Add an entry to `writeups/manifest.json` (optional `series` groups the list):
 
 ```json
 {
   "slug": "my-slug",
   "title": "My writeup",
   "date": "2026-10-01",
-  "description": "One-line summary"
+  "description": "One-line summary",
+  "series": "pwnable.kr"
 }
 ```
 
 3. Visit `/writeups/` — post URL is `writeups/post.html?slug=my-slug`.
+
+Current series: **pwnable.kr** (starts with `fd`).
 
 ## Stack
 HTML, CSS, JavaScript · [marked](https://marked.js.org/) for markdown

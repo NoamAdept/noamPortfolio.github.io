@@ -51,6 +51,15 @@
     return Array.isArray(data) ? data : [];
   }
 
+  function postCard(w) {
+    return `
+        <a class="post-card" href="post.html?slug=${encodeURIComponent(w.slug)}">
+          <span class="post-meta">${escapeHtml(formatDate(w.date))}</span>
+          <h2 class="post-title">${escapeHtml(w.title || w.slug)}</h2>
+          <p class="post-desc">${escapeHtml(w.description || "")}</p>
+        </a>`;
+  }
+
   async function renderList() {
     const el = document.getElementById("writeups-list");
     if (!el) return;
@@ -62,15 +71,32 @@
           '<p class="lead">No writeups yet. Add a markdown file and list it in <code>manifest.json</code>.</p>';
         return;
       }
-      el.innerHTML = items
-        .map(
-          (w) => `
-        <a class="post-card" href="post.html?slug=${encodeURIComponent(w.slug)}">
-          <span class="post-meta">${escapeHtml(formatDate(w.date))}</span>
-          <h2 class="post-title">${escapeHtml(w.title || w.slug)}</h2>
-          <p class="post-desc">${escapeHtml(w.description || "")}</p>
-        </a>`
-        )
+
+      const seriesOrder = [];
+      const bySeries = new Map();
+      items.forEach((w) => {
+        const key = w.series || "";
+        if (!bySeries.has(key)) {
+          bySeries.set(key, []);
+          seriesOrder.push(key);
+        }
+        bySeries.get(key).push(w);
+      });
+      // Named series first (e.g. pwnable.kr), then uncategorized
+      seriesOrder.sort((a, b) => {
+        if (!a) return 1;
+        if (!b) return -1;
+        return a.localeCompare(b);
+      });
+
+      el.innerHTML = seriesOrder
+        .map((key) => {
+          const posts = bySeries.get(key);
+          const heading = key
+            ? `<h2 class="series-heading">${escapeHtml(key)}</h2>`
+            : `<h2 class="series-heading">Notes</h2>`;
+          return `<section class="series-block">${heading}${posts.map(postCard).join("")}</section>`;
+        })
         .join("");
     } catch (err) {
       el.innerHTML = `<p class="lead err-msg">${escapeHtml(err.message)}</p>`;
