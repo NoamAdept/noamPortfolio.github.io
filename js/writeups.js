@@ -152,6 +152,29 @@
         breaks: false,
       });
       article.innerHTML = marked.parse(body);
+      // Soft figure captions from alt text for cleaner screenshot presentation
+      article.querySelectorAll("img[alt]").forEach((img) => {
+        if (img.closest(".challenge-hero") || img.parentElement?.tagName === "FIGURE") {
+          return;
+        }
+        if (img.classList.contains("challenge-logo") || img.classList.contains("challenge-art")) {
+          return;
+        }
+        const alt = (img.getAttribute("alt") || "").trim();
+        if (!alt || alt.length < 12) return;
+        const fig = document.createElement("figure");
+        fig.className = "md-figure";
+        const parent = img.parentElement;
+        img.replaceWith(fig);
+        fig.appendChild(img);
+        const cap = document.createElement("figcaption");
+        cap.textContent = alt;
+        fig.appendChild(cap);
+        // Avoid invalid <p><figure> wrappers from marked
+        if (parent && parent.tagName === "P" && parent.childNodes.length === 1 && parent.firstChild === fig) {
+          parent.replaceWith(fig);
+        }
+      });
     } catch (err) {
       article.innerHTML = `<p class="err-msg">${escapeHtml(err.message)}</p>`;
     }
