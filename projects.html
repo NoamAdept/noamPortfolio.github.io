@@ -19,6 +19,7 @@
         <a href="index.html">home</a>
         <a href="projects.html" aria-current="page">projects</a>
         <a href="writeups/">writeups</a>
+        <a href="#pwncollege">pwn.college</a>
         <a href="#about">about</a>
         <a href="resume1.pdf" target="_blank" rel="noopener noreferrer">resume</a>
       </div>
@@ -29,9 +30,32 @@
     <main class="content">
       <h1>Projects</h1>
       <p class="lead">
-        Systems security, crypto tooling, SDR labs, and teaching CTFs.
+        Systems security, crypto tooling, SDR labs, and teaching CTFs — plus the dojo grind on pwn.college.
       </p>
-      <div class="posts-list" id="all-projects"></div>
+
+      <section class="highlight-section" id="highlighted" aria-labelledby="highlighted-title">
+        <div class="section-head">
+          <h2 id="highlighted-title">Highlighted</h2>
+          <p class="section-sub">The projects I am most proud to put first.</p>
+        </div>
+        <div class="highlight-grid" id="featured-projects"></div>
+      </section>
+
+      <section class="pwn-section" id="pwncollege" aria-labelledby="pwncollege-title">
+        <div class="section-head">
+          <h2 id="pwncollege-title">pwn.college</h2>
+          <p class="section-sub">Belt progress and the modules I have been clearing lately.</p>
+        </div>
+        <div id="pwncollege-root"></div>
+      </section>
+
+      <section class="all-projects-section" id="all" aria-labelledby="all-title">
+        <div class="section-head">
+          <h2 id="all-title">More projects</h2>
+          <p class="section-sub">Everything else in the catalog.</p>
+        </div>
+        <div class="posts-list" id="all-projects"></div>
+      </section>
 
       <section class="about-block" id="about">
         <h2>About</h2>
@@ -45,6 +69,7 @@
         <div class="btn-row">
           <a class="btn btn-accent" href="resume1.pdf" target="_blank" rel="noopener noreferrer">Download resume</a>
           <a class="btn" href="https://github.com/NoamAdept" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a class="btn" href="https://pwn.college/hacker/noamyakar23" target="_blank" rel="noopener noreferrer">pwn.college</a>
         </div>
         <iframe class="resume-frame" src="resume1.pdf" title="Resume"></iframe>
       </section>
@@ -66,9 +91,17 @@
       <div class="sidebar-card links-card">
         <a href="index.html"><span class="prompt">&gt;</span>Home</a>
         <a href="writeups/"><span class="prompt">&gt;</span>Writeups</a>
+        <a href="#highlighted"><span class="prompt">&gt;</span>Highlighted</a>
+        <a href="#pwncollege"><span class="prompt">&gt;</span>pwn.college</a>
         <a href="https://github.com/NoamAdept" target="_blank" rel="noopener noreferrer"><span class="prompt">&gt;</span>GitHub</a>
         <a href="https://www.linkedin.com/in/noam-yakar/" target="_blank" rel="noopener noreferrer"><span class="prompt">&gt;</span>LinkedIn</a>
-        <a href="https://pwn.college/hacker/noamyakar23" target="_blank" rel="noopener noreferrer"><span class="prompt">&gt;</span>pwn.college</a>
+      </div>
+      <div class="sidebar-card pwn-side-card">
+        <h4 class="sidebar-card-title">Belt</h4>
+        <p class="sidebar-bio">
+          <span class="belt-dot" aria-hidden="true"></span>
+          Yellow Belt · earned Sep 2026
+        </p>
       </div>
     </aside>
   </div>
@@ -86,6 +119,7 @@
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
   <script src="js/work.js"></script>
+  <script src="js/pwncollege.js"></script>
   <script src="js/egg.js"></script>
 </body>
 </html>
