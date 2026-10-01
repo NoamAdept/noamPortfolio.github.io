@@ -97,7 +97,7 @@
         bySeries.get(key).push(w);
       });
       // Preferred shelf order — passion topics first
-      const preferred = ["stats & ML", "pwnable.kr"];
+      const preferred = ["pwnable.kr"];
       seriesOrder.sort((a, b) => {
         const ia = preferred.indexOf(a);
         const ib = preferred.indexOf(b);

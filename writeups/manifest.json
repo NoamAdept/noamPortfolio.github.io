@@ -1,19 +1,5 @@
 [
   {
-    "slug": "stp-421-probability-field-guide",
-    "title": "STP 421 probability field guide",
-    "date": "2026-10-01",
-    "description": "Probability spaces through the CLT — polished STP 421 final-review notes.",
-    "series": "stats & ML"
-  },
-  {
-    "slug": "principal-component-analysis",
-    "title": "Principal Component Analysis",
-    "date": "2026-10-01",
-    "description": "Dimensionality reduction from the spectral theorem — covariance, PCs, and when PCA fails.",
-    "series": "stats & ML"
-  },
-  {
     "slug": "pwnable-kr-fd",
     "title": "pwnable.kr — fd",
     "date": "2026-09-30",
