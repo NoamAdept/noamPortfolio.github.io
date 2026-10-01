@@ -7,7 +7,8 @@ window.NOAM_PROJECTS = [
     passion: true,
     title: "pi-sdr-academy — offline Pi SDR lab",
     meta: "Python · Raspberry Pi · DSP / SDR",
-    desc: "The project I am building hardest right now: a self-contained Raspberry Pi laboratory for systems, DSP, and software-defined radio with dojo-style progression.",
+    desc: "Offline Pi laboratory for systems, DSP, and software-defined radio with dojo-style progression.",
+    image: "img/pi-sdr-academy.png",
     tags: ["SDR", "DSP", "hardware", "passion"],
     url: "https://github.com/NoamAdept/pi-sdr-academy",
     highlights: [
@@ -19,7 +20,7 @@ window.NOAM_PROJECTS = [
   {
     id: "gradebook",
     featured: true,
-    highlight: true,
+    highlight: false,
     title: "aTotallyNormalGradebook — WarGames CTF",
     meta: "Python · teaching CTF",
     desc: "Terminal hacking simulation: infiltrate a “secure” gradebook and study auth / design flaws.",
@@ -34,7 +35,7 @@ window.NOAM_PROJECTS = [
   {
     id: "libCanary",
     featured: true,
-    highlight: true,
+    highlight: false,
     title: "libCanary — custom stack canaries",
     meta: "C · systems security",
     desc: "Native stack-canary implementation exploring how runtime guards detect stack-smashing and harden binaries.",
@@ -49,7 +50,7 @@ window.NOAM_PROJECTS = [
   {
     id: "leakyFeistel",
     featured: true,
-    highlight: true,
+    highlight: false,
     title: "leakyFeistel — fixed-key Feistel recovery",
     meta: "C++ · crypto research",
     desc: "Demonstrates how a Feistel cipher with no key schedule leaks enough intermediate state to recover the key.",
@@ -157,25 +158,18 @@ window.renderProjectCards = function (el, { featuredOnly = false, highlightOnly 
   if (excludeHighlight) items = items.filter((p) => !p.highlight);
 
   if (highlightOnly) {
-    // Passion project first, then the rest
-    items = [
-      ...items.filter((p) => p.passion),
-      ...items.filter((p) => !p.passion),
-    ];
     el.innerHTML = items
       .map(
-        (p, i) => `
-      <a class="highlight-card accent-${i % 4}${p.passion ? " highlight-passion" : ""}" href="${p.url}" target="_blank" rel="noopener noreferrer">
-        <span class="highlight-kicker">${p.passion ? "Currently building" : "Highlighted"}</span>
+        (p) => `
+      <a class="highlight-card highlight-passion" href="${p.url}" target="_blank" rel="noopener noreferrer">
+        <span class="highlight-kicker">Currently building</span>
         <h3 class="highlight-title">${escapeHtml(p.title)}</h3>
         <p class="highlight-meta">${escapeHtml(p.meta)}</p>
-        <p class="highlight-desc">${escapeHtml(p.desc)}</p>
-        <ul class="highlight-list">
-          ${(p.highlights || [])
-            .slice(0, 2)
-            .map((h) => `<li>${escapeHtml(h)}</li>`)
-            .join("")}
-        </ul>
+        ${
+          p.image
+            ? `<img class="highlight-shot" src="${escapeHtml(p.image)}" alt="${escapeHtml(p.title)} application" width="1280" height="900" loading="lazy" />`
+            : ""
+        }
         <span class="highlight-cta">View on GitHub →</span>
       </a>`
       )

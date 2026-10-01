@@ -1,4 +1,4 @@
-/* pwn.college profile snapshot — dates = latest activity in that module */
+/* pwn.college profile snapshot */
 window.PWN_COLLEGE = {
   handle: "noamyakar23",
   profileUrl: "https://pwn.college/hacker/noamyakar23",
@@ -13,45 +13,6 @@ window.PWN_COLLEGE = {
     challenges: "≈2.9k solves",
     note: "Progress across dojos · public profile",
   },
-  // Ordered by most recent module activity on the public profile (refreshed 2026-10-01)
-  recent: [
-    {
-      title: "Exclusionary globbing",
-      dojo: "Computing 101",
-      date: "2026-09-30",
-      blurb: "Negative globs and path expansions — last clears on Sep 30.",
-    },
-    {
-      title: "level4.1",
-      dojo: "Program interaction",
-      date: "2026-09-29",
-      blurb: "Interaction ladder module — latest submissions Sep 29.",
-    },
-    {
-      title: "Stop, Pop, and ROP II (Hard)",
-      dojo: "Memory errors",
-      date: "2026-09-28",
-      blurb: "Hard ROP set — same day the yellow belt unlocked.",
-    },
-    {
-      title: "Your First Overflow (easy)",
-      dojo: "Memory errors",
-      date: "2026-09-28",
-      blurb: "Overflow module still seeing new clears through belt day.",
-    },
-    {
-      title: "Project 1.0 Intro and Linux",
-      dojo: "LecLabs",
-      date: "2026-07-24",
-      blurb: "Linux fundamentals project track.",
-    },
-    {
-      title: "File Globbing",
-      dojo: "Computing 101",
-      date: "2026-07-23",
-      blurb: "Wildcard mastery that set up the exclusionary set.",
-    },
-  ],
 };
 
 window.renderPwnCollege = function (root) {
@@ -89,23 +50,6 @@ window.renderPwnCollege = function (root) {
         </div>
         <a class="btn btn-accent" href="${escapePc(d.profileUrl)}" target="_blank" rel="noopener noreferrer">Open public profile</a>
       </div>
-    </div>
-    <h3 class="pwn-recent-heading">Recently active modules</h3>
-    <p class="pwn-recent-note">Sorted by latest successful submission on the public profile — not first-ever solve.</p>
-    <div class="pwn-recent-grid">
-      ${d.recent
-        .map(
-          (c, i) => `
-        <article class="pwn-solve${i === 0 ? " pwn-solve-latest" : ""}">
-          <div class="pwn-solve-top">
-            <span class="pwn-solve-dojo">${escapePc(c.dojo)}</span>
-            <time class="pwn-solve-date" datetime="${escapePc(c.date)}">${escapePc(formatPcDate(c.date))}</time>
-          </div>
-          <h4 class="pwn-solve-title">${escapePc(c.title)}</h4>
-          <p class="pwn-solve-blurb">${escapePc(c.blurb)}</p>
-        </article>`
-        )
-        .join("")}
     </div>
   `;
 };
