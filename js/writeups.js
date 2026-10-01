@@ -19,6 +19,20 @@
     });
   }
 
+  function protectMath(src) {
+    const store = [];
+    const out = src.replace(/\\\[[\s\S]+?\\\]|\\\([\s\S]+?\\\)/g, (m) => {
+      const i = store.length;
+      store.push(m);
+      return `@@MATH${i}@@`;
+    });
+    return { src: out, store };
+  }
+
+  function restoreMath(html, store) {
+    return html.replace(/@@MATH(\d+)@@/g, (_, i) => store[Number(i)] || "");
+  }
+
   function parseFrontmatter(raw) {
     if (!raw.startsWith("---")) {
       return { meta: {}, body: raw };
@@ -151,7 +165,8 @@
         gfm: true,
         breaks: false,
       });
-      article.innerHTML = marked.parse(body);
+      const { src: protectedBody, store: mathStore } = protectMath(body);
+      article.innerHTML = restoreMath(marked.parse(protectedBody), mathStore);
       // Soft figure captions from alt text for cleaner screenshot presentation
       article.querySelectorAll("img[alt]").forEach((img) => {
         if (img.closest(".challenge-hero") || img.parentElement?.tagName === "FIGURE") {
@@ -175,6 +190,9 @@
           parent.replaceWith(fig);
         }
       });
+      if (window.MathJax && typeof window.MathJax.typesetPromise === "function") {
+        window.MathJax.typesetPromise([article]).catch(() => {});
+      }
     } catch (err) {
       article.innerHTML = `<p class="err-msg">${escapeHtml(err.message)}</p>`;
     }

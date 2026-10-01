@@ -1,9 +1,26 @@
 /* Shared project catalog + Faav-style list rendering */
 window.NOAM_PROJECTS = [
   {
-    id: "gradebook",
+    id: "piSdrAcademy",
     featured: true,
     highlight: true,
+    passion: true,
+    title: "pi-sdr-academy — offline Pi SDR lab",
+    meta: "Python · Raspberry Pi · DSP / SDR",
+    desc: "Offline Pi laboratory for systems, DSP, and software-defined radio with dojo-style progression.",
+    image: "img/pi-sdr-academy.png",
+    tags: ["SDR", "DSP", "hardware", "passion"],
+    url: "https://github.com/NoamAdept/pi-sdr-academy",
+    highlights: [
+      "Offline lab modules on real hardware",
+      "Bridges RF, signals, and software",
+      "Belt / academy structure for deliberate practice",
+    ],
+  },
+  {
+    id: "gradebook",
+    featured: true,
+    highlight: false,
     title: "aTotallyNormalGradebook — WarGames CTF",
     meta: "Python · teaching CTF",
     desc: "Terminal hacking simulation: infiltrate a “secure” gradebook and study auth / design flaws.",
@@ -18,7 +35,7 @@ window.NOAM_PROJECTS = [
   {
     id: "libCanary",
     featured: true,
-    highlight: true,
+    highlight: false,
     title: "libCanary — custom stack canaries",
     meta: "C · systems security",
     desc: "Native stack-canary implementation exploring how runtime guards detect stack-smashing and harden binaries.",
@@ -33,7 +50,7 @@ window.NOAM_PROJECTS = [
   {
     id: "leakyFeistel",
     featured: true,
-    highlight: true,
+    highlight: false,
     title: "leakyFeistel — fixed-key Feistel recovery",
     meta: "C++ · crypto research",
     desc: "Demonstrates how a Feistel cipher with no key schedule leaks enough intermediate state to recover the key.",
@@ -43,21 +60,6 @@ window.NOAM_PROJECTS = [
       "Chosen-plaintext key recovery",
       "Weak key-schedule lesson",
       "Clear C++ write-up",
-    ],
-  },
-  {
-    id: "piSdrAcademy",
-    featured: true,
-    highlight: true,
-    title: "pi-sdr-academy — offline Pi SDR lab",
-    meta: "Python · Raspberry Pi · DSP / SDR",
-    desc: "Self-contained Raspberry Pi laboratory for systems, DSP, and software-defined radio — dojo-style progression.",
-    tags: ["SDR", "DSP", "hardware"],
-    url: "https://github.com/NoamAdept/pi-sdr-academy",
-    highlights: [
-      "Offline lab modules",
-      "Bridges RF, signals, and software",
-      "Belt / academy structure",
     ],
   },
   {
@@ -158,18 +160,16 @@ window.renderProjectCards = function (el, { featuredOnly = false, highlightOnly 
   if (highlightOnly) {
     el.innerHTML = items
       .map(
-        (p, i) => `
-      <a class="highlight-card accent-${i % 4}" href="${p.url}" target="_blank" rel="noopener noreferrer">
-        <span class="highlight-kicker">Highlighted</span>
+        (p) => `
+      <a class="highlight-card highlight-passion" href="${p.url}" target="_blank" rel="noopener noreferrer">
+        <span class="highlight-kicker">Currently building</span>
         <h3 class="highlight-title">${escapeHtml(p.title)}</h3>
         <p class="highlight-meta">${escapeHtml(p.meta)}</p>
-        <p class="highlight-desc">${escapeHtml(p.desc)}</p>
-        <ul class="highlight-list">
-          ${(p.highlights || [])
-            .slice(0, 2)
-            .map((h) => `<li>${escapeHtml(h)}</li>`)
-            .join("")}
-        </ul>
+        ${
+          p.image
+            ? `<img class="highlight-shot" src="${escapeHtml(p.image)}" alt="${escapeHtml(p.title)} application" width="1280" height="900" loading="lazy" />`
+            : ""
+        }
         <span class="highlight-cta">View on GitHub →</span>
       </a>`
       )
@@ -212,6 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const detail = document.getElementById("project-detail");
   const pick =
+    window.NOAM_PROJECTS.find((p) => p.passion) ||
     window.NOAM_PROJECTS.find((p) => p.highlight) ||
     window.NOAM_PROJECTS.find((p) => p.featured) ||
     window.NOAM_PROJECTS[0];

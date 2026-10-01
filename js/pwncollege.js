@@ -1,4 +1,4 @@
-/* pwn.college profile snapshot — update when you earn a new belt / binge solves */
+/* pwn.college profile snapshot */
 window.PWN_COLLEGE = {
   handle: "noamyakar23",
   profileUrl: "https://pwn.college/hacker/noamyakar23",
@@ -13,44 +13,6 @@ window.PWN_COLLEGE = {
     challenges: "≈2.9k solves",
     note: "Progress across dojos · public profile",
   },
-  recent: [
-    {
-      title: "Exclusionary globbing",
-      dojo: "Linux / shell",
-      date: "2026-09-30",
-      blurb: "Path expansions and negative globs under pressure.",
-    },
-    {
-      title: "level4.1",
-      dojo: "Program interaction",
-      date: "2026-09-29",
-      blurb: "Next rung on the interaction ladder.",
-    },
-    {
-      title: "Stop, Pop, and ROP II (Hard)",
-      dojo: "Binary exploitation",
-      date: "2026-09-28",
-      blurb: "ROP chain work the same day the yellow belt dropped.",
-    },
-    {
-      title: "File Globbing",
-      dojo: "Linux / shell",
-      date: "2026-07-23",
-      blurb: "Shell wildcard mastery before the exclusionary set.",
-    },
-    {
-      title: "Your First Overflow (easy)",
-      dojo: "Binary exploitation",
-      date: "2025-01-21",
-      blurb: "Classic stack smash warmup.",
-    },
-    {
-      title: "Assembly Crash Course",
-      dojo: "Fundamentals",
-      date: "2025-03-20",
-      blurb: "Registers, calling conventions, and reading disasm.",
-    },
-  ],
 };
 
 window.renderPwnCollege = function (root) {
@@ -88,22 +50,6 @@ window.renderPwnCollege = function (root) {
         </div>
         <a class="btn btn-accent" href="${escapePc(d.profileUrl)}" target="_blank" rel="noopener noreferrer">Open public profile</a>
       </div>
-    </div>
-    <h3 class="pwn-recent-heading">Recently solved</h3>
-    <div class="pwn-recent-grid">
-      ${d.recent
-        .map(
-          (c, i) => `
-        <article class="pwn-solve${i === 0 ? " pwn-solve-latest" : ""}">
-          <div class="pwn-solve-top">
-            <span class="pwn-solve-dojo">${escapePc(c.dojo)}</span>
-            <time class="pwn-solve-date" datetime="${escapePc(c.date)}">${escapePc(formatPcDate(c.date))}</time>
-          </div>
-          <h4 class="pwn-solve-title">${escapePc(c.title)}</h4>
-          <p class="pwn-solve-blurb">${escapePc(c.blurb)}</p>
-        </article>`
-        )
-        .join("")}
     </div>
   `;
 };

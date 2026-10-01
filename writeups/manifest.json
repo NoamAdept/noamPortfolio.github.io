@@ -19,5 +19,40 @@
     "date": "2026-10-01",
     "description": "Toddler's Bottle · gets() overflow to overwrite key with 0xcafebabe.",
     "series": "pwnable.kr"
+  },
+  {
+    "slug": "thomae-popcorn-function",
+    "title": "Thomae's popcorn function",
+    "date": "2026-10-01",
+    "description": "Real analysis · continuity of Thomae's function at irrationals and discontinuity at rationals.",
+    "series": "course notes"
+  },
+  {
+    "slug": "feistel-fixed-key-attack",
+    "title": "Fixed-key Feistel recovery",
+    "date": "2026-10-01",
+    "description": "Crypto · when a Feistel network reuses one round key, intermediate leaks give the key away.",
+    "series": "course notes"
+  },
+  {
+    "slug": "diffie-hellman-ctf-notes",
+    "title": "Diffie–Hellman weak-parameter CTF notes",
+    "date": "2026-10-01",
+    "description": "Crypto CTF · small primes, reused secrets, and other ways DHKE falls over in challenges.",
+    "series": "course notes"
+  },
+  {
+    "slug": "fgsm-adversarial-examples",
+    "title": "FGSM and adversarial examples",
+    "date": "2026-10-01",
+    "description": "ML security · fast gradient sign method and why tiny perturbations flip classifiers.",
+    "series": "course notes"
+  },
+  {
+    "slug": "three-golden-proofs",
+    "title": "Three golden proofs",
+    "date": "2026-10-01",
+    "description": "Proof craft · infinity of primes, √2 irrational, and uncountability of ℝ.",
+    "series": "course notes"
   }
 ]
