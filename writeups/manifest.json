@@ -5,5 +5,19 @@
     "date": "2026-09-30",
     "description": "Toddler's Bottle · deep dive into Linux fds, setgid, and forcing read() onto stdin.",
     "series": "pwnable.kr"
+  },
+  {
+    "slug": "pwnable-kr-collision",
+    "title": "pwnable.kr — collision",
+    "date": "2026-10-01",
+    "description": "Toddler's Bottle · five little-endian ints that sum to a fake hashcode.",
+    "series": "pwnable.kr"
+  },
+  {
+    "slug": "pwnable-kr-bof",
+    "title": "pwnable.kr — bof",
+    "date": "2026-10-01",
+    "description": "Toddler's Bottle · gets() overflow to overwrite key with 0xcafebabe.",
+    "series": "pwnable.kr"
   }
 ]
