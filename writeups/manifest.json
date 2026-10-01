@@ -3,7 +3,7 @@
     "slug": "pwnable-kr-fd",
     "title": "pwnable.kr — fd",
     "date": "2026-09-30",
-    "description": "Toddler's Bottle · Linux file descriptors via stdin (fd 0).",
+    "description": "Toddler's Bottle · deep dive into Linux fds, setgid, and forcing read() onto stdin.",
     "series": "pwnable.kr"
   }
 ]
