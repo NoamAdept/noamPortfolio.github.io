@@ -1231,6 +1231,32 @@ details.spoiler pre {
   color: var(--blue);
 }
 
+.highlight-passion {
+  grid-column: 1 / -1;
+  background:
+    linear-gradient(135deg, var(--blue-soft), var(--surface) 48%, var(--green-soft));
+  border-color: #b7d7f5;
+  border-top-width: 4px;
+  border-top-color: var(--blue);
+  box-shadow: var(--shadow-hover);
+}
+
+.highlight-passion .highlight-kicker {
+  color: var(--blue);
+}
+
+.highlight-passion .highlight-title {
+  font-size: 22px;
+}
+
+.highlight-passion .highlight-list li::before {
+  background: var(--green);
+}
+
+.highlight-passion .highlight-cta {
+  color: #0060c2;
+}
+
 /* ── pwn.college ── */
 .pwn-section {
   margin-bottom: var(--space-4);
@@ -1339,8 +1365,15 @@ details.spoiler pre {
   font-size: 16px;
   font-weight: 600;
   color: var(--text-primary);
-  margin: 0 0 var(--space-3);
+  margin: 0 0 var(--space-2);
   letter-spacing: -0.01em;
+}
+
+.pwn-recent-note {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0 0 var(--space-3);
+  line-height: 1.45;
 }
 
 .pwn-recent-grid {

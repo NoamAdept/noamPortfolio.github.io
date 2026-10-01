@@ -1,6 +1,22 @@
 /* Shared project catalog + Faav-style list rendering */
 window.NOAM_PROJECTS = [
   {
+    id: "piSdrAcademy",
+    featured: true,
+    highlight: true,
+    passion: true,
+    title: "pi-sdr-academy — offline Pi SDR lab",
+    meta: "Python · Raspberry Pi · DSP / SDR",
+    desc: "The project I am building hardest right now: a self-contained Raspberry Pi laboratory for systems, DSP, and software-defined radio with dojo-style progression.",
+    tags: ["SDR", "DSP", "hardware", "passion"],
+    url: "https://github.com/NoamAdept/pi-sdr-academy",
+    highlights: [
+      "Offline lab modules on real hardware",
+      "Bridges RF, signals, and software",
+      "Belt / academy structure for deliberate practice",
+    ],
+  },
+  {
     id: "gradebook",
     featured: true,
     highlight: true,
@@ -43,21 +59,6 @@ window.NOAM_PROJECTS = [
       "Chosen-plaintext key recovery",
       "Weak key-schedule lesson",
       "Clear C++ write-up",
-    ],
-  },
-  {
-    id: "piSdrAcademy",
-    featured: true,
-    highlight: true,
-    title: "pi-sdr-academy — offline Pi SDR lab",
-    meta: "Python · Raspberry Pi · DSP / SDR",
-    desc: "Self-contained Raspberry Pi laboratory for systems, DSP, and software-defined radio — dojo-style progression.",
-    tags: ["SDR", "DSP", "hardware"],
-    url: "https://github.com/NoamAdept/pi-sdr-academy",
-    highlights: [
-      "Offline lab modules",
-      "Bridges RF, signals, and software",
-      "Belt / academy structure",
     ],
   },
   {
@@ -156,11 +157,16 @@ window.renderProjectCards = function (el, { featuredOnly = false, highlightOnly 
   if (excludeHighlight) items = items.filter((p) => !p.highlight);
 
   if (highlightOnly) {
+    // Passion project first, then the rest
+    items = [
+      ...items.filter((p) => p.passion),
+      ...items.filter((p) => !p.passion),
+    ];
     el.innerHTML = items
       .map(
         (p, i) => `
-      <a class="highlight-card accent-${i % 4}" href="${p.url}" target="_blank" rel="noopener noreferrer">
-        <span class="highlight-kicker">Highlighted</span>
+      <a class="highlight-card accent-${i % 4}${p.passion ? " highlight-passion" : ""}" href="${p.url}" target="_blank" rel="noopener noreferrer">
+        <span class="highlight-kicker">${p.passion ? "Currently building" : "Highlighted"}</span>
         <h3 class="highlight-title">${escapeHtml(p.title)}</h3>
         <p class="highlight-meta">${escapeHtml(p.meta)}</p>
         <p class="highlight-desc">${escapeHtml(p.desc)}</p>
@@ -212,6 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const detail = document.getElementById("project-detail");
   const pick =
+    window.NOAM_PROJECTS.find((p) => p.passion) ||
     window.NOAM_PROJECTS.find((p) => p.highlight) ||
     window.NOAM_PROJECTS.find((p) => p.featured) ||
     window.NOAM_PROJECTS[0];

@@ -1,4 +1,4 @@
-/* pwn.college profile snapshot — update when you earn a new belt / binge solves */
+/* pwn.college profile snapshot — dates = latest activity in that module */
 window.PWN_COLLEGE = {
   handle: "noamyakar23",
   profileUrl: "https://pwn.college/hacker/noamyakar23",
@@ -13,42 +13,43 @@ window.PWN_COLLEGE = {
     challenges: "≈2.9k solves",
     note: "Progress across dojos · public profile",
   },
+  // Ordered by most recent module activity on the public profile (refreshed 2026-10-01)
   recent: [
     {
       title: "Exclusionary globbing",
-      dojo: "Linux / shell",
+      dojo: "Computing 101",
       date: "2026-09-30",
-      blurb: "Path expansions and negative globs under pressure.",
+      blurb: "Negative globs and path expansions — last clears on Sep 30.",
     },
     {
       title: "level4.1",
       dojo: "Program interaction",
       date: "2026-09-29",
-      blurb: "Next rung on the interaction ladder.",
+      blurb: "Interaction ladder module — latest submissions Sep 29.",
     },
     {
       title: "Stop, Pop, and ROP II (Hard)",
-      dojo: "Binary exploitation",
+      dojo: "Memory errors",
       date: "2026-09-28",
-      blurb: "ROP chain work the same day the yellow belt dropped.",
-    },
-    {
-      title: "File Globbing",
-      dojo: "Linux / shell",
-      date: "2026-07-23",
-      blurb: "Shell wildcard mastery before the exclusionary set.",
+      blurb: "Hard ROP set — same day the yellow belt unlocked.",
     },
     {
       title: "Your First Overflow (easy)",
-      dojo: "Binary exploitation",
-      date: "2025-01-21",
-      blurb: "Classic stack smash warmup.",
+      dojo: "Memory errors",
+      date: "2026-09-28",
+      blurb: "Overflow module still seeing new clears through belt day.",
     },
     {
-      title: "Assembly Crash Course",
-      dojo: "Fundamentals",
-      date: "2025-03-20",
-      blurb: "Registers, calling conventions, and reading disasm.",
+      title: "Project 1.0 Intro and Linux",
+      dojo: "LecLabs",
+      date: "2026-07-24",
+      blurb: "Linux fundamentals project track.",
+    },
+    {
+      title: "File Globbing",
+      dojo: "Computing 101",
+      date: "2026-07-23",
+      blurb: "Wildcard mastery that set up the exclusionary set.",
     },
   ],
 };
@@ -89,7 +90,8 @@ window.renderPwnCollege = function (root) {
         <a class="btn btn-accent" href="${escapePc(d.profileUrl)}" target="_blank" rel="noopener noreferrer">Open public profile</a>
       </div>
     </div>
-    <h3 class="pwn-recent-heading">Recently solved</h3>
+    <h3 class="pwn-recent-heading">Recently active modules</h3>
+    <p class="pwn-recent-note">Sorted by latest successful submission on the public profile — not first-ever solve.</p>
     <div class="pwn-recent-grid">
       ${d.recent
         .map(
