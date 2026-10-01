@@ -96,8 +96,14 @@
         }
         bySeries.get(key).push(w);
       });
-      // Named series first (e.g. pwnable.kr), then uncategorized
+      // Preferred shelf order — passion topics first
+      const preferred = ["stats & ML", "pwnable.kr"];
       seriesOrder.sort((a, b) => {
+        const ia = preferred.indexOf(a);
+        const ib = preferred.indexOf(b);
+        if (ia !== -1 || ib !== -1) {
+          return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
+        }
         if (!a) return 1;
         if (!b) return -1;
         return a.localeCompare(b);
