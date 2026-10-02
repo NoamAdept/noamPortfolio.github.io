@@ -58,8 +58,28 @@
     return { meta, body };
   }
 
+  /** Directory of the current writeups page (handles /writeups and /writeups/). */
+  function writeupsDir() {
+    const path = window.location.pathname || "/";
+    if (path.endsWith("/")) return path;
+    const slash = path.lastIndexOf("/");
+    return slash === -1 ? "/" : path.slice(0, slash + 1);
+  }
+
+  /** Resolve manifest image paths against the writeups folder (GitHub Pages base path safe). */
+  function writeupAssetUrl(rel) {
+    if (!rel) return "";
+    const s = String(rel);
+    if (/^(https?:|data:|\/\/)/i.test(s) || s.startsWith("/")) return s;
+    try {
+      return new URL(s.replace(/^\.\//, ""), window.location.origin + writeupsDir()).href;
+    } catch (_) {
+      return writeupsDir() + s.replace(/^\.\//, "");
+    }
+  }
+
   async function loadManifest() {
-    const res = await fetch("manifest.json", { cache: "no-store" });
+    const res = await fetch(writeupAssetUrl("manifest.json"), { cache: "no-store" });
     if (!res.ok) throw new Error("Could not load writeups/manifest.json");
     const data = await res.json();
     return Array.isArray(data) ? data : [];
@@ -69,11 +89,12 @@
     const href = w.href
       ? escapeHtml(w.href)
       : `post.html?slug=${encodeURIComponent(w.slug)}`;
-    const img = w.image
-      ? `<img class="post-thumb" src="${escapeHtml(w.image)}" alt="" width="160" height="120" loading="lazy" />`
+    const imgSrc = w.image ? writeupAssetUrl(w.image) : "";
+    const img = imgSrc
+      ? `<img class="post-thumb" src="${escapeHtml(imgSrc)}" alt="${escapeHtml(w.title || w.slug)}" width="160" height="120" loading="lazy" decoding="async" />`
       : `<span class="post-thumb post-thumb-empty" aria-hidden="true"></span>`;
     return `
-        <a class="post-card${w.image ? " post-card-media" : ""}" href="${href}">
+        <a class="post-card${imgSrc ? " post-card-media" : ""}" href="${href}">
           ${img}
           <span class="post-body">
             <span class="post-meta">${escapeHtml(formatDate(w.date))}</span>
