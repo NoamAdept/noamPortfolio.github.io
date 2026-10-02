@@ -69,11 +69,17 @@
     const href = w.href
       ? escapeHtml(w.href)
       : `post.html?slug=${encodeURIComponent(w.slug)}`;
+    const img = w.image
+      ? `<img class="post-thumb" src="${escapeHtml(w.image)}" alt="" width="160" height="120" loading="lazy" />`
+      : `<span class="post-thumb post-thumb-empty" aria-hidden="true"></span>`;
     return `
-        <a class="post-card" href="${href}">
-          <span class="post-meta">${escapeHtml(formatDate(w.date))}</span>
-          <h2 class="post-title">${escapeHtml(w.title || w.slug)}</h2>
-          <p class="post-desc">${escapeHtml(w.description || "")}</p>
+        <a class="post-card${w.image ? " post-card-media" : ""}" href="${href}">
+          ${img}
+          <span class="post-body">
+            <span class="post-meta">${escapeHtml(formatDate(w.date))}</span>
+            <h2 class="post-title">${escapeHtml(w.title || w.slug)}</h2>
+            <p class="post-desc">${escapeHtml(w.description || "")}</p>
+          </span>
         </a>`;
   }
 
