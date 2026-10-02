@@ -18,6 +18,20 @@ window.NOAM_PROJECTS = [
     ],
   },
   {
+    id: "pvt",
+    featured: true,
+    highlight: false,
+    title: "pvt — DatumSamples",
+    meta: "Privacy · data tooling",
+    desc: "DatumSamples privacy / data project — companion work alongside the CODAP privacy-rules toolkit.",
+    tags: ["privacy", "data", "DatumSamples"],
+    url: "https://github.com/DatumSamples/pvt",
+    highlights: [
+      "Privacy-preserving data workflows",
+      "DatumSamples tooling",
+    ],
+  },
+  {
     id: "gradebook",
     featured: true,
     highlight: false,
