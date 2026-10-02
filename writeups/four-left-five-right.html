@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
 <title>Four Left, Five Right</title>
-<meta name="description" content="An interactive note on the Tiny Encryption Algorithm: the shifts, the golden-ratio constant, and why a key that is only added is not a unique key.">
+<meta name="description" content="TEA with Manim animations: Feistel rounds, the <<4/>>5 stir, golden-ratio delta, and why an add-only key has siblings. Inspired by pwn.college reversing-hell babyc.">
 <style>
   :root {
     --bg: #141414;
@@ -344,6 +344,7 @@
     border-radius: 18px;
     background: rgba(255, 255, 255, 0.02);
   }
+  .diagram video,
   .diagram img {
     display: block;
     width: 100%;
@@ -362,6 +363,26 @@
     color: var(--yellow);
     font-weight: 500;
   }
+  .anim-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+    margin: 1.2rem 0 0.2rem;
+  }
+  .anim-grid .diagram {
+    margin: 0;
+  }
+  .anim-hero {
+    margin-top: 1.6rem;
+  }
+  @media (max-width: 720px) {
+    .anim-grid { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .diagram video { display: none; }
+    .diagram .poster-fallback { display: block; }
+  }
+  .poster-fallback { display: none; }
   .site-back {
     position: sticky;
     top: 0;
@@ -401,27 +422,87 @@
 <article>
   <p class="kicker">an algorithm I just learned</p>
   <h1>Four Left, Five Right</h1>
-  <p class="dek">A tiny cipher, watched one shift at a time, and the reason a key can have siblings.</p>
+  <p class="dek">A tiny cipher, watched one shift at a time — and the reason a key can have siblings.</p>
 
   <div class="prose">
-    <p>I wanted a cipher I could hold in my head. The Tiny Encryption Algorithm is that cipher. David Wheeler and Roger Needham published it in 1994, and the whole thing is a loop you can write on a card. A block is two 32-bit words. A key is four words. Each cycle takes the right word, makes three copies, slides them out of line, adds a piece of the key, and folds the mix into the left word. Then the words swap jobs. Thirty-two cycles. Some people count each half as its own Feistel round, and then the number is sixty-four. Same loop.</p>
-    <p>The slide is the part I keep coming back to. Four bits toward the high end, five toward the low end. The copies almost overlap and never quite do, so when they are XORed a bit has to argue with neighbors that used to sit a few places away. That misalignment is the entire design. No tables. No clever key schedule. A constant called delta is added into a running sum so the cycles are not identical. Delta is 2<sup>32</sup> divided by the golden ratio, rounded down: <span style="font-family:var(--mono);font-size:0.92em">9E3779B9</span>. It is not a secret. It just keeps the rounds from repeating.</p>
-    <p>The map is a Feistel cycle — two half-rounds, the <<4 / >>5 stir, then a swap. The theater below is the same loop, watched in bits.</p>
+    <p>I ran into this cipher in CTFs on pwn.college’s
+      <a href="https://pwn.college/reversing-hell/babyc/n">reversing-hell · babyc</a>
+      module, and it stuck with me. TEA is small enough that you can watch every bit move — so I wanted a page that does exactly that.</p>
+    <p>David Wheeler and Roger Needham published the Tiny Encryption Algorithm in 1994. The whole thing fits on a note card: a block is two 32-bit words, a key is four, and each cycle takes the right word, fans it three ways, slides those copies out of line, folds in a piece of the key, and adds the mix into the left. Then the halves swap jobs. Thirty-two cycles. (Some people count each half as its own Feistel round and call it sixty-four. Same loop.)</p>
+    <p>The slide is what I keep coming back to. Four bits toward the high end, five toward the low. The copies almost overlap and never quite do — so when you XOR them, a bit has to argue with neighbors that used to sit a few places away. That misalignment <em>is</em> the design. No S-boxes. No fancy key schedule. Just a constant called delta, added into a running sum so the cycles aren’t copies of each other. Delta is 2<sup>32</sup> divided by the golden ratio, rounded down: <span style="font-family:var(--mono);font-size:0.92em">9E3779B9</span>. Not a secret. Just a metronome.</p>
+    <p>The animations below are Manim walkthroughs of that shape. Under them, the bit theater lets you scrub the same loop yourself.</p>
   </div>
 
-  <figure class="diagram" id="feistel-map">
-    <img
-      src="img/xtea-feistel-cycle.png"
-      alt="Two Feistel rounds making one XTEA cycle: left and right halves, <<4 and >>5 shifts, XOR and modular add with delta and subkeys, then a swap"
-      width="1200"
-      height="900"
-      loading="eager"
-    />
+  <figure class="diagram anim-hero" id="tea-intro">
+    <video
+      autoplay muted loop playsinline
+      poster="tea/videos/intro_poster.jpg"
+      aria-label="Animated title card: TEA halves L and R exchanging influence"
+      width="1280"
+      height="720"
+    >
+      <source src="tea/videos/tea_intro.webm" type="video/webm" />
+      <source src="tea/videos/tea_intro.mp4" type="video/mp4" />
+    </video>
+    <img class="poster-fallback" src="tea/videos/intro_poster.jpg" alt="TEA title card with L and R halves" width="1280" height="720" />
     <figcaption>
-      <strong>One cycle, two Feistel rounds.</strong>
-      Right word fans into <<4 and >>5, mixes with itself and a (delta + subkey) term, then adds into the left word before the halves swap. Same shape the bit stage is scrubbing through.
+      <strong>TEA, in outline.</strong>
+      Two halves, one loop. Animated with
+      <a href="https://github.com/3b1b/manim">Manim</a>
+      (Community Edition).
     </figcaption>
   </figure>
+
+  <figure class="diagram" id="feistel-map">
+    <video
+      autoplay muted loop playsinline
+      poster="tea/videos/feistel_poster.jpg"
+      aria-label="Animated Feistel cycle: delta, shift fan, XOR mix, add into left, then the mirror half"
+      width="1280"
+      height="720"
+    >
+      <source src="tea/videos/feistel_cycle.webm" type="video/webm" />
+      <source src="tea/videos/feistel_cycle.mp4" type="video/mp4" />
+    </video>
+    <img class="poster-fallback" src="tea/videos/feistel_poster.jpg" alt="One TEA Feistel cycle overview" width="1280" height="720" />
+    <figcaption>
+      <strong>One cycle, two Feistel half-rounds.</strong>
+      Delta ticks the sum, R fans into <<4 / identity / >>5, the three lanes XOR with key material, and the mask adds into L — then the mirror half runs on the new L.
+    </figcaption>
+  </figure>
+
+  <div class="anim-grid" aria-label="Shift and delta animations">
+    <figure class="diagram" id="shift-stir">
+      <video
+        autoplay muted loop playsinline
+        aria-label="Animated bit rows sliding four left and five right"
+        width="1280"
+        height="720"
+      >
+        <source src="tea/videos/shift_stir.webm" type="video/webm" />
+        <source src="tea/videos/shift_stir.mp4" type="video/mp4" />
+      </video>
+      <figcaption>
+        <strong>The stir.</strong>
+        Four left, five right — almost overlap, never quite.
+      </figcaption>
+    </figure>
+    <figure class="diagram" id="delta-pulse">
+      <video
+        autoplay muted loop playsinline
+        aria-label="Animated delta constant added each cycle along a number line"
+        width="1280"
+        height="720"
+      >
+        <source src="tea/videos/delta_pulse.webm" type="video/webm" />
+        <source src="tea/videos/delta_pulse.mp4" type="video/mp4" />
+      </video>
+      <figcaption>
+        <strong>Delta.</strong>
+        floor(2³² / φ) — not secret, just so rounds don’t stall.
+      </figcaption>
+    </figure>
+  </div>
 
   <section class="stage" aria-labelledby="stage-title">
     <h2 id="stage-title">The stir</h2>
@@ -467,12 +548,28 @@
   </section>
 
   <div class="prose">
-    <p>A single flipped bit starts as one disagreement. After a handful of cycles it covers about half of the 64-bit block, and then it wanders around half. That wandering is what “mixed” looks like. Early on you can still see the scar. The loop runs thirty-two times because two or three cycles are not a stir yet.</p>
+    <p>Flip one bit and watch what happens. At first it’s a single scar. A few cycles later it covers about half the 64-bit block, then wanders around that half — which is what “mixed” actually looks like. The loop runs thirty-two times because two or three cycles aren’t a stir yet.</p>
   </div>
 
+  <figure class="diagram" id="bit-diffusion">
+    <video
+      autoplay muted loop playsinline
+      aria-label="Animated bars showing one flipped bit spreading across the block over successive cycles"
+      width="1280"
+      height="720"
+    >
+      <source src="tea/videos/bit_diffusion.webm" type="video/webm" />
+      <source src="tea/videos/bit_diffusion.mp4" type="video/mp4" />
+    </video>
+    <figcaption>
+      <strong>Avalanche, sketched.</strong>
+      Hamming distance climbing toward half the block. The panel below is the live version with your own inputs.
+    </figcaption>
+  </figure>
+
   <section class="panel" aria-labelledby="spread-title">
-    <h2 id="spread-title">One flipped bit</h2>
-    <p class="prose" style="margin:0">Same key, same block, one bit of the left word flipped. The bars are how many bits of the block disagree after each cycle. The dashed line is half of them.</p>
+    <h2 id="spread-title">One flipped bit · live</h2>
+    <p class="prose" style="margin:0">Same key, same block, one bit of the left word flipped. The bars are how many bits disagree after each cycle. The dashed line is half of them.</p>
     <div class="choices" role="group" aria-label="Which bit to flip">
       <button type="button" id="bit-0" aria-pressed="true">Low bit</button>
       <button type="button" id="bit-15" aria-pressed="false">Middle bit</button>
@@ -491,9 +588,9 @@
   </section>
 
   <div class="prose">
-    <p>Then the part that disappointed me. The key never moves. Every cycle adds the same four words in the same places. Addition is a poor way to hide a secret, because two changes can cancel. Nudge one ingredient up, nudge the other down, and the sum does not care which pair you started with.</p>
-    <p>TEA has a real version of this failure. Each key has three siblings: other 128-bit keys that encrypt every block the same way, so the key you chose was never the only one. There is a related-key attack as well, the kind where someone can ask for encryptions under a key related to the secret and use that to take the cipher apart. I am not going to show either construction. The figure under this is a toy. Ordinary integers, one addition. It is the shape of the mistake, and it is not a method for finding a TEA key. The follow-up cipher, XTEA, exists because this key schedule was too innocent.</p>
-    <p>I still like the original. It is the smallest thing I have watched that feels both beautiful and not quite enough.</p>
+    <p>Then the part that disappointed me. The key never moves. Every cycle just adds the same four words in the same places. Addition is a soft way to hide a secret — nudge one ingredient up and another down, and the sum doesn’t care which pair you started with.</p>
+    <p>TEA has a real version of that failure. Each key has three siblings: other 128-bit keys that encrypt every block the same way. There’s a related-key attack too, where queries under a related key help take the cipher apart. I’m not going to show either construction. The figure under this is a toy — ordinary integers, one addition — the <em>shape</em> of the mistake, not a recipe for finding a TEA key. XTEA exists because this key schedule was too innocent.</p>
+    <p>I still like the original. It’s the smallest thing I’ve watched that feels both beautiful and not quite enough — which is probably why babyc put it in front of me in the first place.</p>
   </div>
 
   <section class="panel" aria-labelledby="toy-title">
@@ -515,7 +612,11 @@
   </section>
 
   <footer>
-    <p>An LLM helped me build this page and edit the prose. The cipher is David Wheeler and Roger Needham’s, from their 1994 note at the Fast Software Encryption workshop. Delta and the round structure are theirs. The equivalent-key and related-key results were published later; this page names them and leaves the relations, the parameters, and the procedure out on purpose.</p>
+    <p>I wrote this after meeting TEA in
+      <a href="https://pwn.college/reversing-hell/babyc/n">pwn.college · reversing-hell · babyc</a>.
+      An LLM helped build the page and polish the prose. The cipher is David Wheeler and Roger Needham’s (FSE 1994). Delta and the round structure are theirs. Equivalent-key and related-key results came later; this page names them and leaves the relations, parameters, and procedures out on purpose. Animations were rendered with
+      <a href="https://www.manim.community/">Manim Community</a>
+      (inspired by <a href="https://github.com/3b1b/manim">3b1b/manim</a>).</p>
     <p id="self-check"></p>
     <p>Source for the cipher itself: <a href="https://en.wikipedia.org/wiki/Tiny_Encryption_Algorithm">Tiny Encryption Algorithm</a>.</p>
   </footer>

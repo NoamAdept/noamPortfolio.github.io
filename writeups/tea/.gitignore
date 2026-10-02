@@ -1,0 +1,5 @@
+# Ignore Manim build intermediates; keep final videos/ under version control
+media/
+__pycache__/
+*.pyc
+.manim_cache/

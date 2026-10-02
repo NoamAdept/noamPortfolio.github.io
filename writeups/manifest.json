@@ -3,7 +3,7 @@
     "slug": "four-left-five-right",
     "title": "Four Left, Five Right",
     "date": "2026-10-02",
-    "description": "Interactive note on TEA — the shifts, the golden-ratio delta, and why a key that is only added is not unique.",
+    "description": "TEA with Manim animations — Feistel rounds, <<4/>>5 stir, delta, and why an add-only key is not unique. Inspired by pwn.college babyc.",
     "series": "crypto",
     "href": "four-left-five-right.html"
   },
