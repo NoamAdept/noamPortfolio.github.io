@@ -3,29 +3,33 @@
     "slug": "four-left-five-right",
     "title": "Four Left, Five Right",
     "date": "2026-10-02",
-    "description": "TEA with Manim animations on the Tetra light UI \u2014 Feistel rounds, <<4/>>5 stir, delta, and why an add-only key is not unique. Inspired by pwn.college babyc.",
+    "description": "TEA with Manim animations on the Tetra light UI — Feistel rounds, <<4/>>5 stir, delta, and why an add-only key is not unique. Inspired by pwn.college babyc.",
     "series": "crypto",
-    "href": "four-left-five-right.html"
+    "href": "four-left-five-right.html",
+    "image": "tea/videos/tea_central_poster.jpg"
   },
   {
     "slug": "pwnable-kr-fd",
-    "title": "pwnable.kr \u2014 fd",
+    "title": "pwnable.kr — fd",
     "date": "2026-09-30",
-    "description": "Toddler's Bottle \u00b7 deep dive into Linux fds, setgid, and forcing read() onto stdin.",
-    "series": "pwnable.kr"
+    "description": "Toddler's Bottle · deep dive into Linux fds, setgid, and forcing read() onto stdin.",
+    "series": "pwnable.kr",
+    "image": "img/pwnable-kr/fd-challenge.png"
   },
   {
     "slug": "pwnable-kr-collision",
-    "title": "pwnable.kr \u2014 collision",
+    "title": "pwnable.kr — collision",
     "date": "2026-10-01",
-    "description": "Toddler's Bottle \u00b7 five little-endian ints that sum to a fake hashcode.",
-    "series": "pwnable.kr"
+    "description": "Toddler's Bottle · five little-endian ints that sum to a fake hashcode.",
+    "series": "pwnable.kr",
+    "image": "img/pwnable-kr/collision-challenge.png"
   },
   {
     "slug": "pwnable-kr-bof",
-    "title": "pwnable.kr \u2014 bof",
+    "title": "pwnable.kr — bof",
     "date": "2026-10-01",
-    "description": "Toddler's Bottle \u00b7 gets() overflow to overwrite key with 0xcafebabe.",
-    "series": "pwnable.kr"
+    "description": "Toddler's Bottle · gets() overflow to overwrite key with 0xcafebabe.",
+    "series": "pwnable.kr",
+    "image": "img/pwnable-kr/bof-challenge.png"
   }
 ]
