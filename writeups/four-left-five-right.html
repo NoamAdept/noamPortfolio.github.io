@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Four Left, Five Right</title>
+<meta name="description" content="An interactive note on the Tiny Encryption Algorithm: the shifts, the golden-ratio constant, and why a key that is only added is not a unique key.">
+<style>
+  :root {
+    --bg: #141414;
+    --ink: #f3efe6;
+    --muted: #b7b1a6;
+    --faint: rgba(243, 239, 230, 0.16);
+    --line: rgba(243, 239, 230, 0.12);
+    --yellow: #ffd23f;
+    --blue: #58c4dd;
+    --green: #8fce6b;
+    --red: #fc6255;
+    --purple: #c59be0;
+    --bit: 13px;
+    --gap: 2px;
+    --step: 15px;
+    --serif: "Iowan Old Style", Palatino, "Palatino Linotype", "Times New Roman", serif;
+    --mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); }
+  body {
+    font-family: var(--serif);
+    background:
+      radial-gradient(ellipse 70% 36% at 50% -8%, rgba(255, 210, 63, 0.09), transparent 55%),
+      var(--bg);
+    min-height: 100%;
+  }
+  article {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 4.5rem 1.4rem 5rem;
+  }
+  .kicker {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin: 0 0 0.8rem;
+  }
+  h1 {
+    font-weight: 560;
+    font-size: clamp(2.8rem, 7vw, 4.8rem);
+    line-height: 0.96;
+    letter-spacing: -0.03em;
+    margin: 0;
+  }
+  .dek {
+    font-size: 1.28rem;
+    line-height: 1.35;
+    color: var(--muted);
+    max-width: 34rem;
+    margin: 1rem 0 0;
+  }
+  .prose {
+    max-width: 38rem;
+    font-size: 1.12rem;
+    line-height: 1.58;
+    color: #e8e2d6;
+  }
+  .prose p { margin: 1.1rem 0; }
+  h2 {
+    font-weight: 560;
+    font-size: 1.8rem;
+    letter-spacing: -0.02em;
+    margin: 2.6rem 0 0.6rem;
+  }
+  a { color: var(--blue); }
+  button, input { font: inherit; color: inherit; }
+  button {
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.45rem 0.95rem;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+  }
+  button:hover { border-color: rgba(243, 239, 230, 0.4); }
+  button:focus-visible, input:focus-visible {
+    outline: 2px solid var(--yellow);
+    outline-offset: 2px;
+  }
+  button:disabled { opacity: 0.35; cursor: default; }
+  button.primary { border-color: rgba(255, 210, 63, 0.7); color: var(--yellow); }
+  .stage, .panel {
+    margin-top: 1.4rem;
+    padding: 1.15rem 1.1rem 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.015);
+  }
+  .transport {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem 0.7rem;
+    align-items: center;
+  }
+  .scrub { flex: 1 1 220px; display: flex; flex-direction: column; gap: 0.35rem; }
+  .scrub span { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); }
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 2px;
+    background: rgba(243, 239, 230, 0.28);
+    border-radius: 99px;
+    cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--yellow);
+    border: 0;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--yellow);
+    border: 0;
+  }
+  #caption {
+    min-height: 4.6rem;
+    font-size: 1.18rem;
+    line-height: 1.4;
+    margin: 1rem 0 0.35rem;
+  }
+  .formula {
+    font-family: var(--mono);
+    font-size: 0.92rem;
+    color: var(--yellow);
+    min-height: 1.4rem;
+    margin: 0 0 0.9rem;
+  }
+  .scroll { overflow-x: auto; padding-bottom: 0.2rem; }
+  .reg, .lane { margin: 0.45rem 0 0.7rem; }
+  .lane-top, .reg-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: baseline;
+    width: calc(32 * var(--step) - var(--gap));
+    max-width: 100%;
+  }
+  .lane-name, .reg-name {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+  }
+  .lane-hex, .reg-hex, .key-hex {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .bits, .track {
+    display: flex;
+    gap: var(--gap);
+  }
+  .window {
+    width: calc(32 * var(--step) - var(--gap));
+    overflow: hidden;
+  }
+  .bit {
+    width: var(--bit);
+    height: 22px;
+    border-radius: 3px;
+    flex: none;
+  }
+  .bit.off { box-shadow: inset 0 0 0 1px var(--faint); }
+  .bit.on {
+    background: linear-gradient(180deg, var(--c, var(--ink)), color-mix(in srgb, var(--c, var(--ink)) 72%, #000));
+    box-shadow: 0 0 10px color-mix(in srgb, var(--c, var(--ink)) 35%, transparent);
+  }
+  .bit.diff { background: var(--red); box-shadow: 0 0 8px rgba(252, 98, 85, 0.45); }
+  .track { transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1); }
+  .sweep { position: relative; }
+  .sweep::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 22%;
+    background: linear-gradient(90deg, transparent, rgba(255, 210, 63, 0.45), transparent);
+    animation: sweep 720ms ease-out both;
+    pointer-events: none;
+  }
+  @keyframes sweep {
+    from { transform: translateX(380%); }
+    to { transform: translateX(-30%); }
+  }
+  .keys {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 0.4rem;
+  }
+  .key {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 0.35rem 0.55rem 0.4rem;
+    min-width: 7.2rem;
+  }
+  .key.hot { border-color: var(--purple); box-shadow: 0 0 0 1px rgba(197, 155, 224, 0.35); }
+  .key b { display: block; font-family: var(--mono); font-weight: 500; font-size: 0.72rem; color: var(--purple); }
+  .film {
+    display: flex;
+    gap: 4px;
+    margin-top: 0.9rem;
+    overflow-x: auto;
+    padding-bottom: 0.3rem;
+  }
+  .cell {
+    width: 16px;
+    height: 42px;
+    padding: 0;
+    border-radius: 3px;
+    border: 1px solid transparent;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex: none;
+  }
+  .cell i { display: block; flex: 1; }
+  .cell.on { border-color: var(--yellow); }
+  .cell.mid { border-color: rgba(255, 210, 63, 0.35); }
+  .film-label, .note, .field-row, .axis {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .field-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem 1rem;
+    align-items: end;
+    margin-bottom: 0.8rem;
+  }
+  label { display: flex; flex-direction: column; gap: 0.2rem; }
+  input[type="text"] {
+    font-family: var(--mono);
+    font-size: 0.92rem;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(243, 239, 230, 0.28);
+    width: 9ch;
+    padding: 0.15rem 0;
+    border-radius: 0;
+  }
+  input.bad { border-bottom-color: var(--red); }
+  .out {
+    margin-top: 0.75rem;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .chart-wrap { position: relative; margin-top: 0.8rem; }
+  .chart {
+    height: 150px;
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+  }
+  .bar {
+    flex: 1;
+    background: rgba(255, 210, 63, 0.85);
+    border: 0;
+    padding: 0;
+    border-radius: 2px 2px 0 0;
+    min-height: 2px;
+    cursor: pointer;
+  }
+  .bar.now { background: var(--blue); }
+  .half-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    border-top: 1px dashed rgba(243, 239, 230, 0.28);
+    pointer-events: none;
+  }
+  .big-num {
+    font-size: clamp(3rem, 8vw, 4.4rem);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    margin: 0.2rem 0;
+  }
+  .big-num span { color: var(--muted); font-size: 0.4em; letter-spacing: 0; }
+  .choices { display: flex; gap: 0.4rem; flex-wrap: wrap; margin: 0.4rem 0 0.2rem; }
+  .choices button[aria-pressed="true"] { border-color: var(--blue); color: var(--blue); }
+  .adder {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+  }
+  .stack { display: grid; justify-items: end; min-width: 6rem; }
+  .big {
+    font-size: clamp(3.2rem, 8vw, 4.6rem);
+    line-height: 0.95;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.03em;
+  }
+  .plus { font-size: 1.4rem; color: var(--muted); justify-self: center; }
+  .delta-tag {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    min-height: 1.1rem;
+  }
+  .delta-tag.up { color: var(--blue); }
+  .delta-tag.down { color: var(--red); }
+  .stay { color: var(--yellow); }
+  .stay.pulse { animation: hold 600ms ease; }
+  @keyframes hold {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.06); }
+    100% { transform: scale(1); }
+  }
+  .eq-sign { font-size: 2rem; color: var(--muted); }
+  footer {
+    margin-top: 3rem;
+    max-width: 38rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  .diagram {
+    margin: 1.5rem 0 0.35rem;
+    padding: 1rem 1rem 0.85rem;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .diagram img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    background: #0f0f0f;
+  }
+  .diagram figcaption {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 0.75rem;
+    line-height: 1.45;
+  }
+  .diagram figcaption strong {
+    color: var(--yellow);
+    font-weight: 500;
+  }
+  .site-back {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.75rem 1.4rem;
+    background: rgba(20, 20, 20, 0.88);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+  }
+  .site-back a { color: var(--muted); text-decoration: none; }
+  .site-back a:hover { color: var(--yellow); }
+  #self-check { font-family: var(--mono); font-size: 0.75rem; }
+  #self-check.bad { color: var(--red); }
+  @media (max-width: 640px) {
+    :root { --bit: 8px; --gap: 1px; --step: 9px; }
+    .bit { height: 16px; }
+    article { padding-top: 2.4rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .track { transition: none; }
+    .sweep::after, .stay.pulse { animation: none; }
+  }
+</style>
+</head>
+<body>
+<nav class="site-back" aria-label="Site">
+  <a href="../index.html">noam.yakar</a>
+  <a href="index.html">&gt; writeups</a>
+  <a href="../projects.html">&gt; projects</a>
+</nav>
+<article>
+  <p class="kicker">an algorithm I just learned</p>
+  <h1>Four Left, Five Right</h1>
+  <p class="dek">A tiny cipher, watched one shift at a time, and the reason a key can have siblings.</p>
+
+  <div class="prose">
+    <p>I wanted a cipher I could hold in my head. The Tiny Encryption Algorithm is that cipher. David Wheeler and Roger Needham published it in 1994, and the whole thing is a loop you can write on a card. A block is two 32-bit words. A key is four words. Each cycle takes the right word, makes three copies, slides them out of line, adds a piece of the key, and folds the mix into the left word. Then the words swap jobs. Thirty-two cycles. Some people count each half as its own Feistel round, and then the number is sixty-four. Same loop.</p>
+    <p>The slide is the part I keep coming back to. Four bits toward the high end, five toward the low end. The copies almost overlap and never quite do, so when they are XORed a bit has to argue with neighbors that used to sit a few places away. That misalignment is the entire design. No tables. No clever key schedule. A constant called delta is added into a running sum so the cycles are not identical. Delta is 2<sup>32</sup> divided by the golden ratio, rounded down: <span style="font-family:var(--mono);font-size:0.92em">9E3779B9</span>. It is not a secret. It just keeps the rounds from repeating.</p>
+    <p>The map is a Feistel cycle — two half-rounds, the <<4 / >>5 stir, then a swap. The theater below is the same loop, watched in bits.</p>
+  </div>
+
+  <figure class="diagram" id="feistel-map">
+    <img
+      src="img/xtea-feistel-cycle.png"
+      alt="Two Feistel rounds making one XTEA cycle: left and right halves, <<4 and >>5 shifts, XOR and modular add with delta and subkeys, then a swap"
+      width="1200"
+      height="900"
+      loading="eager"
+    />
+    <figcaption>
+      <strong>One cycle, two Feistel rounds.</strong>
+      Right word fans into <<4 and >>5, mixes with itself and a (delta + subkey) term, then adds into the left word before the halves swap. Same shape the bit stage is scrubbing through.
+    </figcaption>
+  </figure>
+
+  <section class="stage" aria-labelledby="stage-title">
+    <h2 id="stage-title">The stir</h2>
+    <form class="field-row" id="fields" autocomplete="off">
+      <label>Left word<input id="in-v0" type="text" value="01234567" maxlength="8" spellcheck="false" aria-label="Left word, eight hex digits"></label>
+      <label>Right word<input id="in-v1" type="text" value="89ABCDEF" maxlength="8" spellcheck="false" aria-label="Right word, eight hex digits"></label>
+      <label>k0<input id="in-k0" type="text" value="00112233" maxlength="8" spellcheck="false" aria-label="Key word 0"></label>
+      <label>k1<input id="in-k1" type="text" value="44556677" maxlength="8" spellcheck="false" aria-label="Key word 1"></label>
+      <label>k2<input id="in-k2" type="text" value="8899AABB" maxlength="8" spellcheck="false" aria-label="Key word 2"></label>
+      <label>k3<input id="in-k3" type="text" value="CCDDEEFF" maxlength="8" spellcheck="false" aria-label="Key word 3"></label>
+      <button type="button" id="shuffle">Another block</button>
+    </form>
+
+    <div class="transport">
+      <button type="button" id="back" aria-label="Step back">Back</button>
+      <button type="button" id="play" class="primary" aria-pressed="false">Play cycle</button>
+      <button type="button" id="fwd" aria-label="Step forward">Step</button>
+      <label class="scrub">
+        <span id="scrub-label">0 cycles completed</span>
+        <input id="scrub" type="range" min="0" max="32" value="0" aria-valuemin="0" aria-valuemax="32" aria-label="Cycles completed">
+      </label>
+    </div>
+
+    <p id="caption" aria-live="polite"></p>
+    <p class="formula" id="formula"></p>
+
+    <div class="scroll">
+      <div id="regs"></div>
+      <div id="work"></div>
+    </div>
+
+    <div class="keys" id="keys">
+      <div class="key" data-key="0"><b>k0</b><span class="key-hex"></span></div>
+      <div class="key" data-key="1"><b>k1</b><span class="key-hex"></span></div>
+      <div class="key" data-key="2"><b>k2</b><span class="key-hex"></span></div>
+      <div class="key" data-key="3"><b>k3</b><span class="key-hex"></span></div>
+    </div>
+    <p class="note">These four words never change. Only the sum does. That is the whole key schedule.</p>
+
+    <p class="film-label" id="film-label">Every cycle</p>
+    <div class="film" id="film" role="group" aria-label="Jump to a cycle"></div>
+    <p class="out" id="cipher-out"></p>
+  </section>
+
+  <div class="prose">
+    <p>A single flipped bit starts as one disagreement. After a handful of cycles it covers about half of the 64-bit block, and then it wanders around half. That wandering is what “mixed” looks like. Early on you can still see the scar. The loop runs thirty-two times because two or three cycles are not a stir yet.</p>
+  </div>
+
+  <section class="panel" aria-labelledby="spread-title">
+    <h2 id="spread-title">One flipped bit</h2>
+    <p class="prose" style="margin:0">Same key, same block, one bit of the left word flipped. The bars are how many bits of the block disagree after each cycle. The dashed line is half of them.</p>
+    <div class="choices" role="group" aria-label="Which bit to flip">
+      <button type="button" id="bit-0" aria-pressed="true">Low bit</button>
+      <button type="button" id="bit-15" aria-pressed="false">Middle bit</button>
+      <button type="button" id="bit-31" aria-pressed="false">High bit</button>
+    </div>
+    <p class="big-num" id="ham"></p>
+    <div class="chart-wrap">
+      <div class="half-line" aria-hidden="true"></div>
+      <div class="chart" id="chart"></div>
+    </div>
+    <label class="scrub">
+      <span id="spread-label">After 0 cycles</span>
+      <input id="spread" type="range" min="0" max="32" value="6" aria-label="Cycles of stirring for the flipped bit">
+    </label>
+    <div class="scroll" id="diff-rows" style="margin-top:0.8rem"></div>
+  </section>
+
+  <div class="prose">
+    <p>Then the part that disappointed me. The key never moves. Every cycle adds the same four words in the same places. Addition is a poor way to hide a secret, because two changes can cancel. Nudge one ingredient up, nudge the other down, and the sum does not care which pair you started with.</p>
+    <p>TEA has a real version of this failure. Each key has three siblings: other 128-bit keys that encrypt every block the same way, so the key you chose was never the only one. There is a related-key attack as well, the kind where someone can ask for encryptions under a key related to the secret and use that to take the cipher apart. I am not going to show either construction. The figure under this is a toy. Ordinary integers, one addition. It is the shape of the mistake, and it is not a method for finding a TEA key. The follow-up cipher, XTEA, exists because this key schedule was too innocent.</p>
+    <p>I still like the original. It is the smallest thing I have watched that feels both beautiful and not quite enough.</p>
+  </div>
+
+  <section class="panel" aria-labelledby="toy-title">
+    <h2 id="toy-title">Sibling ingredients</h2>
+    <p class="prose" style="margin:0">Not the cipher. Not its key relation. One sum, and two pairs that produce it.</p>
+    <div class="adder" id="adder">
+      <div class="stack">
+        <span class="delta-tag up" id="tag-a"></span>
+        <span class="big" id="addend-a">5</span>
+        <span class="plus">+</span>
+        <span class="delta-tag down" id="tag-b"></span>
+        <span class="big" id="addend-b">3</span>
+      </div>
+      <div class="eq-sign" aria-hidden="true">=</div>
+      <div class="big stay" id="sum-stay">8</div>
+    </div>
+    <button type="button" id="nudge" class="primary">Nudge both ingredients</button>
+    <p class="note" id="toy-note">5 and 3. The sum is 8.</p>
+  </section>
+
+  <footer>
+    <p>An LLM helped me build this page and edit the prose. The cipher is David Wheeler and Roger Needham’s, from their 1994 note at the Fast Software Encryption workshop. Delta and the round structure are theirs. The equivalent-key and related-key results were published later; this page names them and leaves the relations, the parameters, and the procedure out on purpose.</p>
+    <p id="self-check"></p>
+    <p>Source for the cipher itself: <a href="https://en.wikipedia.org/wiki/Tiny_Encryption_Algorithm">Tiny Encryption Algorithm</a>.</p>
+  </footer>
+</article>
+<script>
+(function () {
+  const DELTA = 0x9E3779B9;
+  const CYCLES = 32;
+  const BEATS = 8;
+  const MAX = CYCLES * BEATS;
+  const add = (a, b) => (a + b) >>> 0;
+  const xor = (a, b) => (a ^ b) >>> 0;
+  const shl = (a, n) => (a << n) >>> 0;
+  const shr = (a, n) => a >>> n;
+
+  function encrypt(v0, v1, key, rounds) {
+    let sum = 0;
+    for (let i = 0; i < rounds; i++) {
+      sum = add(sum, DELTA);
+      v0 = add(v0, xor(xor(add(shl(v1, 4), key[0]), add(v1, sum)), add(shr(v1, 5), key[1])));
+      v1 = add(v1, xor(xor(add(shl(v0, 4), key[2]), add(v0, sum)), add(shr(v0, 5), key[3])));
+    }
+    return [v0, v1];
+  }
+
+  function build(v0, v1, key) {
+    const frames = [{ v0: v0, v1: v1, sum: 0 }];
+    let sum = 0;
+    for (let i = 0; i < CYCLES; i++) {
+      const prev = frames[i];
+      sum = add(sum, DELTA);
+      const shL = shl(prev.v1, 4);
+      const shR = shr(prev.v1, 5);
+      const a = add(shL, key[0]);
+      const b = add(prev.v1, sum);
+      const c = add(shR, key[1]);
+      const m0 = xor(xor(a, b), c);
+      const nv0 = add(prev.v0, m0);
+      const shL2 = shl(nv0, 4);
+      const shR2 = shr(nv0, 5);
+      const d = add(shL2, key[2]);
+      const e = add(nv0, sum);
+      const f = add(shR2, key[3]);
+      const m1 = xor(xor(d, e), f);
+      frames.push({
+        v0: nv0, v1: add(prev.v1, m1), sum: sum,
+        from0: prev.v0, from1: prev.v1,
+        shL: shL, shR: shR, a: a, b: b, c: c, m0: m0,
+        shL2: shL2, shR2: shR2, d: d, e: e, f: f, m1: m1
+      });
+    }
+    return frames;
+  }
+
+  function hex(n) {
+    return (n >>> 0).toString(16).toUpperCase().padStart(8, "0");
+  }
+  function hexSpaced(n) {
+    const h = hex(n);
+    return h.slice(0, 4) + " " + h.slice(4);
+  }
+  function parseWord(text) {
+    if (!/^[0-9a-fA-F]{8}$/.test(text)) return null;
+    return parseInt(text, 16) >>> 0;
+  }
+  function reducedMotion() {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+  function stepPx() {
+    const cs = getComputedStyle(document.documentElement);
+    return parseFloat(cs.getPropertyValue("--bit")) + parseFloat(cs.getPropertyValue("--gap"));
+  }
+
+  const CAPTIONS = [
+    "Add delta. It is 2^32 divided by the golden ratio, rounded down, so this cycle is not a copy of the last one. The words have not moved.",
+    "Copy the right word three times. Slide one copy four bits toward the high end, and one copy five bits toward the low end. Zeros come in at the open edge.",
+    "Add k0 and k1 onto the shifted copies. Add the sum onto the copy that stayed put. The addition wraps at 2^32.",
+    "XOR the three results. A bit survives where the copies disagree.",
+    "Add that pattern into the left word. The right word is still the one you started this cycle with.",
+    "The left word has changed, so copy that new word and slide it the same way. Four left, five right.",
+    "Add k2 and k3 onto those shifted copies, and add the sum onto the middle one.",
+    "XOR again, and add the pattern into the right word. Both halves have moved. The key was used raw."
+  ];
+  const FORMULAS = [
+    "sum  =  sum + delta",
+    "v1 << 4          v1          v1 >> 5",
+    "(v1 << 4) + k0    XOR    v1 + sum    XOR    (v1 >> 5) + k1",
+    "mask  =  those three, XORed",
+    "v0  =  v0 + mask",
+    "v0 << 4          v0          v0 >> 5",
+    "(v0 << 4) + k2    XOR    v0 + sum    XOR    (v0 >> 5) + k3",
+    "v1  =  v1 + mask"
+  ];
+
+  const els = {
+    caption: document.getElementById("caption"),
+    formula: document.getElementById("formula"),
+    regs: document.getElementById("regs"),
+    work: document.getElementById("work"),
+    film: document.getElementById("film"),
+    scrub: document.getElementById("scrub"),
+    scrubLabel: document.getElementById("scrub-label"),
+    back: document.getElementById("back"),
+    fwd: document.getElementById("fwd"),
+    play: document.getElementById("play"),
+    out: document.getElementById("cipher-out"),
+    check: document.getElementById("self-check"),
+    ham: document.getElementById("ham"),
+    chart: document.getElementById("chart"),
+    spread: document.getElementById("spread"),
+    spreadLabel: document.getElementById("spread-label"),
+    diffRows: document.getElementById("diff-rows"),
+    tagA: document.getElementById("tag-a"),
+    tagB: document.getElementById("tag-b"),
+    addA: document.getElementById("addend-a"),
+    addB: document.getElementById("addend-b"),
+    sumStay: document.getElementById("sum-stay"),
+    toyNote: document.getElementById("toy-note"),
+    nudge: document.getElementById("nudge")
+  };
+  const keyNodes = Array.from(document.querySelectorAll(".key"));
+  const inputs = ["v0", "v1", "k0", "k1", "k2", "k3"].map((id) => document.getElementById("in-" + id));
+
+  let frames = [];
+  let key = [];
+  let step = 0;
+  let landedBy = "step";
+  let timer = null;
+  let renderGen = 0;
+  let flipBit = 0;
+  let spreadN = 6;
+  let nudged = false;
+
+  function readInputs() {
+    const words = inputs.map((input) => parseWord(input.value.trim()));
+    inputs.forEach((input, i) => input.classList.toggle("bad", words[i] === null));
+    if (words.some((w) => w === null)) return null;
+    return { v0: words[0], v1: words[1], key: words.slice(2) };
+  }
+
+  function locate(s) {
+    if (s <= 0) return { mode: "intro" };
+    return { mode: "cycle", cycle: Math.floor((s - 1) / BEATS), beat: (s - 1) % BEATS };
+  }
+
+  function bits(value, color, extra) {
+    const row = document.createElement("div");
+    row.className = "bits" + (extra ? " " + extra : "");
+    for (let i = 0; i < 32; i++) {
+      const cell = document.createElement("span");
+      const on = ((value >>> (31 - i)) & 1) === 1;
+      cell.className = "bit " + (on ? "on" : "off");
+      cell.style.setProperty("--c", color);
+      row.append(cell);
+    }
+    return row;
+  }
+
+  function shiftWindow(value, amount, dir, color) {
+    const win = document.createElement("div");
+    win.className = "window";
+    const track = document.createElement("div");
+    track.className = "track";
+    const cells = [];
+    if (dir === "L") {
+      for (let i = 0; i < 32; i++) cells.push((value >>> (31 - i)) & 1);
+      for (let i = 0; i < amount; i++) cells.push(0);
+    } else {
+      for (let i = 0; i < amount; i++) cells.push(0);
+      for (let i = 0; i < 32; i++) cells.push((value >>> (31 - i)) & 1);
+    }
+    cells.forEach((bit) => {
+      const cell = document.createElement("span");
+      cell.className = "bit " + (bit ? "on" : "off");
+      cell.style.setProperty("--c", color);
+      track.append(cell);
+    });
+    const px = stepPx();
+    if (dir === "R") track.style.transform = "translateX(" + (-amount * px) + "px)";
+    win.append(track);
+    const gen = renderGen;
+    const end = dir === "L" ? "translateX(" + (-amount * px) + "px)" : "translateX(0px)";
+    if (reducedMotion()) {
+      track.style.transform = end;
+    } else {
+      requestAnimationFrame(() => {
+        if (gen !== renderGen) return;
+        requestAnimationFrame(() => {
+          if (gen !== renderGen) return;
+          track.style.transform = end;
+        });
+      });
+    }
+    return win;
+  }
+
+  function lane(name, value, color, opts) {
+    const wrap = document.createElement("div");
+    wrap.className = "lane";
+    const top = document.createElement("div");
+    top.className = "lane-top";
+    const nm = document.createElement("span");
+    nm.className = "lane-name";
+    nm.style.color = color;
+    nm.textContent = name;
+    const hx = document.createElement("span");
+    hx.className = "lane-hex";
+    hx.textContent = hexSpaced(value);
+    top.append(nm, hx);
+    wrap.append(top);
+    if (opts && opts.shift) wrap.append(shiftWindow(opts.from, opts.amount, opts.dir, color));
+    else wrap.append(bits(value, color, opts && opts.sweep ? "sweep" : ""));
+    return wrap;
+  }
+
+  function reg(name, value, color) {
+    const wrap = document.createElement("div");
+    wrap.className = "reg";
+    const top = document.createElement("div");
+    top.className = "reg-top";
+    const nm = document.createElement("span");
+    nm.className = "reg-name";
+    nm.style.color = color;
+    nm.textContent = name;
+    const hx = document.createElement("span");
+    hx.className = "reg-hex";
+    hx.textContent = hexSpaced(value);
+    top.append(nm, hx);
+    wrap.append(top, bits(value, color));
+    return wrap;
+  }
+
+  function portrait(frame, sum) {
+    els.regs.replaceChildren(
+      reg("Left word  v0", frame.v0, "var(--blue)"),
+      reg("Right word  v1", frame.v1, "var(--green)"),
+      reg("Sum", sum, "var(--yellow)")
+    );
+  }
+
+  function fillWork(next, beat) {
+    const box = els.work;
+    box.replaceChildren();
+    const gold = "var(--yellow)";
+    const blue = "var(--blue)";
+    const green = "var(--green)";
+    const red = "var(--red)";
+    const purple = "var(--purple)";
+    if (beat === 0) {
+      box.append(lane("Delta", DELTA, gold), lane("Sum, after adding it", next.sum, gold, { sweep: true }));
+    } else if (beat === 1) {
+      box.append(
+        lane("Right word, four left", next.shL, green, { shift: true, from: next.from1, amount: 4, dir: "L" }),
+        lane("Right word, unmoved", next.from1, "var(--ink)"),
+        lane("Right word, five right", next.shR, blue, { shift: true, from: next.from1, amount: 5, dir: "R" })
+      );
+    } else if (beat === 2) {
+      box.append(
+        lane("(v1 << 4) + k0", next.a, purple, { sweep: true }),
+        lane("v1 + sum", next.b, gold, { sweep: true }),
+        lane("(v1 >> 5) + k1", next.c, purple, { sweep: true })
+      );
+    } else if (beat === 3) {
+      box.append(lane("Where they disagree", next.m0, red));
+    } else if (beat === 4) {
+      box.append(
+        lane("Left word, before", next.from0, blue),
+        lane("The mask", next.m0, red),
+        lane("Left word, after", next.v0, blue, { sweep: true })
+      );
+    } else if (beat === 5) {
+      box.append(
+        lane("Left word, four left", next.shL2, blue, { shift: true, from: next.v0, amount: 4, dir: "L" }),
+        lane("Left word, unmoved", next.v0, "var(--ink)"),
+        lane("Left word, five right", next.shR2, green, { shift: true, from: next.v0, amount: 5, dir: "R" })
+      );
+    } else if (beat === 6) {
+      box.append(
+        lane("(v0 << 4) + k2", next.d, purple, { sweep: true }),
+        lane("v0 + sum", next.e, gold, { sweep: true }),
+        lane("(v0 >> 5) + k3", next.f, purple, { sweep: true })
+      );
+    } else {
+      box.append(
+        lane("Right word, before", next.from1, green),
+        lane("The mask", next.m1, red),
+        lane("Right word, after", next.v1, green, { sweep: true })
+      );
+    }
+  }
+
+  function renderFilm(done, mid) {
+    els.film.replaceChildren();
+    frames.forEach((frame, i) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "cell" + (i === done ? " on" : "") + (mid && i === done + 1 ? " mid" : "");
+      btn.setAttribute("aria-label", i === 0 ? "Before any cycles" : "After " + i + (i === 1 ? " cycle" : " cycles"));
+      const bytes = [];
+      [frame.v0, frame.v1].forEach((word) => {
+        bytes.push((word >>> 24) & 255, (word >>> 16) & 255, (word >>> 8) & 255, word & 255);
+      });
+      bytes.forEach((b) => {
+        const slice = document.createElement("i");
+        const light = 16 + (b / 255) * 52;
+        slice.style.background = "hsl(45 78% " + light + "%)";
+        btn.append(slice);
+      });
+      btn.addEventListener("click", () => {
+        stopPlay();
+        landedBy = "slider";
+        step = i * BEATS;
+        render();
+      });
+      els.film.append(btn);
+    });
+  }
+
+  function render() {
+    renderGen += 1;
+    const loc = locate(step);
+    const done = Math.floor(step / BEATS);
+    const inside = step % BEATS !== 0;
+    els.scrub.value = String(done);
+    els.scrub.setAttribute("aria-valuenow", String(done));
+    els.scrubLabel.textContent = inside
+      ? "Inside cycle " + (done + 1) + " of 32, motion " + (loc.beat + 1) + " of 8"
+      : done + (done === 1 ? " cycle completed" : " cycles completed");
+    els.back.disabled = step <= 0;
+    els.fwd.disabled = step >= MAX;
+    els.play.disabled = step >= MAX && !timer;
+
+    let shown;
+    let hot = [];
+    if (loc.mode === "intro") {
+      shown = frames[0];
+      portrait(shown, 0);
+      els.work.replaceChildren();
+      els.caption.textContent = "Two words, thirty-two bits each. This is the whole block. Nothing has moved. Step forward and the first cycle begins.";
+      els.formula.textContent = "block  =  (v0, v1)     key  =  (k0, k1, k2, k3)";
+    } else {
+      const next = frames[loc.cycle + 1];
+      const beat = loc.beat;
+      const v0 = beat >= 4 ? next.v0 : next.from0;
+      const v1 = beat >= 7 ? next.v1 : next.from1;
+      portrait({ v0: v0, v1: v1 }, next.sum);
+      const settled = landedBy === "slider" && beat === 7;
+      if (settled) {
+        els.work.replaceChildren();
+        els.caption.textContent = "After " + (loc.cycle + 1) + (loc.cycle === 0 ? " cycle." : " cycles.") + " Both words have been folded that many times. Step forward to watch the next slide.";
+        els.formula.textContent = "v0  " + hexSpaced(next.v0) + "     v1  " + hexSpaced(next.v1);
+      } else {
+        fillWork(next, beat);
+        els.caption.textContent = CAPTIONS[beat];
+        els.formula.textContent = FORMULAS[beat];
+      }
+      if (beat >= 2 && beat <= 4) hot = [0, 1];
+      if (beat >= 6) hot = [2, 3];
+      shown = next;
+    }
+    keyNodes.forEach((node, i) => node.classList.toggle("hot", hot.indexOf(i) !== -1));
+    renderFilm(done, inside);
+    const final = frames[CYCLES];
+    els.out.textContent = "After all 32 cycles:  " + hex(final.v0) + "  " + hex(final.v1);
+    publishHeight();
+  }
+
+  function stepBy(delta) {
+    stopPlay();
+    const next = Math.max(0, Math.min(MAX, step + delta));
+    if (next === step) return;
+    landedBy = "step";
+    step = next;
+    render();
+  }
+
+  function stopPlay() {
+    if (timer) clearInterval(timer);
+    timer = null;
+    els.play.textContent = "Play cycle";
+    els.play.setAttribute("aria-pressed", "false");
+    els.play.disabled = step >= MAX;
+  }
+
+  function playCycle() {
+    if (timer) { stopPlay(); return; }
+    const end = Math.min(MAX, (Math.floor(step / BEATS) + 1) * BEATS);
+    if (step >= end) return;
+    els.play.textContent = "Pause";
+    els.play.setAttribute("aria-pressed", "true");
+    timer = setInterval(() => {
+      if (step >= end) { stopPlay(); return; }
+      landedBy = "step";
+      step += 1;
+      render();
+      if (step >= end) stopPlay();
+    }, 920);
+  }
+
+  function rebuild() {
+    const data = readInputs();
+    if (!data) return;
+    stopPlay();
+    key = data.key;
+    frames = build(data.v0, data.v1, key);
+    keyNodes.forEach((node, i) => {
+      node.querySelector(".key-hex").textContent = hexSpaced(key[i]);
+    });
+    if (step > MAX) step = MAX;
+    render();
+    renderSpread();
+  }
+
+  function popcount(n) {
+    let x = n >>> 0;
+    let c = 0;
+    while (x) { c += x & 1; x >>>= 1; }
+    return c;
+  }
+
+  function renderSpread() {
+    const data = readInputs();
+    if (!data) return;
+    const series = [];
+    for (let n = 0; n <= CYCLES; n++) {
+      const a = encrypt(data.v0, data.v1, data.key, n);
+      const b = encrypt(xor(data.v0, 1 << flipBit), data.v1, data.key, n);
+      series.push({ a: a, b: b, d: popcount(a[0] ^ b[0]) + popcount(a[1] ^ b[1]) });
+    }
+    const cur = series[spreadN];
+    els.ham.innerHTML = cur.d + " <span>bits differ, out of 64</span>";
+    els.spreadLabel.textContent = spreadN === 0 ? "Before any stirring" : "After " + spreadN + (spreadN === 1 ? " cycle" : " cycles");
+    els.chart.replaceChildren();
+    series.forEach((point, n) => {
+      const bar = document.createElement("button");
+      bar.type = "button";
+      bar.className = "bar" + (n === spreadN ? " now" : "");
+      bar.style.height = Math.max(2, (point.d / 64) * 100) + "%";
+      bar.setAttribute("aria-label", n + (n === 1 ? " cycle, " : " cycles, ") + point.d + " bits differ");
+      bar.addEventListener("click", () => {
+        spreadN = n;
+        els.spread.value = String(n);
+        renderSpread();
+      });
+      els.chart.append(bar);
+    });
+    const row = (word, other, name, color) => {
+      const wrap = document.createElement("div");
+      wrap.className = "lane";
+      const top = document.createElement("div");
+      top.className = "lane-top";
+      const nm = document.createElement("span");
+      nm.className = "lane-name";
+      nm.style.color = color;
+      nm.textContent = name;
+      top.append(nm);
+      const bitsRow = document.createElement("div");
+      bitsRow.className = "bits";
+      for (let i = 0; i < 32; i++) {
+        const cell = document.createElement("span");
+        const bit = (word >>> (31 - i)) & 1;
+        const diff = ((word ^ other) >>> (31 - i)) & 1;
+        cell.className = "bit " + (diff ? "diff" : bit ? "on" : "off");
+        cell.style.setProperty("--c", color);
+        bitsRow.append(cell);
+      }
+      wrap.append(top, bitsRow);
+      return wrap;
+    };
+    els.diffRows.replaceChildren(
+      row(cur.a[0], cur.b[0], "Left word, differences in red", "var(--blue)"),
+      row(cur.a[1], cur.b[1], "Right word", "var(--green)")
+    );
+  }
+
+  function setFlip(bit, button) {
+    flipBit = bit;
+    document.querySelectorAll(".choices button").forEach((b) => b.setAttribute("aria-pressed", b === button ? "true" : "false"));
+    renderSpread();
+  }
+
+  function setToy(next) {
+    nudged = next;
+    els.addA.textContent = nudged ? "6" : "5";
+    els.addB.textContent = nudged ? "2" : "3";
+    els.tagA.textContent = nudged ? "+1" : "";
+    els.tagB.textContent = nudged ? "−1" : "";
+    els.nudge.textContent = nudged ? "Put them back" : "Nudge both ingredients";
+    els.toyNote.textContent = nudged
+      ? "6 and 2. Same sum. The +1 and the −1 cancelled."
+      : "5 and 3. The sum is 8.";
+    els.sumStay.classList.remove("pulse");
+    void els.sumStay.offsetWidth;
+    els.sumStay.classList.add("pulse");
+  }
+
+  function selfCheck() {
+    const key0 = [0x00112233, 0x44556677, 0x8899AABB, 0xCCDDEEFF];
+    const full = encrypt(0x01234567, 0x89ABCDEF, key0, 32);
+    const one = encrypt(0x01234567, 0x89ABCDEF, key0, 1);
+    const ok = full[0] === 0x126c6b92 && full[1] === 0xc0653a3e &&
+      one[0] === 4138911700 && one[1] === 1030467898 &&
+      ((32 * DELTA) >>> 0) === 0xC6EF3720;
+    els.check.textContent = ok
+      ? "The bits are computed from the real round function."
+      : "The round function failed its check. The picture may be wrong.";
+    els.check.classList.toggle("bad", !ok);
+    return ok;
+  }
+
+  function publishHeight() {
+    if (window.parent === window) return;
+    const height = document.documentElement.scrollHeight;
+    window.parent.postMessage({ source: "four-left-five-right", height: height }, "*");
+  }
+
+  els.back.addEventListener("click", () => stepBy(-1));
+  els.fwd.addEventListener("click", () => stepBy(1));
+  els.play.addEventListener("click", playCycle);
+  els.scrub.addEventListener("input", () => {
+    stopPlay();
+    landedBy = "slider";
+    step = Number(els.scrub.value) * BEATS;
+    render();
+  });
+  els.spread.addEventListener("input", () => {
+    spreadN = Number(els.spread.value);
+    renderSpread();
+  });
+  document.getElementById("bit-0").addEventListener("click", (e) => setFlip(0, e.currentTarget));
+  document.getElementById("bit-15").addEventListener("click", (e) => setFlip(15, e.currentTarget));
+  document.getElementById("bit-31").addEventListener("click", (e) => setFlip(31, e.currentTarget));
+  document.getElementById("shuffle").addEventListener("click", () => {
+    const buf = new Uint32Array(2);
+    crypto.getRandomValues(buf);
+    inputs[0].value = hex(buf[0]);
+    inputs[1].value = hex(buf[1]);
+    step = 0;
+    landedBy = "step";
+    rebuild();
+  });
+  document.getElementById("fields").addEventListener("submit", (e) => e.preventDefault());
+  inputs.forEach((input) => input.addEventListener("input", () => {
+    if (!readInputs()) return;
+    step = 0;
+    landedBy = "step";
+    rebuild();
+  }));
+  els.nudge.addEventListener("click", () => setToy(!nudged));
+  document.addEventListener("keydown", (e) => {
+    if (e.target.closest("input, textarea")) return;
+    if (e.key === "ArrowRight") { e.preventDefault(); stepBy(1); }
+    else if (e.key === "ArrowLeft") { e.preventDefault(); stepBy(-1); }
+    else if (e.key === " " && !e.target.closest("button")) { e.preventDefault(); playCycle(); }
+  });
+
+  selfCheck();
+  rebuild();
+  new ResizeObserver(publishHeight).observe(document.body);
+})();
+</script>
+</body>
+</html>
