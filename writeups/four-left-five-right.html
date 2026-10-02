@@ -3,101 +3,121 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="dark">
-<title>Four Left, Five Right</title>
-<meta name="description" content="An interactive note on the Tiny Encryption Algorithm: the shifts, the golden-ratio constant, and why a key that is only added is not a unique key.">
+<meta name="theme-color" content="#0073EA">
+<meta name="color-scheme" content="light">
+<title>Four Left, Five Right — Noam Yakar</title>
+<meta name="description" content="TEA with Manim animations: Feistel rounds, the <<4/>>5 stir, golden-ratio delta, and why an add-only key has siblings. Inspired by pwn.college reversing-hell babyc.">
+<link rel="stylesheet" href="../css/site.css" />
 <style>
+  /* Theater tokens — map interactive JS colors onto Tetra (site.css) */
   :root {
-    --bg: #141414;
-    --ink: #f3efe6;
-    --muted: #b7b1a6;
-    --faint: rgba(243, 239, 230, 0.16);
-    --line: rgba(243, 239, 230, 0.12);
-    --yellow: #ffd23f;
-    --blue: #58c4dd;
-    --green: #8fce6b;
-    --red: #fc6255;
-    --purple: #c59be0;
+    --bg: var(--background);
+    --ink: var(--text-primary);
+    --muted: var(--text-secondary);
+    --faint: var(--border);
+    --line: var(--border);
+    --red: var(--danger);
     --bit: 13px;
     --gap: 2px;
     --step: 15px;
-    --serif: "Iowan Old Style", Palatino, "Palatino Linotype", "Times New Roman", serif;
-    --mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    --mono: var(--font-mono);
   }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; background: var(--bg); color: var(--ink); }
-  body {
-    font-family: var(--serif);
+  body.tea-writeup {
     background:
-      radial-gradient(ellipse 70% 36% at 50% -8%, rgba(255, 210, 63, 0.09), transparent 55%),
-      var(--bg);
-    min-height: 100%;
+      radial-gradient(ellipse 70% 40% at 50% -8%, var(--blue-soft), transparent 55%),
+      var(--background);
   }
-  article {
+  .tea-article {
     max-width: 920px;
     margin: 0 auto;
-    padding: 4.5rem 1.4rem 5rem;
+    padding: var(--space-7) var(--space-5) var(--space-8);
   }
   .kicker {
-    font-family: var(--mono);
+    font-family: var(--font-mono);
     font-size: 0.72rem;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--yellow);
+    color: var(--blue);
+    font-weight: 600;
     margin: 0 0 0.8rem;
   }
-  h1 {
-    font-weight: 560;
-    font-size: clamp(2.8rem, 7vw, 4.8rem);
-    line-height: 0.96;
+  .tea-article > h1 {
+    font-weight: 700;
+    font-size: clamp(2.4rem, 6vw, 3.6rem);
+    line-height: 1.05;
     letter-spacing: -0.03em;
     margin: 0;
+    color: var(--text-primary);
+  }
+  .tea-article > h1::after {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 3px;
+    background: var(--blue);
+    margin-top: var(--space-3);
+    border-radius: 2px;
   }
   .dek {
-    font-size: 1.28rem;
-    line-height: 1.35;
-    color: var(--muted);
-    max-width: 34rem;
+    font-size: 1.15rem;
+    line-height: 1.45;
+    color: var(--text-secondary);
+    max-width: 36rem;
     margin: 1rem 0 0;
   }
   .prose {
-    max-width: 38rem;
-    font-size: 1.12rem;
-    line-height: 1.58;
-    color: #e8e2d6;
+    max-width: 40rem;
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: var(--text-secondary);
   }
   .prose p { margin: 1.1rem 0; }
-  h2 {
-    font-weight: 560;
-    font-size: 1.8rem;
+  .prose a { color: var(--blue); font-weight: 500; }
+  .prose a:hover { color: #005bb8; }
+  .tea-article h2 {
+    font-weight: 600;
+    font-size: 1.35rem;
     letter-spacing: -0.02em;
-    margin: 2.6rem 0 0.6rem;
+    margin: 0 0 0.65rem;
+    color: var(--text-primary);
   }
-  a { color: var(--blue); }
+  .tea-article a { color: var(--blue); }
   button, input { font: inherit; color: inherit; }
   button {
-    background: transparent;
-    border: 1px solid var(--line);
-    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
     padding: 0.45rem 0.95rem;
     cursor: pointer;
-    font-family: var(--mono);
+    font-family: var(--font-mono);
     font-size: 0.82rem;
     letter-spacing: 0.02em;
+    color: var(--text-primary);
+    transition: var(--transition);
   }
-  button:hover { border-color: rgba(243, 239, 230, 0.4); }
+  button:hover {
+    border-color: var(--border-strong);
+    background: var(--surface-hover);
+  }
   button:focus-visible, input:focus-visible {
-    outline: 2px solid var(--yellow);
+    outline: 2px solid var(--blue);
     outline-offset: 2px;
   }
-  button:disabled { opacity: 0.35; cursor: default; }
-  button.primary { border-color: rgba(255, 210, 63, 0.7); color: var(--yellow); }
+  button:disabled { opacity: 0.4; cursor: default; }
+  button.primary {
+    border-color: var(--blue);
+    color: var(--blue);
+    background: var(--blue-soft);
+    font-weight: 600;
+  }
+  button.primary:hover { background: #d6e9fa; }
   .stage, .panel {
     margin-top: 1.4rem;
     padding: 1.15rem 1.1rem 1.25rem;
-    border: 1px solid var(--line);
-    border-radius: 18px;
-    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--surface);
+    box-shadow: var(--shadow-card);
   }
   .transport {
     display: flex;
@@ -111,8 +131,8 @@
     -webkit-appearance: none;
     appearance: none;
     width: 100%;
-    height: 2px;
-    background: rgba(243, 239, 230, 0.28);
+    height: 3px;
+    background: var(--border-strong);
     border-radius: 99px;
     cursor: pointer;
   }
@@ -121,26 +141,27 @@
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    background: var(--yellow);
+    background: var(--blue);
     border: 0;
   }
   input[type="range"]::-moz-range-thumb {
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    background: var(--yellow);
+    background: var(--blue);
     border: 0;
   }
   #caption {
     min-height: 4.6rem;
-    font-size: 1.18rem;
-    line-height: 1.4;
+    font-size: 1.1rem;
+    line-height: 1.45;
     margin: 1rem 0 0.35rem;
+    color: var(--text-primary);
   }
   .formula {
     font-family: var(--mono);
     font-size: 0.92rem;
-    color: var(--yellow);
+    color: var(--blue);
     min-height: 1.4rem;
     margin: 0 0 0.9rem;
   }
@@ -178,12 +199,12 @@
     border-radius: 3px;
     flex: none;
   }
-  .bit.off { box-shadow: inset 0 0 0 1px var(--faint); }
+  .bit.off { box-shadow: inset 0 0 0 1px var(--border); background: var(--surface-hover); }
   .bit.on {
-    background: linear-gradient(180deg, var(--c, var(--ink)), color-mix(in srgb, var(--c, var(--ink)) 72%, #000));
-    box-shadow: 0 0 10px color-mix(in srgb, var(--c, var(--ink)) 35%, transparent);
+    background: linear-gradient(180deg, var(--c, var(--ink)), color-mix(in srgb, var(--c, var(--ink)) 78%, #fff));
+    box-shadow: 0 1px 2px color-mix(in srgb, var(--c, var(--ink)) 22%, transparent);
   }
-  .bit.diff { background: var(--red); box-shadow: 0 0 8px rgba(252, 98, 85, 0.45); }
+  .bit.diff { background: var(--red); box-shadow: 0 0 0 1px color-mix(in srgb, var(--red) 35%, transparent); }
   .track { transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1); }
   .sweep { position: relative; }
   .sweep::after {
@@ -193,7 +214,7 @@
     bottom: 0;
     left: 0;
     width: 22%;
-    background: linear-gradient(90deg, transparent, rgba(255, 210, 63, 0.45), transparent);
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--blue) 45%, transparent), transparent);
     animation: sweep 720ms ease-out both;
     pointer-events: none;
   }
@@ -213,8 +234,8 @@
     padding: 0.35rem 0.55rem 0.4rem;
     min-width: 7.2rem;
   }
-  .key.hot { border-color: var(--purple); box-shadow: 0 0 0 1px rgba(197, 155, 224, 0.35); }
-  .key b { display: block; font-family: var(--mono); font-weight: 500; font-size: 0.72rem; color: var(--purple); }
+  .key.hot { border-color: var(--purple); box-shadow: 0 0 0 2px var(--purple-soft); }
+  .key b { display: block; font-family: var(--mono); font-weight: 600; font-size: 0.72rem; color: var(--purple); }
   .film {
     display: flex;
     gap: 4px;
@@ -234,8 +255,8 @@
     flex: none;
   }
   .cell i { display: block; flex: 1; }
-  .cell.on { border-color: var(--yellow); }
-  .cell.mid { border-color: rgba(255, 210, 63, 0.35); }
+  .cell.on { border-color: var(--blue); }
+  .cell.mid { border-color: color-mix(in srgb, var(--blue) 40%, transparent); }
   .film-label, .note, .field-row, .axis {
     font-family: var(--mono);
     font-size: 0.75rem;
@@ -254,10 +275,11 @@
     font-size: 0.92rem;
     background: transparent;
     border: none;
-    border-bottom: 1px solid rgba(243, 239, 230, 0.28);
+    border-bottom: 1px solid var(--border-strong);
     width: 9ch;
     padding: 0.15rem 0;
     border-radius: 0;
+    color: var(--text-primary);
   }
   input.bad { border-bottom-color: var(--red); }
   .out {
@@ -275,7 +297,7 @@
   }
   .bar {
     flex: 1;
-    background: rgba(255, 210, 63, 0.85);
+    background: color-mix(in srgb, var(--yellow) 88%, #fff);
     border: 0;
     padding: 0;
     border-radius: 2px 2px 0 0;
@@ -288,7 +310,7 @@
     left: 0;
     right: 0;
     top: 50%;
-    border-top: 1px dashed rgba(243, 239, 230, 0.28);
+    border-top: 1px dashed var(--border-strong);
     pointer-events: none;
   }
   .big-num {
@@ -322,7 +344,7 @@
   }
   .delta-tag.up { color: var(--blue); }
   .delta-tag.down { color: var(--red); }
-  .stay { color: var(--yellow); }
+  .stay { color: var(--blue); font-weight: 600; }
   .stay.pulse { animation: hold 600ms ease; }
   @keyframes hold {
     0% { transform: scale(1); }
@@ -330,61 +352,68 @@
     100% { transform: scale(1); }
   }
   .eq-sign { font-size: 2rem; color: var(--muted); }
-  footer {
+  footer.tea-foot {
     margin-top: 3rem;
-    max-width: 38rem;
-    color: var(--muted);
+    max-width: 40rem;
+    color: var(--text-muted);
     font-size: 0.95rem;
     line-height: 1.5;
   }
+  footer.tea-foot a { color: var(--blue); font-weight: 500; }
   .diagram {
     margin: 1.5rem 0 0.35rem;
     padding: 1rem 1rem 0.85rem;
-    border: 1px solid var(--line);
-    border-radius: 18px;
-    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--surface);
+    box-shadow: var(--shadow-card);
   }
+  .diagram video,
   .diagram img {
     display: block;
     width: 100%;
     height: auto;
-    border-radius: 10px;
-    background: #0f0f0f;
+    border-radius: var(--radius);
+    background: var(--blue-soft);
+    border: 1px solid var(--border);
   }
   .diagram figcaption {
     font-family: var(--mono);
     font-size: 0.78rem;
-    color: var(--muted);
+    color: var(--text-secondary);
     margin-top: 0.75rem;
     line-height: 1.45;
   }
   .diagram figcaption strong {
-    color: var(--yellow);
-    font-weight: 500;
+    color: var(--blue);
+    font-weight: 600;
   }
-  .site-back {
-    position: sticky;
-    top: 0;
-    z-index: 5;
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    padding: 0.75rem 1.4rem;
-    background: rgba(20, 20, 20, 0.88);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--line);
-    font-family: var(--mono);
-    font-size: 0.78rem;
-    letter-spacing: 0.04em;
+  .anim-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+    margin: 1.2rem 0 0.2rem;
   }
-  .site-back a { color: var(--muted); text-decoration: none; }
-  .site-back a:hover { color: var(--yellow); }
+  .anim-grid .diagram {
+    margin: 0;
+  }
+  .anim-hero {
+    margin-top: 1.6rem;
+  }
+  @media (max-width: 720px) {
+    .anim-grid { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .diagram video { display: none; }
+    .diagram .poster-fallback { display: block; }
+  }
+  .poster-fallback { display: none; }
   #self-check { font-family: var(--mono); font-size: 0.75rem; }
   #self-check.bad { color: var(--red); }
   @media (max-width: 640px) {
     :root { --bit: 8px; --gap: 1px; --step: 9px; }
     .bit { height: 16px; }
-    article { padding-top: 2.4rem; }
+    .tea-article { padding-top: var(--space-5); }
   }
   @media (prefers-reduced-motion: reduce) {
     .track { transition: none; }
@@ -392,36 +421,106 @@
   }
 </style>
 </head>
-<body>
-<nav class="site-back" aria-label="Site">
-  <a href="../index.html">noam.yakar</a>
-  <a href="index.html">&gt; writeups</a>
-  <a href="../projects.html">&gt; projects</a>
-</nav>
-<article>
+<body class="site tea-writeup">
+  <nav class="topbar" aria-label="Primary">
+    <div class="topbar-inner">
+      <a class="topbar-brand" href="../index.html">
+        <img class="topbar-avatar" src="../profile.png" alt="" width="30" height="30" />
+        <span>noam.yakar</span>
+      </a>
+      <div class="topbar-links">
+        <a href="../index.html">home</a>
+        <a href="../projects.html">projects</a>
+        <a href="index.html" aria-current="page">writeups</a>
+        <a href="../resume1.pdf" target="_blank" rel="noopener noreferrer">resume</a>
+      </div>
+    </div>
+  </nav>
+<article class="tea-article">
+  <p class="back-link"><a href="index.html">&gt; all writeups</a></p>
   <p class="kicker">an algorithm I just learned</p>
   <h1>Four Left, Five Right</h1>
-  <p class="dek">A tiny cipher, watched one shift at a time, and the reason a key can have siblings.</p>
+  <p class="dek">A tiny cipher, watched one shift at a time — and the reason a key can have siblings.</p>
 
   <div class="prose">
-    <p>I wanted a cipher I could hold in my head. The Tiny Encryption Algorithm is that cipher. David Wheeler and Roger Needham published it in 1994, and the whole thing is a loop you can write on a card. A block is two 32-bit words. A key is four words. Each cycle takes the right word, makes three copies, slides them out of line, adds a piece of the key, and folds the mix into the left word. Then the words swap jobs. Thirty-two cycles. Some people count each half as its own Feistel round, and then the number is sixty-four. Same loop.</p>
-    <p>The slide is the part I keep coming back to. Four bits toward the high end, five toward the low end. The copies almost overlap and never quite do, so when they are XORed a bit has to argue with neighbors that used to sit a few places away. That misalignment is the entire design. No tables. No clever key schedule. A constant called delta is added into a running sum so the cycles are not identical. Delta is 2<sup>32</sup> divided by the golden ratio, rounded down: <span style="font-family:var(--mono);font-size:0.92em">9E3779B9</span>. It is not a secret. It just keeps the rounds from repeating.</p>
-    <p>The map is a Feistel cycle — two half-rounds, the <<4 / >>5 stir, then a swap. The theater below is the same loop, watched in bits.</p>
+    <p>I ran into this cipher in CTFs on pwn.college’s
+      <a href="https://pwn.college/reversing-hell/babyc/n">reversing-hell · babyc</a>
+      module, and it stuck with me. TEA is small enough that you can watch every bit move — so I wanted a page that does exactly that.</p>
+    <p>David Wheeler and Roger Needham published the Tiny Encryption Algorithm in 1994. The whole thing fits on a note card: a block is two 32-bit words, a key is four, and each cycle takes the right word, fans it three ways, slides those copies out of line, folds in a piece of the key, and adds the mix into the left. Then the halves swap jobs. Thirty-two cycles. (Some people count each half as its own Feistel round and call it sixty-four. Same loop.)</p>
+    <p>The slide is what I keep coming back to. Four bits toward the high end, five toward the low. The copies almost overlap and never quite do — so when you XOR them, a bit has to argue with neighbors that used to sit a few places away. That misalignment <em>is</em> the design. No S-boxes. No fancy key schedule. Just a constant called delta, added into a running sum so the cycles aren’t copies of each other. Delta is 2<sup>32</sup> divided by the golden ratio, rounded down: <span style="font-family:var(--mono);font-size:0.92em">9E3779B9</span>. Not a secret. Just a metronome.</p>
+    <p>The animations below are Manim walkthroughs of that shape. Under them, the bit theater lets you scrub the same loop yourself.</p>
   </div>
 
-  <figure class="diagram" id="feistel-map">
-    <img
-      src="img/xtea-feistel-cycle.png"
-      alt="Two Feistel rounds making one XTEA cycle: left and right halves, <<4 and >>5 shifts, XOR and modular add with delta and subkeys, then a swap"
-      width="1200"
-      height="900"
-      loading="eager"
-    />
+  <figure class="diagram anim-hero" id="tea-intro">
+    <video
+      autoplay muted loop playsinline
+      poster="tea/videos/intro_poster.jpg"
+      aria-label="Animated title card: TEA halves L and R exchanging influence"
+      width="1280"
+      height="720"
+    >
+      <source src="tea/videos/tea_intro.webm" type="video/webm" />
+      <source src="tea/videos/tea_intro.mp4" type="video/mp4" />
+    </video>
+    <img class="poster-fallback" src="tea/videos/intro_poster.jpg" alt="TEA title card with L and R halves" width="1280" height="720" />
     <figcaption>
-      <strong>One cycle, two Feistel rounds.</strong>
-      Right word fans into <<4 and >>5, mixes with itself and a (delta + subkey) term, then adds into the left word before the halves swap. Same shape the bit stage is scrubbing through.
+      <strong>TEA, in outline.</strong>
+      Two halves, one loop. Animated with
+      <a href="https://github.com/3b1b/manim">Manim</a>
+      (Community Edition).
     </figcaption>
   </figure>
+
+  <figure class="diagram" id="feistel-map">
+    <video
+      autoplay muted loop playsinline
+      poster="tea/videos/feistel_poster.jpg"
+      aria-label="Animated Feistel cycle: delta, shift fan, XOR mix, add into left, then the mirror half"
+      width="1280"
+      height="720"
+    >
+      <source src="tea/videos/feistel_cycle.webm" type="video/webm" />
+      <source src="tea/videos/feistel_cycle.mp4" type="video/mp4" />
+    </video>
+    <img class="poster-fallback" src="tea/videos/feistel_poster.jpg" alt="One TEA Feistel cycle overview" width="1280" height="720" />
+    <figcaption>
+      <strong>One cycle, two Feistel half-rounds.</strong>
+      Delta ticks the sum, R fans into <<4 / identity / >>5, the three lanes XOR with key material, and the mask adds into L — then the mirror half runs on the new L.
+    </figcaption>
+  </figure>
+
+  <div class="anim-grid" aria-label="Shift and delta animations">
+    <figure class="diagram" id="shift-stir">
+      <video
+        autoplay muted loop playsinline
+        aria-label="Animated bit rows sliding four left and five right"
+        width="1280"
+        height="720"
+      >
+        <source src="tea/videos/shift_stir.webm" type="video/webm" />
+        <source src="tea/videos/shift_stir.mp4" type="video/mp4" />
+      </video>
+      <figcaption>
+        <strong>The stir.</strong>
+        Four left, five right — almost overlap, never quite.
+      </figcaption>
+    </figure>
+    <figure class="diagram" id="delta-pulse">
+      <video
+        autoplay muted loop playsinline
+        aria-label="Animated delta constant added each cycle along a number line"
+        width="1280"
+        height="720"
+      >
+        <source src="tea/videos/delta_pulse.webm" type="video/webm" />
+        <source src="tea/videos/delta_pulse.mp4" type="video/mp4" />
+      </video>
+      <figcaption>
+        <strong>Delta.</strong>
+        floor(2³² / φ) — not secret, just so rounds don’t stall.
+      </figcaption>
+    </figure>
+  </div>
 
   <section class="stage" aria-labelledby="stage-title">
     <h2 id="stage-title">The stir</h2>
@@ -467,12 +566,28 @@
   </section>
 
   <div class="prose">
-    <p>A single flipped bit starts as one disagreement. After a handful of cycles it covers about half of the 64-bit block, and then it wanders around half. That wandering is what “mixed” looks like. Early on you can still see the scar. The loop runs thirty-two times because two or three cycles are not a stir yet.</p>
+    <p>Flip one bit and watch what happens. At first it’s a single scar. A few cycles later it covers about half the 64-bit block, then wanders around that half — which is what “mixed” actually looks like. The loop runs thirty-two times because two or three cycles aren’t a stir yet.</p>
   </div>
 
+  <figure class="diagram" id="bit-diffusion">
+    <video
+      autoplay muted loop playsinline
+      aria-label="Animated bars showing one flipped bit spreading across the block over successive cycles"
+      width="1280"
+      height="720"
+    >
+      <source src="tea/videos/bit_diffusion.webm" type="video/webm" />
+      <source src="tea/videos/bit_diffusion.mp4" type="video/mp4" />
+    </video>
+    <figcaption>
+      <strong>Avalanche, sketched.</strong>
+      Hamming distance climbing toward half the block. The panel below is the live version with your own inputs.
+    </figcaption>
+  </figure>
+
   <section class="panel" aria-labelledby="spread-title">
-    <h2 id="spread-title">One flipped bit</h2>
-    <p class="prose" style="margin:0">Same key, same block, one bit of the left word flipped. The bars are how many bits of the block disagree after each cycle. The dashed line is half of them.</p>
+    <h2 id="spread-title">One flipped bit · live</h2>
+    <p class="prose" style="margin:0">Same key, same block, one bit of the left word flipped. The bars are how many bits disagree after each cycle. The dashed line is half of them.</p>
     <div class="choices" role="group" aria-label="Which bit to flip">
       <button type="button" id="bit-0" aria-pressed="true">Low bit</button>
       <button type="button" id="bit-15" aria-pressed="false">Middle bit</button>
@@ -491,9 +606,9 @@
   </section>
 
   <div class="prose">
-    <p>Then the part that disappointed me. The key never moves. Every cycle adds the same four words in the same places. Addition is a poor way to hide a secret, because two changes can cancel. Nudge one ingredient up, nudge the other down, and the sum does not care which pair you started with.</p>
-    <p>TEA has a real version of this failure. Each key has three siblings: other 128-bit keys that encrypt every block the same way, so the key you chose was never the only one. There is a related-key attack as well, the kind where someone can ask for encryptions under a key related to the secret and use that to take the cipher apart. I am not going to show either construction. The figure under this is a toy. Ordinary integers, one addition. It is the shape of the mistake, and it is not a method for finding a TEA key. The follow-up cipher, XTEA, exists because this key schedule was too innocent.</p>
-    <p>I still like the original. It is the smallest thing I have watched that feels both beautiful and not quite enough.</p>
+    <p>Then the part that disappointed me. The key never moves. Every cycle just adds the same four words in the same places. Addition is a soft way to hide a secret — nudge one ingredient up and another down, and the sum doesn’t care which pair you started with.</p>
+    <p>TEA has a real version of that failure. Each key has three siblings: other 128-bit keys that encrypt every block the same way. There’s a related-key attack too, where queries under a related key help take the cipher apart. I’m not going to show either construction. The figure under this is a toy — ordinary integers, one addition — the <em>shape</em> of the mistake, not a recipe for finding a TEA key. XTEA exists because this key schedule was too innocent.</p>
+    <p>I still like the original. It’s the smallest thing I’ve watched that feels both beautiful and not quite enough — which is probably why babyc put it in front of me in the first place.</p>
   </div>
 
   <section class="panel" aria-labelledby="toy-title">
@@ -514,12 +629,19 @@
     <p class="note" id="toy-note">5 and 3. The sum is 8.</p>
   </section>
 
-  <footer>
-    <p>An LLM helped me build this page and edit the prose. The cipher is David Wheeler and Roger Needham’s, from their 1994 note at the Fast Software Encryption workshop. Delta and the round structure are theirs. The equivalent-key and related-key results were published later; this page names them and leaves the relations, the parameters, and the procedure out on purpose.</p>
+  <footer class="tea-foot">
+    <p>I wrote this after meeting TEA in
+      <a href="https://pwn.college/reversing-hell/babyc/n">pwn.college · reversing-hell · babyc</a>.
+      An LLM helped build the page and polish the prose. The cipher is David Wheeler and Roger Needham’s (FSE 1994). Delta and the round structure are theirs. Equivalent-key and related-key results came later; this page names them and leaves the relations, parameters, and procedures out on purpose. Animations were rendered with
+      <a href="https://www.manim.community/">Manim Community</a>
+      (inspired by <a href="https://github.com/3b1b/manim">3b1b/manim</a>), in the same Tetra light palette as the rest of this site.</p>
     <p id="self-check"></p>
     <p>Source for the cipher itself: <a href="https://en.wikipedia.org/wiki/Tiny_Encryption_Algorithm">Tiny Encryption Algorithm</a>.</p>
   </footer>
 </article>
+<footer class="site-footer">
+  <p>© 2026 Noam Yakar</p>
+</footer>
 <script>
 (function () {
   const DELTA = 0x9E3779B9;
