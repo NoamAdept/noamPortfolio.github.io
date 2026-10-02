@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#0073EA">
 <meta name="color-scheme" content="light">
 <title>Four Left, Five Right — Noam Yakar</title>
-<meta name="description" content="TEA with Manim animations: Feistel rounds, the <<4/>>5 stir, golden-ratio delta, and why an add-only key has siblings. Inspired by pwn.college reversing-hell babyc.">
+<meta name="description" content="TEA explained in one Manim walkthrough: Feistel cycles, the <<4/>>5 stir, golden-ratio delta, and why an add-only key has siblings. Inspired by pwn.college reversing-hell babyc.">
 <link rel="stylesheet" href="../css/site.css" />
 <style>
   /* Theater tokens — map interactive JS colors onto Tetra (site.css) */
@@ -388,20 +388,27 @@
     color: var(--blue);
     font-weight: 600;
   }
-  .anim-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.85rem;
-    margin: 1.2rem 0 0.2rem;
-  }
-  .anim-grid .diagram {
-    margin: 0;
-  }
   .anim-hero {
     margin-top: 1.6rem;
   }
-  @media (max-width: 720px) {
-    .anim-grid { grid-template-columns: 1fr; }
+  .anim-hero video {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+  .anim-chapters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.55rem;
+    margin-top: 0.75rem;
+  }
+  .anim-chapters span {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    background: var(--blue-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    padding: 0.28rem 0.65rem;
   }
   @media (prefers-reduced-motion: reduce) {
     .diagram video { display: none; }
@@ -448,79 +455,35 @@
       module, and it stuck with me. TEA is small enough that you can watch every bit move — so I wanted a page that does exactly that.</p>
     <p>David Wheeler and Roger Needham published the Tiny Encryption Algorithm in 1994. The whole thing fits on a note card: a block is two 32-bit words, a key is four, and each cycle takes the right word, fans it three ways, slides those copies out of line, folds in a piece of the key, and adds the mix into the left. Then the halves swap jobs. Thirty-two cycles. (Some people count each half as its own Feistel round and call it sixty-four. Same loop.)</p>
     <p>The slide is what I keep coming back to. Four bits toward the high end, five toward the low. The copies almost overlap and never quite do — so when you XOR them, a bit has to argue with neighbors that used to sit a few places away. That misalignment <em>is</em> the design. No S-boxes. No fancy key schedule. Just a constant called delta, added into a running sum so the cycles aren’t copies of each other. Delta is 2<sup>32</sup> divided by the golden ratio, rounded down: <span style="font-family:var(--mono);font-size:0.92em">9E3779B9</span>. Not a secret. Just a metronome.</p>
-    <p>The animations below are Manim walkthroughs of that shape. Under them, the bit theater lets you scrub the same loop yourself.</p>
+    <p>One Manim walkthrough covers the whole shape — parts, a cycle, the stir, delta, and why keys can have siblings. Under it, the bit theater lets you scrub the same loop yourself.</p>
   </div>
 
-  <figure class="diagram anim-hero" id="tea-intro">
+  <figure class="diagram anim-hero" id="tea-central">
     <video
-      autoplay muted loop playsinline
-      poster="tea/videos/intro_poster.jpg"
-      aria-label="Animated title card: TEA halves L and R exchanging influence"
+      controls muted playsinline
+      poster="tea/videos/tea_central_poster.jpg"
+      aria-label="Central TEA animation: how the cipher works and why keys can have siblings"
       width="1280"
       height="720"
     >
-      <source src="tea/videos/tea_intro.webm" type="video/webm" />
-      <source src="tea/videos/tea_intro.mp4" type="video/mp4" />
+      <source src="tea/videos/tea_central.webm" type="video/webm" />
+      <source src="tea/videos/tea_central.mp4" type="video/mp4" />
     </video>
-    <img class="poster-fallback" src="tea/videos/intro_poster.jpg" alt="TEA title card with L and R halves" width="1280" height="720" />
+    <img class="poster-fallback" src="tea/videos/tea_central_poster.jpg" alt="TEA central animation poster" width="1280" height="720" />
     <figcaption>
-      <strong>TEA, in outline.</strong>
-      Two halves, one loop. Animated with
+      <strong>TEA, start to finish.</strong>
+      Plain-language captions, progressive reveal, then the equivalent-key / key-sibling idea — no exploit recipe. Rendered with
       <a href="https://github.com/3b1b/manim">Manim</a>
-      (Community Edition).
+      (Community Edition) in the Tetra light palette.
     </figcaption>
+    <div class="anim-chapters" aria-label="Animation chapters">
+      <span>pieces</span>
+      <span>one cycle</span>
+      <span>four left · five right</span>
+      <span>delta</span>
+      <span>key siblings</span>
+    </div>
   </figure>
-
-  <figure class="diagram" id="feistel-map">
-    <video
-      autoplay muted loop playsinline
-      poster="tea/videos/feistel_poster.jpg"
-      aria-label="Animated Feistel cycle: delta, shift fan, XOR mix, add into left, then the mirror half"
-      width="1280"
-      height="720"
-    >
-      <source src="tea/videos/feistel_cycle.webm" type="video/webm" />
-      <source src="tea/videos/feistel_cycle.mp4" type="video/mp4" />
-    </video>
-    <img class="poster-fallback" src="tea/videos/feistel_poster.jpg" alt="One TEA Feistel cycle overview" width="1280" height="720" />
-    <figcaption>
-      <strong>One cycle, two Feistel half-rounds.</strong>
-      Delta ticks the sum, R fans into <<4 / identity / >>5, the three lanes XOR with key material, and the mask adds into L — then the mirror half runs on the new L.
-    </figcaption>
-  </figure>
-
-  <div class="anim-grid" aria-label="Shift and delta animations">
-    <figure class="diagram" id="shift-stir">
-      <video
-        autoplay muted loop playsinline
-        aria-label="Animated bit rows sliding four left and five right"
-        width="1280"
-        height="720"
-      >
-        <source src="tea/videos/shift_stir.webm" type="video/webm" />
-        <source src="tea/videos/shift_stir.mp4" type="video/mp4" />
-      </video>
-      <figcaption>
-        <strong>The stir.</strong>
-        Four left, five right — almost overlap, never quite.
-      </figcaption>
-    </figure>
-    <figure class="diagram" id="delta-pulse">
-      <video
-        autoplay muted loop playsinline
-        aria-label="Animated delta constant added each cycle along a number line"
-        width="1280"
-        height="720"
-      >
-        <source src="tea/videos/delta_pulse.webm" type="video/webm" />
-        <source src="tea/videos/delta_pulse.mp4" type="video/mp4" />
-      </video>
-      <figcaption>
-        <strong>Delta.</strong>
-        floor(2³² / φ) — not secret, just so rounds don’t stall.
-      </figcaption>
-    </figure>
-  </div>
 
   <section class="stage" aria-labelledby="stage-title">
     <h2 id="stage-title">The stir</h2>
@@ -566,24 +529,8 @@
   </section>
 
   <div class="prose">
-    <p>Flip one bit and watch what happens. At first it’s a single scar. A few cycles later it covers about half the 64-bit block, then wanders around that half — which is what “mixed” actually looks like. The loop runs thirty-two times because two or three cycles aren’t a stir yet.</p>
+    <p>Flip one bit and watch what happens. At first it’s a single scar. A few cycles later it covers about half the 64-bit block, then wanders around that half — which is what “mixed” actually looks like. The loop runs thirty-two times because two or three cycles aren’t a stir yet. The live chart below is the hands-on version of that idea.</p>
   </div>
-
-  <figure class="diagram" id="bit-diffusion">
-    <video
-      autoplay muted loop playsinline
-      aria-label="Animated bars showing one flipped bit spreading across the block over successive cycles"
-      width="1280"
-      height="720"
-    >
-      <source src="tea/videos/bit_diffusion.webm" type="video/webm" />
-      <source src="tea/videos/bit_diffusion.mp4" type="video/mp4" />
-    </video>
-    <figcaption>
-      <strong>Avalanche, sketched.</strong>
-      Hamming distance climbing toward half the block. The panel below is the live version with your own inputs.
-    </figcaption>
-  </figure>
 
   <section class="panel" aria-labelledby="spread-title">
     <h2 id="spread-title">One flipped bit · live</h2>
@@ -607,7 +554,7 @@
 
   <div class="prose">
     <p>Then the part that disappointed me. The key never moves. Every cycle just adds the same four words in the same places. Addition is a soft way to hide a secret — nudge one ingredient up and another down, and the sum doesn’t care which pair you started with.</p>
-    <p>TEA has a real version of that failure. Each key has three siblings: other 128-bit keys that encrypt every block the same way. There’s a related-key attack too, where queries under a related key help take the cipher apart. I’m not going to show either construction. The figure under this is a toy — ordinary integers, one addition — the <em>shape</em> of the mistake, not a recipe for finding a TEA key. XTEA exists because this key schedule was too innocent.</p>
+    <p>TEA has a real version of that failure. Each key has three siblings: other 128-bit keys that encrypt every block the same way. The central animation shows that shape — different-looking keys, same ciphertext — without spelling out the bit-level construction. There’s a related-key attack too; this page names it and leaves the parameters out. The figure under this is the same toy idea with ordinary integers. XTEA exists because this key schedule was too innocent.</p>
     <p>I still like the original. It’s the smallest thing I’ve watched that feels both beautiful and not quite enough — which is probably why babyc put it in front of me in the first place.</p>
   </div>
 
