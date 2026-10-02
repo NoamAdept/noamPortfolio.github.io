@@ -66,8 +66,11 @@
   }
 
   function postCard(w) {
+    const href = w.href
+      ? escapeHtml(w.href)
+      : `post.html?slug=${encodeURIComponent(w.slug)}`;
     return `
-        <a class="post-card" href="post.html?slug=${encodeURIComponent(w.slug)}">
+        <a class="post-card" href="${href}">
           <span class="post-meta">${escapeHtml(formatDate(w.date))}</span>
           <h2 class="post-title">${escapeHtml(w.title || w.slug)}</h2>
           <p class="post-desc">${escapeHtml(w.description || "")}</p>
@@ -96,8 +99,8 @@
         }
         bySeries.get(key).push(w);
       });
-      // Preferred shelf order — passion topics first
-      const preferred = ["pwnable.kr"];
+      // Preferred shelf order
+      const preferred = ["crypto", "pwnable.kr"];
       seriesOrder.sort((a, b) => {
         const ia = preferred.indexOf(a);
         const ib = preferred.indexOf(b);

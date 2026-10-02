@@ -1,5 +1,13 @@
 [
   {
+    "slug": "four-left-five-right",
+    "title": "Four Left, Five Right",
+    "date": "2026-10-02",
+    "description": "Interactive note on TEA — the shifts, the golden-ratio delta, and why a key that is only added is not unique.",
+    "series": "crypto",
+    "href": "four-left-five-right.html"
+  },
+  {
     "slug": "pwnable-kr-fd",
     "title": "pwnable.kr — fd",
     "date": "2026-09-30",
