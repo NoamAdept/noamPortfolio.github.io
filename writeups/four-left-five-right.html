@@ -82,6 +82,32 @@
     color: var(--text-primary);
   }
   .tea-article a { color: var(--blue); }
+  .code-panel {
+    margin-top: 1.4rem;
+    padding: 1.15rem 1.1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-large);
+    background: var(--surface);
+    box-shadow: var(--shadow-card);
+  }
+  .code-panel .prose { margin: 0 0 0.85rem; max-width: none; }
+  .code-block {
+    margin: 0;
+    padding: 1rem 1.05rem;
+    overflow-x: auto;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: #0f1720;
+    color: #e8eef5;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.55;
+    tab-size: 4;
+  }
+  .code-block .c { color: #8b9bb0; }      /* comments */
+  .code-block .k { color: #7ec8ff; }      /* keywords */
+  .code-block .n { color: #fdab3d; }      /* names / numbers of note */
+  .code-block .o { color: #c59be0; }      /* operators of note */
   button, input { font: inherit; color: inherit; }
   button {
     background: var(--surface);
@@ -526,6 +552,51 @@
     <p class="film-label" id="film-label">Every cycle</p>
     <div class="film" id="film" role="group" aria-label="Jump to a cycle"></div>
     <p class="out" id="cipher-out"></p>
+  </section>
+
+  <section class="code-panel" aria-labelledby="code-title">
+    <h2 id="code-title">Encrypt · decrypt</h2>
+    <p class="prose">The whole cipher is basically this — classic TEA in C, with unsigned 32-bit wraparound. Encrypt walks the sum <em>up</em> by delta each cycle; decrypt walks it <em>down</em>.</p>
+<pre class="code-block" tabindex="0"><code><span class="c">/* Tiny Encryption Algorithm (Wheeler &amp; Needham, 1994)
+ * v  = 64-bit block as two uint32 words (v[0]=left, v[1]=right)
+ * k  = 128-bit key as four uint32 words
+ * All + is mod 2^32 (uint32_t wraparound).
+ */</span>
+<span class="k">#include</span> &lt;stdint.h&gt;
+
+<span class="c">/* delta = floor(2^32 / golden_ratio) — not secret, just a metronome */</span>
+<span class="k">#define</span> <span class="n">DELTA</span> <span class="n">0x9E3779B9u</span>
+<span class="k">#define</span> <span class="n">CYCLES</span> <span class="n">32</span>
+
+<span class="k">void</span> tea_encrypt(uint32_t v[<span class="n">2</span>], <span class="k">const</span> uint32_t k[<span class="n">4</span>]) {
+    uint32_t v0 = v[<span class="n">0</span>], v1 = v[<span class="n">1</span>], sum = <span class="n">0</span>;
+    <span class="k">int</span> i;
+
+    <span class="k">for</span> (i = <span class="n">0</span>; i &lt; <span class="n">CYCLES</span>; i++) {
+        sum += <span class="n">DELTA</span>;                         <span class="c">/* advance the round metronome */</span>
+        <span class="c">/* mix R: (R&lt;&lt;4)+k0  XOR  R+sum  XOR  (R&gt;&gt;5)+k1  → add into L */</span>
+        v0 += (((v1 &lt;&lt; <span class="n">4</span>) + k[<span class="n">0</span>]) <span class="o">^</span> (v1 + sum) <span class="o">^</span> ((v1 &gt;&gt; <span class="n">5</span>) + k[<span class="n">1</span>]));
+        <span class="c">/* swap roles: mix (new) L into R with k2/k3 */</span>
+        v1 += (((v0 &lt;&lt; <span class="n">4</span>) + k[<span class="n">2</span>]) <span class="o">^</span> (v0 + sum) <span class="o">^</span> ((v0 &gt;&gt; <span class="n">5</span>) + k[<span class="n">3</span>]));
+    }
+    v[<span class="n">0</span>] = v0; v[<span class="n">1</span>] = v1;
+}
+
+<span class="k">void</span> tea_decrypt(uint32_t v[<span class="n">2</span>], <span class="k">const</span> uint32_t k[<span class="n">4</span>]) {
+    uint32_t v0 = v[<span class="n">0</span>], v1 = v[<span class="n">1</span>];
+    <span class="c">/* start at the final sum after 32 deltas */</span>
+    uint32_t sum = <span class="n">DELTA</span> * <span class="n">CYCLES</span>;
+    <span class="k">int</span> i;
+
+    <span class="k">for</span> (i = <span class="n">0</span>; i &lt; <span class="n">CYCLES</span>; i++) {
+        <span class="c">/* undo the second half-round first (inverse of encrypt's last add) */</span>
+        v1 -= (((v0 &lt;&lt; <span class="n">4</span>) + k[<span class="n">2</span>]) <span class="o">^</span> (v0 + sum) <span class="o">^</span> ((v0 &gt;&gt; <span class="n">5</span>) + k[<span class="n">3</span>]));
+        <span class="c">/* then undo the first half-round */</span>
+        v0 -= (((v1 &lt;&lt; <span class="n">4</span>) + k[<span class="n">0</span>]) <span class="o">^</span> (v1 + sum) <span class="o">^</span> ((v1 &gt;&gt; <span class="n">5</span>) + k[<span class="n">1</span>]));
+        sum -= <span class="n">DELTA</span>;                         <span class="c">/* walk the metronome backward */</span>
+    }
+    v[<span class="n">0</span>] = v0; v[<span class="n">1</span>] = v1;
+}</code></pre>
   </section>
 
   <div class="prose">
