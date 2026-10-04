@@ -231,5 +231,5 @@ After doing this the slow way, I can (finally) draw from memory:
 
 <aside class="callout callout-tip">
 <strong>Next</strong>
-Part 2 — <em>Bins Before Shells</em> (working title): chunk flags, freelist shapes, and the first real heap primitives. I needed this page before any of that made sense.
+Part 2 — <a href="post.html?slug=someone-elses-chunk">Someone Else's Chunk</a>: use-after-free, overlapping views, and the House of Spirit <em>idea</em> — still no recipes. I needed this map before any of that made sense.
 </aside>
