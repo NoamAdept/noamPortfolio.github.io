@@ -1,5 +1,13 @@
 [
   {
+    "slug": "someone-elses-chunk",
+    "title": "Someone Else's Chunk",
+    "date": "2026-10-04",
+    "description": "Heap notes Part 2 — use-after-free, overlapping memory, and the House of Spirit idea (fake chunk metadata) as mental models, not recipes.",
+    "series": "heap",
+    "image": "img/heap-part2-list-thumb.png"
+  },
+  {
     "slug": "where-the-break-lives",
     "title": "Where the Break Lives",
     "date": "2026-10-04",

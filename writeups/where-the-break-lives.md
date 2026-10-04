@@ -217,7 +217,7 @@ I don’t need freelist diagrams yet. I just needed to see the pressure points:
          └─ overflow ─────┘   ← adjacent metadata is uncomfortably close
 ```
 
-Part 2 is where I’ll open the bins — tcache, fastbins, unsorted/small/large, consolidation, the first real primitives. Not today. I wanted the map first.
+Part 2 is where I chase what happens after `free` — dangling pointers, overlapping views, and the House of Spirit *idea*. Bins still wait. I wanted the map first.
 
 ## What I can sketch cold now
 
@@ -231,5 +231,5 @@ After doing this the slow way, I can (finally) draw from memory:
 
 <aside class="callout callout-tip">
 <strong>Next</strong>
-Part 2 — <em>Bins Before Shells</em> (working title): chunk flags, freelist shapes, and the first real heap primitives. I needed this page before any of that made sense.
+Part 2 — <a href="post.html?slug=someone-elses-chunk">Someone Else's Chunk</a>: use-after-free, overlapping views, and the House of Spirit <em>idea</em> — still no recipes. I needed this map before any of that made sense.
 </aside>
