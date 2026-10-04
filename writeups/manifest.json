@@ -14,7 +14,7 @@
     "description": "TEA with Manim animations on the Tetra light UI — Feistel rounds, <<4/>>5 stir, delta, and why an add-only key is not unique. Inspired by pwn.college babyc.",
     "series": "crypto",
     "href": "four-left-five-right.html",
-    "image": "tea/videos/tea_central_poster.jpg"
+    "image": "img/tea-list-thumb.png"
   },
   {
     "slug": "pwnable-kr-fd",
