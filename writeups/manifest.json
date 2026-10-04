@@ -3,7 +3,7 @@
     "slug": "where-the-break-lives",
     "title": "Where the Break Lives",
     "date": "2026-10-04",
-    "description": "Heap exploitation Part 1 — process memory layout, why long-lived dynamic memory exists, and how brk/mmap + glibc carve the heap before freelist tricks.",
+    "description": "What I figured out learning heap foundations — process layout, why malloc exists, and how brk/mmap sit under glibc before freelist tricks.",
     "series": "heap",
     "image": "img/heap-list-thumb.png"
   },

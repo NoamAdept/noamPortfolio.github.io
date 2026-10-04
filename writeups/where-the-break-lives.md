@@ -1,22 +1,24 @@
 ---
 title: Where the Break Lives
 date: 2026-10-04
-description: Heap exploitation Part 1 — process memory layout, why long-lived dynamic memory exists, and how brk/mmap + glibc carve the heap before freelist tricks.
+description: Notes from learning heap foundations — where stuff actually lives in a process, why malloc exists, and what brk/mmap are doing under the hood.
 series: heap
 ---
 
 <aside class="callout callout-info">
 <strong>Series</strong>
-Part 1 of a heap notes track. This page is foundations only: address space, why the heap exists, and the syscalls underneath <code>malloc</code>. Freelists, tcache, and fastbin attacks wait for Part 2.
+Part 1 of my heap notes. I'm deliberately stopping before freelists, tcache, and fastbin tricks — those are Part 2. This page is just the mental model I needed first.
 </aside>
 
-Before you overflow a chunk or chase a use-after-free, you need a map. Not of glibc’s freelist zoo — of the **process** those chunks live in. Where is the binary? Where is the stack? Where does “the heap” actually sit, and who asked the kernel for those pages?
+I used to treat “the heap” like a magical bag `malloc` pulled memory out of. Useful. Opaque. Definitely not something I could draw.
 
-This writeup answers that, then stops at the doorway of allocator internals.
+Then I tried reading a heap writeup that jumped straight into bins, and none of it stuck. What finally helped was stepping back: where does the **binary** live? the **stack**? libc? And where, physically in that map, is the thing people keep overflowing?
 
-## The address space, high to low
+This is what I was able to figure out. Foundations only. No exploit recipes yet.
 
-On a typical Linux **x86-64** userspace process, virtual memory is a sparse 64-bit landscape. Exact numbers move with ASLR, but the **neighborhood** is stable enough to teach from:
+## The map that finally clicked
+
+On a typical Linux **x86-64** process, the numbers jump around because of ASLR. The *neighborhood* doesn’t. Once I stopped memorizing hex and started remembering relatives, the picture got simple:
 
 ```text
 HIGH  0x7fffffffffff ─────────────────────────────────
@@ -30,33 +32,33 @@ HIGH  0x7fffffffffff ───────────────────�
 LOW   0x000000000000 ─────────────────────────────────
 ```
 
-![Linux x86-64 userspace layout — high addresses to low, heap between ELF and mmap](img/heap/addr-space.png)
+![The layout I keep sketching — high addresses down to the ELF, heap sitting above the binary](img/heap/addr-space.png)
 
-Read it top-down once, then pin three habits:
+Three habits that stuck for me:
 
-1. **Stack grows down** (toward lower addresses) as frames push.
-2. **Classic heap grows up** from the end of the data segment by moving the **program break**.
-3. **Lots of “heap-ish” memory is not on the break at all** — large allocations and libraries arrive through `mmap`.
+1. **Stack grows down** — every new frame eats lower addresses.
+2. **Classic heap grows up** — by moving the **program break** past `.bss`.
+3. **A lot of “heap” isn’t on that break** — big allocations and libraries show up as their own `mmap` regions.
 
 <aside class="callout callout-tip">
-<strong>ASLR note</strong>
-Randomization slides the stack, libc, and often the binary/heap. Relative patterns still hold: stack near the top, ELF near the bottom of the used range, heap above the binary, libraries in the mmap belt. Teaching diagrams ignore the random slide on purpose.
+<strong>ASLR, in practice</strong>
+Yes, the bases slide. I still draw the same cartoon. Stack near the top, ELF toward the bottom of what the process uses, heap above the binary, libraries in the mmap belt. The slide is noise; the neighborhood is the lesson.
 </aside>
 
-## What’s inside the binary
+## What’s actually inside “the binary”
 
-The ELF on disk is sections; at runtime the loader maps **segments**. For intuition, these names still matter:
+I kept mixing up sections and segments. What mattered for intuition was the names I’d see in `readelf` / objdump and what job each one had:
 
-| Region | Role |
+| Region | What I use it for mentally |
 | --- | --- |
-| **`.text`** | Machine code. Usually read + execute. |
-| **`.rodata`** | String literals, `const` data. Read-only. |
-| **`.data`** | Initialized globals / statics. Writable. |
-| **`.bss`** | Zero-initialized globals. Writable; often grows the data segment toward the classic heap. |
-| **`.plt`** | Procedure Linkage Table — stub jumps for dynamically linked calls. |
-| **`.got` / `.got.plt`** | Global Offset Table — addresses the PLT fills in (lazy binding on first call is the usual story). |
+| **`.text`** | Code. Usually r-x. |
+| **`.rodata`** | Strings, `const` stuff. Read-only. |
+| **`.data`** | Initialized globals. Writable. |
+| **`.bss`** | Zeroed globals. Writable — and this is the edge the classic heap grows from. |
+| **`.plt`** | Stubs for calls into shared libs (`puts@plt` and friends). |
+| **`.got` / `.got.plt`** | Where those stubs eventually find real addresses (lazy binding on first call is the usual story). |
 
-Picture the image as layers:
+How I picture it now:
 
 ```text
   ┌────────────── ELF mapping ──────────────┐
@@ -72,11 +74,11 @@ Picture the image as layers:
                  classic heap
 ```
 
-`.plt` / `.got` are how your binary talks to libc without baking absolute addresses at link time. They live **with the binary** (or in related mappings), not on the heap — but once you can write GOT entries, control of a resolved pointer is a late-game prize. Part 1 only needs: **dynamic linking has tables in the process image; the heap is a different region.**
+`.plt` / `.got` confused me for a while because people mention them in exploit writeups. They’re **not** the heap. They’re how the binary talks to libc without baking absolute addresses at link time. They live with the process image. Writing a GOT entry is a late-game idea — for Part 1 I only needed: *dynamic linking has tables in the binary’s neighborhood; the heap is a different region.*
 
-## A `/proc/self/maps` shaped sketch
+## When I finally opened `/proc/self/maps`
 
-If you `cat /proc/self/maps` in a tiny C program, the flavor looks like this (addresses invented; order is the lesson):
+This was the moment it stopped being abstract. Tiny C program, `cat /proc/self/maps`, stare. Addresses below are made up; the **order** is what I kept:
 
 ```text
 00400000-00401000  r-xp  …  /tmp/demo          .text
@@ -89,33 +91,35 @@ If you `cat /proc/self/maps` in a tiny C program, the flavor looks like this (ad
 7ffc1a4e6000-…     r-xp  …  [vdso]
 ```
 
-Relative placement to memorize:
+What I look for now:
 
-- **Heap** sits above the binary’s writable data, labeled `[heap]` when it’s the main break region.
-- **libc / ld** sit in the shared-library / mmap band, usually far above the heap.
-- **Stack** sits near the top of userspace.
-- Extra **anonymous `rw-p` maps** appear for large `malloc`s, thread arenas, and other mappings — still “heap” to the programmer, not always `[heap]` to `/proc`.
+- **`[heap]`** — the main break region, sitting above the binary’s writable data.
+- **libc / ld** — usually way up in the shared-library / mmap band.
+- **`[stack]`** — near the top of userspace.
+- Extra **anonymous `rw-p`** lines — large `malloc`s, thread stuff, etc. Still “heap” in my head as a programmer. Not always labeled `[heap]` by the kernel.
 
-## Why the heap exists
+That last bullet was a real “oh.” I’d been saying “the heap” like it was one rectangle. `/proc` quietly disagreed.
 
-The **stack** is automatic and scoped. Locals appear when a function runs and vanish when it returns. That is perfect for small, short-lived state — and terrible for everything else.
+## Why the heap has to exist
 
-You reach for the heap when:
+Stack memory is great until it isn’t. Locals show up when a function runs and disappear when it returns. Perfect for small, short-lived stuff. Useless when something needs to **outlive** the function, grow, or just be *big*.
 
-- an object must **outlive** the function that created it
-- the size is **unknown at compile time** (or grows)
-- the allocation is **large** (stack space is limited; deep recursion + big locals ends badly)
-- many objects need **independent lifetimes** (`free` A while B still lives)
+I reach for the heap when:
+
+- the object has to live past the return
+- I don’t know the size at compile time (or it grows)
+- I’d blow the stack with a huge local
+- different objects need different lifetimes — free A, keep B
 
 ```c
-/* Stack: dies when parse() returns — caller cannot keep it. */
+/* The bug I had to unlearn: returning a local. */
 char *bad_token(void) {
     char buf[64];
     fgets(buf, sizeof buf, stdin);
-    return buf;           /* dangling — don't do this */
+    return buf;           /* dangling — dies with the frame */
 }
 
-/* Heap: explicit lifetime. Caller frees when done. */
+/* What I do instead: ask the heap, free later. */
 char *good_token(void) {
     char *buf = malloc(64);
     if (!buf) return NULL;
@@ -124,20 +128,20 @@ char *good_token(void) {
 }
 ```
 
-Growable structures (vectors, hash tables, AST nodes, packet reassembly buffers) are the same story: **allocate now, free later, maybe realloc in between.** That contract — explicit lifetime — is why heap bugs are interesting. The allocator trusts you to free correctly, not double-free, and not write past the payload.
+Vectors, hash tables, AST nodes, packet buffers — same deal. Allocate now, free later, maybe `realloc` in the middle. That contract is also why heap bugs get interesting: the allocator trusts you about lifetime and size. Metadata sitting next to your buffer is part of that trust.
 
 <aside class="callout callout-warn">
-<strong>Stack vs heap in one line</strong>
-Stack lifetime is tied to control flow. Heap lifetime is tied to <code>malloc</code>/<code>free</code> (or <code>new</code>/<code>delete</code>) — and to whatever metadata the allocator tucked beside your bytes.
+<strong>The one-liner that stuck</strong>
+Stack lifetime follows control flow. Heap lifetime follows <code>malloc</code>/<code>free</code> (or <code>new</code>/<code>delete</code>) — plus whatever bookkeeping the allocator hid beside your bytes.
 </aside>
 
-## How the kernel hands out memory
+## What’s under `malloc` (kernel side)
 
-Userspace never invents pages out of thin air. The C library asks the kernel for **virtual memory mappings**, then carves those mappings into chunks.
+Userspace doesn’t invent pages. That was the other myth I had to drop. The C library asks the kernel for **mappings**, then carves those mappings into pieces you can hand around.
 
 ### `brk` / `sbrk` — the program break
 
-The **program break** is the end of the process’s data segment. Raising it adds anonymous memory after `.bss`; that region is the classic `[heap]`.
+The **program break** is “end of the data segment.” Nudge it up and you get more anonymous memory after `.bss`. That region is the classic `[heap]` line.
 
 ```text
   .text .data .bss |######## heap ########|  break
@@ -148,17 +152,17 @@ The **program break** is the end of the process’s data segment. Raising it add
   sbrk(delta)    → nudge it by delta (wrapper around brk)
 ```
 
-Small and medium allocations historically grow this region. Shrinking is possible but constrained — free’d chunks usually stay mapped and get reused by the allocator instead of immediately returning pages to the kernel.
+Smaller allocations historically grow this. Free doesn’t usually give the pages straight back — the allocator keeps the mapping and reuses chunks. That surprised me the first time I expected `free` to shrink `/proc`.
 
-### `mmap` / `munmap` — maps of their own
+### `mmap` / `munmap` — whole new regions
 
-`mmap` creates a **new** virtual memory region (file-backed or anonymous). glibc uses it for:
+`mmap` creates a **separate** virtual region. glibc leans on it for:
 
-- **large** allocations (above a size threshold — “mmap chunks”)
-- additional **arenas** / thread heaps
-- the usual loading of **shared libraries**
+- **large** allocations (past a size threshold — “mmap chunks”)
+- extra **arenas** / thread heaps
+- loading **shared libraries** (the everyday case)
 
-`munmap` tears a region down. Large freed mmap chunks can return to the kernel more eagerly than break memory.
+`munmap` tears a region down. Big mmap’d chunks can go back to the kernel more eagerly than break memory.
 
 ```text
   kernel view                          allocator view
@@ -169,22 +173,20 @@ Small and medium allocations historically grow this region. Shrinking is possibl
   libc.so mapping    ─────────────►    not “your” malloc heap
 ```
 
-So “the heap” in conversation is often **several mappings**: main break heap + mmap’d large chunks + maybe more arenas. `/proc/self/maps` only stamps `[heap]` on the break region.
+So when someone says “the heap,” I now hear: main break heap **plus** mmap’d large chunks **plus** maybe more arenas. Only the break region gets the `[heap]` sticker.
 
-## What glibc does with those pages (high level)
+## What glibc does with those pages (just enough)
 
-You call `malloc` / `free`. glibc’s **ptmalloc** (and friends) sits between you and the syscalls.
+I call `malloc` / `free`. glibc’s **ptmalloc** (and friends) sits in the middle. I don’t need the whole freelist zoo yet — just vocabulary so Part 2 has somewhere to land:
 
-Enough vocabulary for Part 2 — nothing deeper yet:
-
-| Idea | Meaning |
+| Idea | What it meant once it clicked |
 | --- | --- |
-| **Arena** | An allocator heap context (main arena on the break; others often mmap’d). |
-| **Chunk** | Allocator record: metadata header + payload (what you get a pointer into). |
-| **In-use vs free** | Free chunks are linked into bins/caches; metadata still sits in the mapping. |
-| **Carving** | The kernel gave a big `rw` region; the allocator subdivides it. |
+| **Arena** | An allocator context (main arena on the break; others often mmap’d). |
+| **Chunk** | Metadata header + payload. Your pointer points into the payload. |
+| **In-use vs free** | Free chunks hang out in bins/caches; the metadata is still right there in the mapping. |
+| **Carving** | Kernel gave a big `rw` region; the allocator subdivides it. |
 
-![Conceptual glibc chunk — prev_size, size/flags, then user payload](img/heap/chunk-anatomy.png)
+![Chunk picture that finally made “metadata next to my buffer” real — prev_size, size/flags, then payload](img/heap/chunk-anatomy.png)
 
 ```text
   malloc(n)
@@ -194,40 +196,40 @@ Enough vocabulary for Part 2 — nothing deeper yet:
       └─ ask kernel: brk↑  or  mmap(anonymous)
 ```
 
-Two layers, always:
+Two layers I keep separate on purpose:
 
-1. **Kernel** — virtual pages exist and have permissions (`brk` / `mmap`).
-2. **Allocator** — bytes inside those pages are labeled as chunks with sizes and free-list links.
+1. **Kernel** — pages exist, with permissions (`brk` / `mmap`).
+2. **Allocator** — those pages are sliced into chunks with sizes and free-list links.
 
-Exploit intuition starts when those two layers disagree with the programmer’s story — especially when **metadata next to your buffer** is trusted by `malloc`/`free` on the next call.
+Exploit intuition starts when those layers disagree with the story your C code told — especially when **metadata next to your buffer** gets trusted on the next `malloc`/`free`.
 
-## Light teaser: why attackers stare here
+## Why I care (light teaser only)
 
-You do not need freelist diagrams yet. You only need the pressure points:
+I don’t need freelist diagrams yet. I just needed to see the pressure points:
 
-- **Overflow into the next chunk** — write past your payload into a neighbor’s size/field metadata.
-- **Use-after-free** — keep a dangling pointer; the chunk gets reused; your old pointer now aliases someone else’s object (or freelist linkage).
-- **Wrong lifetime / double free** — allocator bookkeeping assumes a clean in-use ↔ free protocol; break the protocol and later `malloc`/`free` walks corrupted state.
+- **Overflow into the next chunk** — walk past your payload into a neighbor’s size/fields.
+- **Use-after-free** — keep a dangling pointer; the chunk gets reused; suddenly you’re looking at someone else’s object (or freelist linkage).
+- **Wrong lifetime / double free** — the allocator assumes a clean in-use ↔ free dance; break the dance and later calls walk garbage.
 
 ```text
   [ chunk A payload | A's meta | chunk B payload | … ]
          │                ▲
-         └─ overflow ─────┘   ← adjacent metadata is close
+         └─ overflow ─────┘   ← adjacent metadata is uncomfortably close
 ```
 
-Part 2 will open the bins: tcache, fastbins, unsorted/small/large, consolidation, and the classic ways corrupted metadata turns into overlapping chunks or write primitives. Not today.
+Part 2 is where I’ll open the bins — tcache, fastbins, unsorted/small/large, consolidation, the first real primitives. Not today. I wanted the map first.
 
-## What you should be able to sketch
+## What I can sketch cold now
 
-After this page, from memory:
+After doing this the slow way, I can (finally) draw from memory:
 
-1. High→low map: stack, libs/mmap, heap, ELF — and which way stack/heap grow.
-2. Why `.plt`/`.got` exist (dynamic linking), and that they are **not** the heap.
+1. High→low: stack, libs/mmap, heap, ELF — and which way stack/heap grow.
+2. Why `.plt`/`.got` exist, and that they are **not** the heap.
 3. Why programs need a heap (lifetime + size).
 4. That `malloc` is userspace policy on top of `brk`/`mmap`.
 5. That “heap” ≠ one `/proc` line — break heap plus mmap’d pieces.
 
 <aside class="callout callout-tip">
 <strong>Next</strong>
-Part 2 — <em>Bins Before Shells</em> (working title): chunk flags, freelist shapes, and the first real heap primitives. Foundations first; tricks second.
+Part 2 — <em>Bins Before Shells</em> (working title): chunk flags, freelist shapes, and the first real heap primitives. I needed this page before any of that made sense.
 </aside>
