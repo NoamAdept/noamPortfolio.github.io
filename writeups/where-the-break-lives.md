@@ -217,7 +217,7 @@ I don’t need freelist diagrams yet. I just needed to see the pressure points:
          └─ overflow ─────┘   ← adjacent metadata is uncomfortably close
 ```
 
-Part 2 is where I’ll open the bins — tcache, fastbins, unsorted/small/large, consolidation, the first real primitives. Not today. I wanted the map first.
+Part 2 is where I chase what happens after `free` — dangling pointers, overlapping views, and the House of Spirit *idea*. Bins still wait. I wanted the map first.
 
 ## What I can sketch cold now
 
