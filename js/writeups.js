@@ -106,7 +106,7 @@
         bySeries.get(key).push(w);
       });
       // Preferred shelf order
-      const preferred = ["crypto", "pwnable.kr"];
+      const preferred = ["crypto", "heap", "pwnable.kr"];
       seriesOrder.sort((a, b) => {
         const ia = preferred.indexOf(a);
         const ib = preferred.indexOf(b);
