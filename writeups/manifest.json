@@ -5,7 +5,7 @@
     "date": "2026-10-04",
     "description": "Heap notes Part 2 — use-after-free, overlapping memory, and the House of Spirit idea (fake chunk metadata) as mental models, not recipes.",
     "series": "heap",
-    "image": "img/heap-part2-list-thumb.png"
+    "image": "img/heap-part2-list-thumb.jpg"
   },
   {
     "slug": "where-the-break-lives",
@@ -13,7 +13,7 @@
     "date": "2026-10-04",
     "description": "What I figured out learning heap foundations — process layout, why malloc exists, and how brk/mmap sit under glibc before freelist tricks.",
     "series": "heap",
-    "image": "img/heap-list-thumb.png"
+    "image": "img/heap-list-thumb.jpg"
   },
   {
     "slug": "four-left-five-right",
@@ -22,7 +22,7 @@
     "description": "TEA with Manim animations on the Tetra light UI — Feistel rounds, <<4/>>5 stir, delta, and why an add-only key is not unique. Inspired by pwn.college babyc.",
     "series": "crypto",
     "href": "four-left-five-right.html",
-    "image": "tea/videos/tea_central_poster.jpg"
+    "image": "img/tea-list-thumb.jpg"
   },
   {
     "slug": "pwnable-kr-fd",
