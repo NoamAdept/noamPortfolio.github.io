@@ -4,48 +4,68 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#0073EA" />
-  <title>Noam Yakar</title>
-  <meta name="description" content="Noam Yakar — cybersecurity, systems, CS + Math @ ASU." />
+  <title>Noam Yakar — Security &amp; Systems</title>
+  <meta name="description" content="Noam Yakar — binary exploitation, cryptography, and SDR. CS + Math at ASU, pwn.college yellow belt. Projects and CTF writeups." />
+  <link rel="canonical" href="https://noamadept.github.io/noamPortfolio.github.io/" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Noam Yakar — Security &amp; Systems" />
+  <meta property="og:description" content="Binary exploitation, cryptography, and SDR. Projects and CTF writeups." />
+  <meta property="og:url" content="https://noamadept.github.io/noamPortfolio.github.io/" />
+  <meta property="og:image" content="https://noamadept.github.io/noamPortfolio.github.io/profile.jpg" />
+  <meta name="twitter:card" content="summary" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Noam Yakar",
+    "url": "https://noamadept.github.io/noamPortfolio.github.io/",
+    "affiliation": "Arizona State University",
+    "sameAs": [
+      "https://github.com/NoamAdept",
+      "https://www.linkedin.com/in/noam-yakar/",
+      "https://pwn.college/hacker/noamyakar23"
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="css/site.css" />
+  <script src="js/theme.js"></script>
 </head>
 <body class="landing">
   <main class="stage" aria-label="Noam Yakar">
     <div class="glow" aria-hidden="true"></div>
+    <button class="theme-toggle landing-toggle" type="button" aria-label="Toggle dark mode">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
     <div class="card">
       <div class="portrait">
-        <img src="profile.png" alt="Noam Yakar" width="480" height="640" />
+        <img src="profile.jpg" alt="Noam Yakar" width="618" height="968" fetchpriority="high" />
       </div>
 
       <div class="panel">
+        <header>
+          <p class="intro-kicker">security · systems · CS + Math @ ASU</p>
+          <h1 class="intro-name">Noam Yakar</h1>
+          <p class="intro-lead">
+            I like finding out how things break: binary exploitation, cryptography,
+            and software-defined radio. Yellow belt on pwn.college, and right now
+            I'm building <a href="projects.html#highlighted">pi-sdr-academy</a>,
+            an offline Raspberry Pi SDR lab.
+          </p>
+        </header>
+
         <div class="panel-links">
           <a class="panel-link" href="projects.html">&gt; projects</a>
-          <a class="panel-link" href="writeups/">&gt; writeups</a>
+          <a class="panel-link ghost" href="writeups/">&gt; writeups</a>
+          <a class="panel-link ghost" href="resume1.pdf" target="_blank" rel="noopener noreferrer">&gt; resume</a>
         </div>
 
-        <section class="section" aria-labelledby="socials-title">
-          <h2 id="socials-title">Socials</h2>
-          <ul class="list">
-            <li>
-              <a href="https://github.com/NoamAdept" target="_blank" rel="noopener noreferrer">
-                <span class="prompt">&gt;</span> GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://www.linkedin.com/in/noam-yakar/" target="_blank" rel="noopener noreferrer">
-                <span class="prompt">&gt;</span> LinkedIn
-              </a>
-            </li>
-            <li>
-              <a href="https://pwn.college/hacker/noamyakar23" target="_blank" rel="noopener noreferrer">
-                <span class="prompt">&gt;</span> pwn.college
-              </a>
-            </li>
-            <li>
-              <a href="resume1.pdf" target="_blank" rel="noopener noreferrer">
-                <span class="prompt">&gt;</span> Resume
-              </a>
-            </li>
-          </ul>
+        <section class="section" aria-labelledby="latest-title" id="latest" hidden>
+          <h2 id="latest-title">Latest writeups</h2>
+          <ul class="latest-list" id="latest-list"></ul>
         </section>
 
         <section class="section" aria-labelledby="exp-title">
@@ -68,22 +88,67 @@
 
         <section class="section" aria-labelledby="skills-title">
           <h2 id="skills-title">Skills</h2>
-          <ul class="list">
-            <li><span class="prompt">&gt;</span> Cybersecurity</li>
-            <li><span class="prompt">&gt;</span> Cryptography</li>
-            <li><span class="prompt">&gt;</span> Systems / C</li>
-            <li><span class="prompt">&gt;</span> Python</li>
-            <li><span class="prompt">&gt;</span> SDR / DSP</li>
-            <li><span class="prompt">&gt;</span> CTFs</li>
+          <ul class="chips">
+            <li>Binary exploitation</li>
+            <li>Cryptography</li>
+            <li>Systems / C</li>
+            <li>Python</li>
+            <li>SDR / DSP</li>
+            <li>CTFs</li>
+          </ul>
+        </section>
+
+        <section class="section" aria-labelledby="socials-title">
+          <h2 id="socials-title">Find me</h2>
+          <ul class="list list-cols">
+            <li>
+              <a href="https://github.com/NoamAdept" target="_blank" rel="noopener noreferrer">
+                <span class="prompt">&gt;</span> GitHub
+              </a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/in/noam-yakar/" target="_blank" rel="noopener noreferrer">
+                <span class="prompt">&gt;</span> LinkedIn
+              </a>
+            </li>
+            <li>
+              <a href="https://pwn.college/hacker/noamyakar23" target="_blank" rel="noopener noreferrer">
+                <span class="prompt">&gt;</span> pwn.college
+              </a>
+            </li>
+            <li>
+              <a href="resume1.pdf" target="_blank" rel="noopener noreferrer">
+                <span class="prompt">&gt;</span> Resume (PDF)
+              </a>
+            </li>
           </ul>
         </section>
       </div>
-
-      <div class="brand"><span>&gt;</span> noam.yakar</div>
     </div>
   </main>
 
   <script>
+    /* Latest writeups, straight from the manifest */
+    (function () {
+      const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+      fetch("writeups/manifest.json")
+        .then((r) => (r.ok ? r.json() : []))
+        .then((items) => {
+          const list = document.getElementById("latest-list");
+          if (!list || !Array.isArray(items) || !items.length) return;
+          items.sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
+          list.innerHTML = items
+            .slice(0, 3)
+            .map((w) => {
+              const href = "writeups/" + (w.href || "post.html?slug=" + encodeURIComponent(w.slug));
+              return `<li><a href="${esc(href)}"><span class="latest-title">${esc(w.title || w.slug)}</span><span class="latest-series">${esc(w.series || "")}</span></a></li>`;
+            })
+            .join("");
+          document.getElementById("latest").hidden = false;
+        })
+        .catch(() => {});
+    })();
+
     /* Konami opens projects with #egg — quiet easter egg */
     (function () {
       const seq = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"];

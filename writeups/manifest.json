@@ -5,7 +5,8 @@
     "date": "2026-10-04",
     "description": "Heap notes Part 2 — use-after-free, overlapping memory, and the House of Spirit idea (fake chunk metadata) as mental models, not recipes.",
     "series": "heap",
-    "image": "img/heap-part2-list-thumb.jpg"
+    "image": "img/heap-part2-list-thumb.jpg",
+    "part": 2
   },
   {
     "slug": "where-the-break-lives",
@@ -13,7 +14,8 @@
     "date": "2026-10-04",
     "description": "What I figured out learning heap foundations — process layout, why malloc exists, and how brk/mmap sit under glibc before freelist tricks.",
     "series": "heap",
-    "image": "img/heap-list-thumb.jpg"
+    "image": "img/heap-list-thumb.jpg",
+    "part": 1
   },
   {
     "slug": "four-left-five-right",

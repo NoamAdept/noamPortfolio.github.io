@@ -8,7 +8,7 @@ window.NOAM_PROJECTS = [
     title: "pi-sdr-academy — offline Pi SDR lab",
     meta: "Python · Raspberry Pi · DSP / SDR",
     desc: "Offline Pi laboratory for systems, DSP, and software-defined radio with dojo-style progression.",
-    image: "img/pi-sdr-academy.png",
+    image: "img/pi-sdr-academy.jpg",
     tags: ["SDR", "DSP", "hardware", "passion"],
     url: "https://github.com/NoamAdept/pi-sdr-academy",
     highlights: [
