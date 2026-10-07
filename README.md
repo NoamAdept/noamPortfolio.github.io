@@ -40,7 +40,11 @@ Images go under `writeups/img/…` and are referenced with relative paths from t
 
 3. Visit `/writeups/` — post URL is `writeups/post.html?slug=my-slug`.
 
-Current series: **pwnable.kr** (starts with `fd`).
+Posts in the same series get previous/next links at the bottom, ordered by `date`. If two posts share a date, add `"part": 1`, `"part": 2`, … to set their order. The three newest posts also show up on the home page automatically.
+
+## Theme
+
+Light/dark follows the OS by default; the toggle in the top bar saves the choice in `localStorage` (`js/theme.js`). Colors are CSS variables in `css/site.css`, and the dark values are set in the "Dark theme" block. To keep a page light, add `data-theme="light"` to its `<html>` tag and leave out `theme.js` (the TEA writeup does this because its animations are light).
 
 ## Stack
 HTML, CSS, JavaScript · [marked](https://marked.js.org/) for markdown

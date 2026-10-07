@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0073EA" />
+  <title>404 — Noam Yakar</title>
+  <meta name="robots" content="noindex" />
+  <base href="/noamPortfolio.github.io/" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/site.css" />
+  <script src="js/theme.js"></script>
+</head>
+<body class="site">
+  <main class="notfound content" id="main">
+    <h1>404</h1>
+    <pre><span id="nf-path"></span>: segmentation fault (core dumped)
+$ gdb -q ./site
+(gdb) bt
+#0  0x00000000 in ?? ()   // this page doesn't exist</pre>
+    <div class="btn-row">
+      <a class="btn btn-accent" href="./">&gt; home</a>
+      <a class="btn" href="projects.html">&gt; projects</a>
+      <a class="btn" href="writeups/">&gt; writeups</a>
+    </div>
+  </main>
+  <script>
+    document.getElementById("nf-path").textContent = location.pathname;
+  </script>
+</body>
+</html>

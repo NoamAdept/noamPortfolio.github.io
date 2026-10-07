@@ -162,11 +162,15 @@
       const dateEl = document.getElementById("writeup-date");
       const descEl = document.getElementById("writeup-desc");
       if (titleEl) titleEl.textContent = title;
+      const words = body.replace(/```[\s\S]*?```/g, " ").split(/\s+/).filter(Boolean).length;
+      const minutes = Math.max(1, Math.round(words / 220));
       if (dateEl) {
-        dateEl.textContent = series
-          ? `${series} · ${formatDate(date)}`
-          : formatDate(date);
+        dateEl.textContent = [series, formatDate(date), `${minutes} min read`]
+          .filter(Boolean)
+          .join(" · ");
       }
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc && description) metaDesc.setAttribute("content", description);
       if (descEl) {
         descEl.textContent = description;
         descEl.hidden = !description;
@@ -205,12 +209,54 @@
           parent.replaceWith(fig);
         }
       });
+      // Linkable section headings
+      const used = new Set();
+      article.querySelectorAll("h2, h3").forEach((h) => {
+        if (h.id) return;
+        let id = h.textContent.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+        if (!id) return;
+        while (used.has(id)) id += "-";
+        used.add(id);
+        h.id = id;
+      });
+      renderPostNav(article, manifest, slug, series);
+      if (location.hash) {
+        const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+        if (target) target.scrollIntoView();
+      }
       if (window.MathJax && typeof window.MathJax.typesetPromise === "function") {
         window.MathJax.typesetPromise([article]).catch(() => {});
       }
     } catch (err) {
       article.innerHTML = `<p class="err-msg">${escapeHtml(err.message)}</p>`;
     }
+  }
+
+  // Previous / next within the same series, oldest → newest
+  function renderPostNav(article, manifest, slug, series) {
+    if (!series || !manifest.length) return;
+    const posts = manifest
+      .filter((w) => w.series === series)
+      .sort(
+        (a, b) =>
+          String(a.date || "").localeCompare(String(b.date || "")) ||
+          (Number(a.part) || 0) - (Number(b.part) || 0)
+      );
+    const i = posts.findIndex((w) => w.slug === slug);
+    if (i === -1 || posts.length < 2) return;
+    const link = (w, cls, label) => {
+      if (!w) return "";
+      const href = w.href ? w.href : `post.html?slug=${encodeURIComponent(w.slug)}`;
+      return `<a class="${cls}" href="${escapeHtml(href)}">
+          <span class="post-nav-label">${label}</span>
+          <span class="post-nav-title">${escapeHtml(w.title || w.slug)}</span>
+        </a>`;
+    };
+    const nav = document.createElement("nav");
+    nav.className = "post-nav";
+    nav.setAttribute("aria-label", `More in ${series}`);
+    nav.innerHTML = link(posts[i - 1], "prev", "← Previous") + link(posts[i + 1], "next", "Next →");
+    article.after(nav);
   }
 
   document.addEventListener("DOMContentLoaded", () => {
