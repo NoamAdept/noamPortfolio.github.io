@@ -151,10 +151,10 @@ class HmacCentral(Scene):
     def construct(self):
         self.camera.background_color = BG
         self._intro()
-        self._naive()
+        self._story_attack()
+        self._story_fix()
         self._pads()
         self._construction()
-        self._why_outer()
         self._verify()
         self._outro()
 
@@ -193,7 +193,7 @@ class HmacCentral(Scene):
 
         packet = VGroup(
             pill("message", INK, w=2.1, h=0.72, font_mono=False, size=22, fill=0.04),
-            pill("tag", YELLOW, w=1.2, h=0.72, size=22),
+            pill("seal", YELLOW, w=1.3, h=0.72, size=22),
         ).arrange(RIGHT, buff=0.12)
         packet.next_to(alice, RIGHT, buff=0.35)
         self.play(FadeIn(packet, shift=RIGHT * 0.1), run_time=0.4)
@@ -206,59 +206,136 @@ class HmacCentral(Scene):
         checks.move_to(DOWN * 2.15)
         self.play(LaggedStart(*[FadeIn(c, shift=RIGHT * 0.12) for c in checks], lag_ratio=0.4), run_time=0.8)
 
-        foot = caption("HMAC = the recipe for that tag.  Not encryption — the message stays readable.")
+        foot = caption("HMAC is the recipe for that seal (a.k.a. tag).  It hides nothing — it proves nothing was changed.")
         self.play(FadeIn(foot), run_time=0.35)
         self.wait(1.3)
         self._clear()
 
-    def _naive(self):
-        title = section_title("The obvious idea:  tag = H(key ‖ message)")
+    def _machine_row(self, chips, y, start_label, start_color, out_label, out_color, size=19):
+        """Chips fed left-to-right into a running-total 'fingerprint machine'.
+        Every row's result lands in the same right-hand column so readings compare at a glance."""
+        row = VGroup(*chips).arrange(RIGHT, buff=0.1)
+        start = pill(start_label, start_color, w=1.25, h=0.68, size=17)
+        machine = VGroup(start, row).arrange(RIGHT, buff=0.18).move_to(UP * y)
+        machine.shift(RIGHT * (3.0 - machine.get_right()[0]))
+        display = pill(out_label, out_color, h=0.7, size=size + 1, fill=0.16).move_to(RIGHT * 4.95 + UP * y)
+        arr = arrow(machine.get_right(), display.get_left(), out_color)
+        return machine, arr, display
+
+    def _story_attack(self):
+        title = section_title("The attack HMAC was built to stop")
         self.play(FadeIn(title), run_time=0.4)
 
-        cap = caption("SHA-256 eats input in 64-byte blocks, carrying a 32-byte state forward")
-        self.play(FadeIn(cap), run_time=0.35)
+        # --- the setup: Alice, her bank, Mallory in the middle
+        alice = pill("Alice", BLUE, w=2.0, h=0.8, font_mono=False, size=26).move_to(LEFT * 5.0 + UP * 1.4)
+        bank = pill("Bank", GREEN, w=2.0, h=0.8, font_mono=False, size=26).move_to(RIGHT * 5.0 + UP * 1.4)
+        s1 = ink("knows the secret", 19, PURPLE).next_to(alice, DOWN, buff=0.16)
+        s2 = ink("knows the secret", 19, PURPLE).next_to(bank, DOWN, buff=0.16)
+        cap = caption("Alice and her bank share a secret.  Every order gets a seal = fingerprint( secret + order )")
+        self.play(FadeIn(alice), FadeIn(bank), FadeIn(s1), FadeIn(s2), FadeIn(cap), run_time=0.6)
 
-        # Merkle–Damgård chain: IV -> f -> f -> digest
-        y = 0.55
-        iv = pill("IV", FAINT, w=0.9).move_to(LEFT * 5.6 + UP * y)
-        blk1 = pill("key ‖ message", PURPLE, w=2.6, size=16).move_to(LEFT * 2.6 + UP * (y + 1.35))
-        f1 = hash_box("compress").scale(0.8).move_to(LEFT * 2.6 + UP * y)
-        blk2 = pill("…message ‖ pad", PURPLE, w=2.6, size=16).move_to(RIGHT * 0.9 + UP * (y + 1.35))
-        f2 = hash_box("compress").scale(0.8).move_to(RIGHT * 0.9 + UP * y)
-        tag = pill("tag", YELLOW, w=1.3).move_to(RIGHT * 4.2 + UP * y)
+        order = VGroup(
+            pill("pay Bob $10", INK, h=0.74, font_mono=False, size=22, fill=0.04),
+            pill("seal 4f2a", YELLOW, h=0.74, size=20),
+        ).arrange(RIGHT, buff=0.1).next_to(alice, RIGHT, buff=0.3)
+        self.play(FadeIn(order, shift=RIGHT * 0.1), run_time=0.4)
+        self.play(order.animate.move_to(UP * 1.4), run_time=0.8)
 
-        a_iv = arrow(iv.get_right(), f1.get_left())
-        a_b1 = arrow(blk1.get_bottom(), f1.get_top(), PURPLE)
-        a_12 = arrow(f1.get_right(), f2.get_left())
-        a_b2 = arrow(blk2.get_bottom(), f2.get_top(), PURPLE)
-        a_t = arrow(f2.get_right(), tag.get_left(), YELLOW)
+        mallory = pill("Mallory", RED, w=2.2, h=0.8, font_mono=False, size=26).move_to(DOWN * 0.7)
+        m_lab = ink("sees the order and the seal — not the secret", 19, RED).next_to(mallory, DOWN, buff=0.16)
+        cap = self._swap_caption(cap, "Mallory sits in the middle. Without the secret she shouldn't be able to make a valid seal…")
+        self.play(FadeIn(mallory, shift=UP * 0.1), FadeIn(m_lab), run_time=0.5)
+        self.wait(1.6)
+        self.play(*[FadeOut(m) for m in [alice, bank, s1, s2, order, mallory, m_lab]], run_time=0.4)
 
-        self.play(FadeIn(iv), FadeIn(blk1), FadeIn(f1), GrowArrow(a_iv), GrowArrow(a_b1), run_time=0.6)
-        self.play(GrowArrow(a_12), FadeIn(blk2), FadeIn(f2), GrowArrow(a_b2), run_time=0.6)
-        self.play(GrowArrow(a_t), FadeIn(tag), run_time=0.45)
-        self.wait(0.4)
-
-        cap = self._swap_caption(cap, "Catch: the tag IS the final state. An attacker can just keep going.", RED)
-
-        # Attacker continues from the tag
-        f3 = hash_box("compress", RED).scale(0.8).move_to(RIGHT * 4.2 + DOWN * 1.35)
-        extra = pill("‖ extra data", RED, w=2.2, size=16).move_to(RIGHT * 1.0 + DOWN * 1.35)
-        forged = pill("valid tag", RED, w=1.7, fill=0.16).move_to(RIGHT * 4.2 + DOWN * 2.55)
-        a_tf = arrow(tag.get_bottom(), f3.get_top(), RED)
-        a_ef = arrow(extra.get_right(), f3.get_left(), RED)
-        a_ff = arrow(f3.get_bottom(), forged.get_top(), RED)
-        self.play(GrowArrow(a_tf), FadeIn(f3), run_time=0.5)
-        self.play(FadeIn(extra, shift=RIGHT * 0.1), GrowArrow(a_ef), run_time=0.45)
-        self.play(GrowArrow(a_ff), FadeIn(forged), run_time=0.45)
-
-        note = ink("no key needed", 18, RED, "BOLD").next_to(forged, LEFT, buff=0.3)
-        self.play(FadeIn(note), Indicate(forged, color=RED, scale_factor=1.08), run_time=0.6)
-        cap = self._swap_caption(cap, "Length extension: a tag for  key ‖ message ‖ pad ‖ extra,  forged blind", RED)
+        # --- the machine: a running total
+        cap = self._swap_caption(cap, "…but the fingerprint machine works like a running total: it reads its input piece by piece")
+        secret = pill("secret ????", PURPLE, h=0.68, size=19)
+        msg = pill("pay Bob $10", INK, h=0.68, font_mono=False, size=21, fill=0.04)
+        m1, a1, d1 = self._machine_row([secret, msg], 1.6, "start", FAINT, "4f2a", YELLOW)
+        self.play(FadeIn(m1[0]), run_time=0.3)
+        r1 = mono("reads a91c", 15, MUTED).next_to(secret, UP, buff=0.12)
+        self.play(FadeIn(secret, shift=RIGHT * 0.1), FadeIn(r1), run_time=0.5)
+        r2 = mono("reads 4f2a", 15, MUTED).next_to(msg, UP, buff=0.12)
+        self.play(FadeIn(msg, shift=RIGHT * 0.1), FadeIn(r2), run_time=0.5)
+        self.play(GrowArrow(a1), FadeIn(d1), run_time=0.45)
+        note = ink("final reading = the seal", 18, YELLOW).next_to(d1, DOWN, buff=0.14)
+        self.play(FadeIn(note), run_time=0.35)
+        cap = self._swap_caption(cap, "Its final reading IS the seal — so the seal tells everyone exactly where the machine stopped.")
         self.wait(1.4)
+
+        # --- Mallory continues from the seal
+        cap = self._swap_caption(cap, "Mallory types the seal back in as the starting reading… and keeps feeding it", RED)
+        extra = pill("pay Mallory $1,000,000", RED, h=0.68, font_mono=False, size=21)
+        m2, a2, d2 = self._machine_row([extra], -0.3, "4f2a", YELLOW, "9c1e", RED)
+        self.play(FadeOut(note), TransformFromCopy(d1, m2[0]), run_time=0.7)
+        self.play(FadeIn(extra, shift=RIGHT * 0.1), run_time=0.45)
+        self.play(GrowArrow(a2), FadeIn(d2), run_time=0.45)
+        no_key = ink("new seal, no secret used", 18, RED, "BOLD").next_to(m2, DOWN, buff=0.14)
+        self.play(FadeIn(no_key), run_time=0.35)
+        self.wait(1.2)
+
+        # --- the bank checks from scratch
+        cap = self._swap_caption(cap, "The bank checks the new order by recomputing from scratch with the real secret…")
+        b_secret = pill("secret", PURPLE, h=0.62, size=16)
+        b_msg = pill("pay Bob $10", INK, h=0.62, font_mono=False, size=18, fill=0.04)
+        b_junk = pill("···", FAINT, h=0.62, size=16)
+        b_extra = pill("pay Mallory $1,000,000", RED, h=0.62, font_mono=False, size=18)
+        m3, a3, d3 = self._machine_row([b_secret, b_msg, b_junk, b_extra], -2.0, "start", FAINT, "9c1e", RED)
+        junk_lab = ink("a few junk characters", 15, FAINT).next_to(b_junk, DOWN, buff=0.1)
+        self.play(FadeOut(no_key), FadeIn(m3), FadeIn(junk_lab), run_time=0.6)
+        self.play(GrowArrow(a3), FadeIn(d3), run_time=0.45)
+        match = SurroundingRectangle(VGroup(d2, d3), buff=0.14, corner_radius=0.12, color=RED, stroke_width=2.6)
+        same = ink("same!", 20, RED, "BOLD").next_to(match, RIGHT, buff=0.15)
+        self.play(Create(match), FadeIn(same), run_time=0.5)
+        cap = self._swap_caption(cap, "…and gets the same reading. Seal valid — money sent. This is a length-extension attack.", RED)
+        self.wait(2.4)
+        self._clear()
+
+    def _story_fix(self):
+        title = section_title("HMAC's fix: seal it twice")
+        self.play(FadeIn(title), run_time=0.4)
+
+        cap = caption("First fingerprint the order with one version of the secret…")
+        self.play(FadeIn(cap), run_time=0.35)
+        sa = pill("secret A", BLUE, h=0.68, size=19)
+        msg = pill("pay Bob $10", INK, h=0.68, font_mono=False, size=21, fill=0.04)
+        m1, a1, d1 = self._machine_row([sa, msg], 1.75, "start", FAINT, "inner", BLUE)
+        self.play(FadeIn(m1), run_time=0.5)
+        self.play(GrowArrow(a1), FadeIn(d1), run_time=0.45)
+        hidden = ink("never sent", 16, BLUE).next_to(d1, DOWN, buff=0.1)
+        self.play(FadeIn(hidden), run_time=0.3)
+
+        cap = self._swap_caption(cap, "…then fingerprint THAT result with a second version. Only this outer reading is sent.")
+        sb = pill("secret B", YELLOW, h=0.68, size=19)
+        inner = pill("inner", BLUE, h=0.68, size=19)
+        m2, a2, d2 = self._machine_row([sb, inner], 0.4, "start", FAINT, "seal 7d03", YELLOW)
+        self.play(FadeIn(m2[0]), FadeIn(sb), TransformFromCopy(d1, inner), run_time=0.8)
+        self.play(GrowArrow(a2), FadeIn(d2), run_time=0.45)
+        self.wait(1.0)
+
+        cap = self._swap_caption(cap, "Mallory can still keep feeding — but only onto the OUTER layer", RED)
+        extra = pill("pay Mallory $1,000,000", RED, h=0.68, font_mono=False, size=21)
+        m3, a3, d3 = self._machine_row([extra], -0.95, "7d03", YELLOW, "e5b8", RED)
+        self.play(TransformFromCopy(d2, m3[0]), run_time=0.6)
+        self.play(FadeIn(extra), GrowArrow(a3), FadeIn(d3), run_time=0.6)
+        self.wait(0.8)
+
+        cap = self._swap_caption(cap, "The bank rebuilds BOTH layers for the new order, starting from the inside…")
+        b_sb = pill("secret B", YELLOW, h=0.62, size=16)
+        b_in = pill("inner( secret A + the whole new order )", BLUE, h=0.62, size=16)
+        m4, a4, d4 = self._machine_row([b_sb, b_in], -2.15, "start", FAINT, "31aa", GREEN)
+        self.play(FadeIn(m4), run_time=0.6)
+        self.play(GrowArrow(a4), FadeIn(d4), run_time=0.45)
+        box = SurroundingRectangle(VGroup(d3, d4), buff=0.14, corner_radius=0.12, color=GREEN, stroke_width=2.6)
+        neq = ink("≠", 36, RED, "BOLD").next_to(box, RIGHT, buff=0.15)
+        self.play(Create(box), FadeIn(neq), run_time=0.5)
+        cap = self._swap_caption(cap, "Seals don't match — forgery rejected. Her add-on landed on the wrong layer.", GREEN)
+        self.wait(2.4)
         self._clear()
 
     def _pads(self):
-        title = section_title("Step 1 · stretch the key, then make two of it")
+        title = section_title("Under the hood · two versions of the secret")
         self.play(FadeIn(title), run_time=0.4)
 
         # key "key" = 6b 65 79, padded with zeros (show 10 of 64 bytes)
@@ -311,7 +388,7 @@ class HmacCentral(Scene):
         self._clear()
 
     def _construction(self):
-        title = section_title("Step 2 · two nested hashes")
+        title = section_title("Under the hood · the two fingerprints")
         self.play(FadeIn(title), run_time=0.4)
 
         formula = mono("HMAC(K, m) = H( K_out ‖ H( K_in ‖ m ) )", 24, INK)
@@ -330,7 +407,7 @@ class HmacCentral(Scene):
         cap = caption("Inner hash: the inner key glued in front of the message")
         self.play(FadeIn(cap), FadeIn(kin), FadeIn(msg), run_time=0.5)
         self.play(GrowArrow(a1), FadeIn(h1), run_time=0.45)
-        self.play(Indicate(h1, color=BLUE, scale_factor=1.06), run_time=0.45)
+        self.play(Circumscribe(h1, color=BLUE, buff=0.08), run_time=0.6)
         self.play(GrowArrow(a2), FadeIn(inner), run_time=0.45)
         self.wait(0.3)
 
@@ -343,7 +420,7 @@ class HmacCentral(Scene):
         self.play(inner_copy.animate.next_to(kout, RIGHT, buff=0.08), run_time=0.9, rate_func=smooth)
         a3 = arrow(inner_copy.get_right(), h2.get_left(), YELLOW)
         self.play(GrowArrow(a3), FadeIn(h2), run_time=0.45)
-        self.play(Indicate(h2, color=YELLOW, scale_factor=1.06), run_time=0.45)
+        self.play(Circumscribe(h2, color=YELLOW, buff=0.08), run_time=0.6)
 
         tag = VGroup(
             mono("tag", 15, YELLOW),
@@ -362,44 +439,8 @@ class HmacCentral(Scene):
         self.wait(1.6)
         self._clear()
 
-    def _why_outer(self):
-        title = section_title("Why the second hash kills length extension")
-        self.play(FadeIn(title), run_time=0.4)
-
-        # Attacker sees only the tag, tries to extend it
-        tag = pill("tag", YELLOW, w=1.4).move_to(LEFT * 4.6 + UP * 1.0)
-        f = hash_box("compress", RED).scale(0.8).move_to(LEFT * 1.5 + UP * 1.0)
-        extra = pill("‖ extra", RED, w=1.6, size=16).next_to(f, UP, buff=0.45)
-        out = pill("H(K_out ‖ inner ‖ pad ‖ extra)", RED, w=4.4, size=15).move_to(RIGHT * 3.3 + UP * 1.0)
-        a1 = arrow(tag.get_right(), f.get_left(), RED)
-        a2 = arrow(extra.get_bottom(), f.get_top(), RED)
-        a3 = arrow(f.get_right(), out.get_left(), RED)
-
-        cap = caption("Extending the tag only ever extends the OUTER hash…")
-        self.play(FadeIn(cap), FadeIn(tag), run_time=0.4)
-        self.play(GrowArrow(a1), FadeIn(f), FadeIn(extra), GrowArrow(a2), run_time=0.6)
-        self.play(GrowArrow(a3), FadeIn(out), run_time=0.5)
-        self.wait(0.4)
-
-        # What the verifier would actually compute
-        want = mono("verifier computes  H( K_out ‖ H( K_in ‖ m' ) )", 19, INK).move_to(DOWN * 0.35)
-        self.play(FadeIn(want), run_time=0.45)
-        cap = self._swap_caption(cap, "…but a real tag always hashes K_out with exactly 32 bytes — a fresh inner hash")
-        self.wait(0.6)
-
-        cross = Cross(out, stroke_color=RED, stroke_width=5)
-        nomatch = ink("never matches", 20, RED, "BOLD").next_to(out, DOWN, buff=0.25)
-        self.play(Create(cross), FadeIn(nomatch), run_time=0.6)
-
-        punch = ink("To forge, you'd need the inner hash of your new message — which needs the key.", 20, INK)
-        punch.move_to(DOWN * 1.65)
-        self.play(FadeIn(punch, shift=UP * 0.08), run_time=0.5)
-        cap = self._swap_caption(cap, "Same trick protects HMAC-MD5 and HMAC-SHA1 from their broken collisions — still, use SHA-256")
-        self.wait(1.6)
-        self._clear()
-
     def _verify(self):
-        title = section_title("Step 3 · check the tag without leaking it")
+        title = section_title("One last trap · checking the seal")
         self.play(FadeIn(title), run_time=0.4)
 
         good = "f7bc83f4"
