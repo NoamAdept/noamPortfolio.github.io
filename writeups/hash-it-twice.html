@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#0073EA">
 <meta name="color-scheme" content="light">
 <title>Hash It Twice — Noam Yakar</title>
-<meta name="description" content="HMAC explained with one Manim walkthrough: why H(key ‖ message) falls to length extension, the 0x36 / 0x5C pads, two nested hashes, and constant-time verification — plus a live byte lab and a real length-extension forge.">
+<meta name="description" content="HMAC in plain English — the bank-transfer length-extension attack that motivated it, the seal-it-twice fix, then the real bytes: why H(key ‖ message) falls to length extension, the 0x36 / 0x5C pads, two nested hashes, and constant-time verification — plus a live byte lab and a real length-extension forge.">
 <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
 <link rel="stylesheet" href="../css/site.css" />
 <style>
@@ -335,6 +335,138 @@
   }
   footer.hmac-foot p { margin: 0.6rem 0; }
 
+  /* plain-language story */
+  .glossary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.7rem;
+    margin: 1.6rem 0 0.4rem;
+  }
+  .term {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-large);
+    background: var(--surface);
+    padding: 0.85rem 0.95rem;
+    box-shadow: var(--shadow-card);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+  .term b {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 0.3rem;
+  }
+  .term code { font-family: var(--font-mono); font-size: 0.88em; color: var(--yellow-strong); }
+  .story { margin-top: 2.6rem; }
+  .story > h2 { font-size: 1.6rem !important; }
+  .formula-plain {
+    font-family: var(--font-mono);
+    font-size: clamp(0.9rem, 2.6vw, 1.1rem);
+    color: var(--text-primary);
+    margin: 0.4rem 0 0.2rem;
+    padding: 0.75rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    display: inline-block;
+  }
+  .formula-plain .sec { color: var(--purple); font-weight: 600; }
+  .analogy {
+    max-width: 40rem;
+    margin: 1.4rem 0;
+    padding: 1rem 1.15rem;
+    border-radius: var(--radius-large);
+    background: var(--yellow-soft);
+    border: 1px solid var(--warn-border);
+    font-size: 1.02rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+  }
+  .analogy p { margin: 0.55rem 0; }
+  .analogy-title {
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-top: 0 !important;
+  }
+  .steps {
+    list-style: none;
+    counter-reset: step;
+    max-width: 40rem;
+    margin: 1.2rem 0;
+    padding: 0;
+    display: grid;
+    gap: 0.55rem;
+  }
+  .steps li {
+    counter-increment: step;
+    position: relative;
+    padding: 0.75rem 0.9rem 0.75rem 3rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-large);
+    background: var(--surface);
+    font-size: 1rem;
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0.85rem;
+    top: 0.75rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: var(--blue-soft);
+    color: var(--blue);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+  }
+  .steps code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    color: var(--text-primary);
+    background: var(--surface-hover);
+    border-radius: 4px;
+    padding: 0.05em 0.3em;
+  }
+  .steps b, .steps strong { color: var(--text-primary); }
+  .who { font-weight: 700; }
+  .who.alice { color: var(--blue); }
+  .who.mallory { color: var(--danger); }
+  .who.bank { color: var(--green-strong); }
+  .tok-a { color: var(--blue); font-weight: 600; }
+  .tok-b { color: var(--yellow-strong); font-weight: 600; }
+  .prose .aside {
+    font-size: 0.95rem;
+    padding-left: 0.9rem;
+    border-left: 2px solid var(--border-strong);
+  }
+  .prose .aside b { color: var(--text-primary); }
+  .tech-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 3rem 0 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .tech-divider::before, .tech-divider::after {
+    content: "";
+    flex: 1;
+    border-top: 1px dashed var(--border-strong);
+  }
+
   @media (max-width: 640px) {
     .hmac-article { padding: var(--space-5) var(--space-4) var(--space-7); }
     .bytes { grid-template-columns: repeat(8, minmax(0, 1fr)); }
@@ -359,15 +491,110 @@
   </nav>
 <article class="hmac-article">
   <p class="back-link"><a href="index.html">&gt; all writeups</a></p>
-  <p class="kicker">crypto notes · message authentication</p>
+  <p class="kicker">crypto notes · no maths required</p>
   <h1>Hash It Twice</h1>
-  <p class="dek">How HMAC turns a plain hash into a tamper seal, and why the obvious shortcut gets forged.</p>
+  <p class="dek">A plain-English guide to the tamper-proof seal behind webhooks, logins and API keys, and to the sneaky attack that made it necessary.</p>
 
   <div class="prose">
-    <p>HMAC is in a lot of places: GitHub webhook signatures, <code>HS256</code> JWTs, AWS request signing, the six-digit codes in an authenticator app, and the key schedule of TLS 1.3. The definition fits on one line. Still, I didn't really understand it until I saw why the simpler version fails.</p>
-    <p>The goal is simple. Two people share a secret key. One sends a message with a short <em>tag</em>. The other checks the tag and learns two things: nobody changed the message, and it came from someone who has the key. This isn't encryption, because anyone can still read the message. It only proves the message hasn't been tampered with.</p>
-    <p>The obvious recipe is <code>tag = SHA256(key ‖ message)</code>. It's broken. SHA-256 processes its input in 64-byte blocks and carries a 32-byte state from one block to the next. The final digest <em>is</em> that state. So anyone holding a tag can load it back into the hash and keep feeding in data. The result is a valid tag for <code>key ‖ message ‖ padding ‖ anything</code>, made without ever seeing the key. This is called <strong>length extension</strong>, and the forge panel further down runs it for real.</p>
-    <p>HMAC (Bellare, Canetti and Krawczyk, 1996; RFC 2104) fixes this by hashing twice, with two keys derived from your one key:</p>
+    <p>When your bank's app sends "pay Bob $10" to the bank's servers, the bank has to answer two questions before it moves any money. <strong>Did this really come from you?</strong> And <strong>did anyone change it on the way?</strong></p>
+    <p>The usual answer is a digital <em>seal</em>, a short code attached to the message. It works like a wax seal on a letter: anyone can read the letter, but only someone with the right signet ring can make the seal, and if anyone touches the letter the seal stops matching. <strong>HMAC</strong> is the recipe most of the internet uses to make that seal. This page explains it with no maths, starting from the attack that made people invent it.</p>
+  </div>
+
+  <div class="glossary" aria-label="Three words you'll need">
+    <div class="term">
+      <b>fingerprint</b>
+      <span>A machine that turns any text into a short code, like <code>4f2a</code>. Same text, same code. Change one letter and the code changes completely. You can't run it backwards. (Its real name is a <em>hash</em>.)</span>
+    </div>
+    <div class="term">
+      <b>secret</b>
+      <span>A password that only you and the bank know. It is never sent over the internet.</span>
+    </div>
+    <div class="term">
+      <b>seal</b>
+      <span>The code attached to each message, made by mixing the secret into the fingerprint. (Its real name is a <em>tag</em> or <em>MAC</em>.)</span>
+    </div>
+  </div>
+
+  <section class="story" aria-labelledby="attack-title">
+    <h2 id="attack-title">The attack that started it all</h2>
+    <div class="prose">
+      <p>The obvious way to make a seal: put the secret in front of the message and fingerprint the whole thing.</p>
+    </div>
+    <p class="formula-plain">seal = fingerprint( <span class="sec">secret</span> + <span>message</span> )</p>
+    <div class="prose">
+      <p>That looks safe. The attacker, call her Mallory, doesn't know the secret, so she can't put it in front of her own message, so she can't make a matching seal. Right?</p>
+      <p>Wrong. The flaw isn't in the secret. It's in how the fingerprint machine reads.</p>
+    </div>
+
+    <div class="analogy">
+      <p class="analogy-title">The machine is a running total</p>
+      <p>Picture a cash register. It doesn't look at the whole receipt at once. It reads one item at a time and updates the number on its screen after each one. When it's done, that number is the answer.</p>
+      <p>Fingerprint machines like SHA-256 work the same way. They read the text in chunks and keep a "reading" that changes after every chunk. <strong>The seal is just the last reading on the screen.</strong></p>
+      <p>So if you know the final reading, you know exactly where the machine stopped. You can type that reading back in and <strong>keep going</strong>, without knowing anything that was fed in before.</p>
+    </div>
+
+    <ol class="steps">
+      <li><span class="who alice">You</span> send <code>pay Bob $10</code> with seal <code>4f2a</code>. To make it, the machine read the secret, then your order, and stopped on <code>4f2a</code>.</li>
+      <li><span class="who mallory">Mallory</span> intercepts it. She can't see the secret, but she can see the seal <code>4f2a</code>, which is the machine's last reading.</li>
+      <li><span class="who mallory">Mallory</span> sets a fingerprint machine to start from <code>4f2a</code> instead of from zero, feeds it <code>pay Mallory $1,000,000</code>, and gets a new reading: <code>9c1e</code>.</li>
+      <li><span class="who mallory">Mallory</span> sends the bank: your original order, a few junk characters, her extra line, and the seal <code>9c1e</code>.</li>
+      <li><span class="who bank">The bank</span> checks the seal the normal way. It fingerprints the secret plus everything it received. The machine passes through exactly the readings Mallory skipped and stops on <code>9c1e</code>. <strong>Seal valid. Money sent.</strong></li>
+    </ol>
+
+    <div class="prose">
+      <p>Mallory never learned the secret. She didn't have to: the seal itself told her where the machine stopped. This is called a <strong>length-extension attack</strong>, because she extended the message and the seal came along with it.</p>
+      <p class="aside"><b>What are the junk characters?</b> When the machine finishes, it stamps a small "end of message" marker that includes the message length. That marker was part of what the machine read, so Mallory has to include it before her extra line. Many servers just ignore odd characters like these. To guess the length, she needs to know roughly how long the secret is, and she can simply try every likely length.</p>
+      <p class="aside"><b>Did this really happen?</b> Yes. In 2009, researchers Thai Duong and Juliano Rizzo used this exact trick against Flickr's API, which signed requests as <code>fingerprint(secret + request)</code>. They added extra commands to signed requests and Flickr accepted them.</p>
+    </div>
+  </section>
+
+  <section class="story" aria-labelledby="fix-title">
+    <h2 id="fix-title">The fix: seal it twice</h2>
+    <div class="prose">
+      <p>HMAC was published in 1996 by Mihir Bellare, Ran Canetti and Hugo Krawczyk with exactly this kind of weakness in mind. The idea is to put the message in an envelope inside another envelope:</p>
+    </div>
+    <ol class="steps">
+      <li><b>Inner envelope.</b> Make two slightly different versions of the secret, A and B. Fingerprint <span class="tok-a">secret A</span> + the message. Keep this result private; it is never sent.</li>
+      <li><b>Outer envelope.</b> Fingerprint <span class="tok-b">secret B</span> + that inner result. <strong>This is the seal you send.</strong></li>
+    </ol>
+    <div class="prose">
+      <p>Now replay Mallory's trick. She can still type the seal back in and keep going, but the seal only tells her where the <em>outer</em> machine stopped. Her extra line gets attached to the outside of the outer envelope.</p>
+      <p>The bank never stacks text there. To check a message, it always rebuilds both envelopes from scratch: first the inner fingerprint of the whole new message with secret A, then the outer one with secret B. Mallory's add-on lands in the wrong place, so the seals don't match. To make a seal that fits, she'd need the inner fingerprint of her new message, and that requires the secret.</p>
+      <p>That's the whole idea. <strong>Two fingerprints, one inside the other, both keyed with the secret.</strong> The animation tells the same story, then looks under the hood.</p>
+    </div>
+  </section>
+
+  <figure class="diagram" id="hmac-central">
+    <video
+      controls muted playsinline
+      poster="hmac/videos/hmac_central_poster.jpg"
+      aria-label="HMAC animation: the bank-transfer length-extension attack, the seal-it-twice fix, then how HMAC works under the hood"
+      width="1280"
+      height="720"
+    >
+      <source src="hmac/videos/hmac_central.webm" type="video/webm" />
+      <source src="hmac/videos/hmac_central.mp4" type="video/mp4" />
+    </video>
+    <img class="poster-fallback" src="hmac/videos/hmac_central_poster.jpg" alt="Animation still: Mallory's continued fingerprint and the bank's recomputed fingerprint give the same reading" width="1280" height="720" />
+    <figcaption>
+      <strong>The story in 70 seconds.</strong>
+      Alice, the bank and Mallory, then the fix, then the real bytes. Rendered with
+      <a href="https://www.manim.community/">Manim</a>
+      (Community Edition) in the Tetra light palette.
+    </figcaption>
+    <div class="anim-chapters" aria-label="Animation chapters">
+      <span>what a seal is for</span>
+      <span>the attack</span>
+      <span>seal it twice</span>
+      <span>under the hood</span>
+      <span>checking the seal</span>
+    </div>
+  </figure>
+
+  <div class="tech-divider" role="separator"><span>for the technically curious</span></div>
+
+  <div class="prose">
+    <p>The rest of the page uses the real names. The fingerprint machine is a hash function <code>H</code>, here SHA-256. It reads 64-byte blocks and carries a 32-byte internal state from block to block. The final digest <em>is</em> that state, which is exactly what makes length extension possible. Secret A and secret B come from one key <code>K</code>:</p>
   </div>
 
   <div class="formula-big" aria-label="HMAC of K and m equals H of K-out concatenated with H of K-in concatenated with m">
@@ -375,36 +602,8 @@
   </div>
 
   <div class="prose">
-    <p><code>K′</code> is the key stretched to exactly one hash block: 64 bytes for SHA-256. If the key is shorter, it's padded with zero bytes. If it's longer, it's hashed first and then padded. <code>ipad</code> is the byte <code>0x36</code> repeated 64 times, and <code>opad</code> is <code>0x5C</code> repeated 64 times. Those two constants differ in exactly half their bits, so the inner key and the outer key look unrelated to the hash function. The animation walks through each step.</p>
+    <p><code>K′</code> is the key stretched to exactly one block: 64 bytes for SHA-256. A shorter key is padded with zero bytes; a longer one is hashed first. "Secret A" is <code>K′</code> with every byte XORed with <code>0x36</code> (the <em>ipad</em>). "Secret B" is the same thing with <code>0x5C</code> (the <em>opad</em>). Those two constants differ in exactly half their bits, so the two derived keys look unrelated to the hash. You can watch every byte below.</p>
   </div>
-
-  <figure class="diagram" id="hmac-central">
-    <video
-      controls muted playsinline
-      poster="hmac/videos/hmac_central_poster.jpg"
-      aria-label="Central HMAC animation: why H(key ‖ msg) breaks, the ipad and opad keys, the nested hashes, and constant-time verification"
-      width="1280"
-      height="720"
-    >
-      <source src="hmac/videos/hmac_central.webm" type="video/webm" />
-      <source src="hmac/videos/hmac_central.mp4" type="video/mp4" />
-    </video>
-    <img class="poster-fallback" src="hmac/videos/hmac_central_poster.jpg" alt="HMAC central animation poster" width="1280" height="720" />
-    <figcaption>
-      <strong>HMAC, start to finish.</strong>
-      The broken shortcut, the two pads, the two hashes, why the outer hash blocks extension, and checking a tag without leaking it through timing. Rendered with
-      <a href="https://www.manim.community/">Manim</a>
-      (Community Edition) in the Tetra light palette.
-    </figcaption>
-    <div class="anim-chapters" aria-label="Animation chapters">
-      <span>the job</span>
-      <span>H(key ‖ msg)</span>
-      <span>ipad · opad</span>
-      <span>two hashes</span>
-      <span>why it holds</span>
-      <span>compare_digest</span>
-    </div>
-  </figure>
 
   <section class="panel" aria-labelledby="lab-title">
     <h2 id="lab-title">Byte lab</h2>
@@ -429,36 +628,36 @@
   </section>
 
   <div class="prose">
-    <p>The second hash is what saves it. An attacker who extends the tag is only extending the <em>outer</em> hash, which ends up hashing <code>K_out ‖ inner ‖ padding ‖ extra</code>. The verifier never computes anything with that shape. A real tag always comes from <code>K_out</code> followed by exactly 32 bytes, and those 32 bytes are a fresh inner hash of the new message. Producing that inner hash requires the key. The same structure is why HMAC-MD5 and HMAC-SHA1 still have no practical forgeries, even though MD5 and SHA-1 collisions are cheap to find. For new code, use SHA-256 anyway.</p>
+    <p>In those terms, here is why the second hash saves it. An attacker who extends the tag is only extending the <em>outer</em> hash, which ends up hashing <code>K_out ‖ inner ‖ padding ‖ extra</code>. The verifier never computes anything with that shape. A real tag always comes from <code>K_out</code> followed by exactly 32 bytes, and those 32 bytes are a fresh inner hash of the new message. Producing that inner hash requires the key. The same structure is why HMAC-MD5 and HMAC-SHA1 still have no practical forgeries, even though MD5 and SHA-1 collisions are cheap to find. For new code, use SHA-256 anyway.</p>
   </div>
 
   <section class="panel" aria-labelledby="forge-title">
-    <h2 id="forge-title">Length extension, live</h2>
-    <p class="prose">A toy server holds a random 16-byte secret and signs a query string two ways: the naive <code>SHA256(secret ‖ msg)</code> and real <code>HMAC-SHA256</code>. You get the message and both tags. You don't get the secret, only its length, and attackers can usually just try every length. Then you forge.</p>
+    <h2 id="forge-title">Try the attack yourself</h2>
+    <p class="prose">This is Mallory's attack for real, not a cartoon. A toy bank holds a random 16-byte secret and seals a transfer order two ways: the naive <code>SHA256(secret ‖ order)</code> and real <code>HMAC-SHA256</code>. You see the order and both seals, never the secret. Press the button to extend both seals with your extra line. Many web servers read the <em>last</em> <code>to=</code> they see, so the extra line redirects the money.</p>
     <p class="note">server secret: <span class="secret" id="secret-mask"></span></p>
     <div class="field-row" style="margin-top:0.6rem">
-      <label>signed message<input id="forge-msg" type="text" value="user=noam&amp;role=guest" spellcheck="false"></label>
-      <label class="narrow">append<input id="forge-extra" type="text" value="&amp;role=admin" spellcheck="false"></label>
+      <label>signed order<input id="forge-msg" type="text" value="to=bob&amp;amount=10" spellcheck="false"></label>
+      <label class="narrow">Mallory appends<input id="forge-extra" type="text" value="&amp;to=mallory&amp;amount=1000000" spellcheck="false"></label>
     </div>
     <div class="pipe">
-      <div class="stage-row"><span class="lane-name">naive tag</span><span class="hex" id="naive-tag"></span></div>
-      <div class="stage-row tag"><span class="lane-name">hmac tag</span><span class="hex" id="hmac-tag"></span></div>
+      <div class="stage-row"><span class="lane-name">naive seal</span><span class="hex" id="naive-tag"></span></div>
+      <div class="stage-row tag"><span class="lane-name">hmac seal</span><span class="hex" id="hmac-tag"></span></div>
     </div>
     <div class="choices">
-      <button type="button" class="primary" id="forge-btn">Forge from the tags alone</button>
+      <button type="button" class="primary" id="forge-btn">Forge using only the seals</button>
       <button type="button" id="reseed">New secret</button>
     </div>
     <div class="forge-out" id="forge-out" hidden>
-      <p class="lane-name" style="margin-top:0.6rem">forged message on the wire (red = SHA-256 padding the attacker had to include)</p>
+      <p class="lane-name" style="margin-top:0.6rem">what Mallory sends (red = the "junk characters", SHA-256's end-of-message marker)</p>
       <div class="wire" id="forged-wire"></div>
       <div class="verdicts">
         <div class="verdict" id="v-naive">
-          <h3>Naive server · SHA256(secret ‖ msg)</h3>
+          <h3>Naive bank · SHA256(secret ‖ order)</h3>
           <div class="big" id="v-naive-big"></div>
           <p class="note" id="v-naive-note"></p>
         </div>
         <div class="verdict" id="v-hmac">
-          <h3>HMAC server · HMAC-SHA256</h3>
+          <h3>HMAC bank · HMAC-SHA256</h3>
           <div class="big" id="v-hmac-big"></div>
           <p class="note" id="v-hmac-note"></p>
         </div>
@@ -467,7 +666,7 @@
   </section>
 
   <div class="prose">
-    <p>The last trap is on the receiving end. If you check a tag with <code>==</code>, the comparison stops at the first byte that differs. Response time then grows with every correct leading byte, which lets an attacker recover a valid tag one byte at a time. Python's <code>hmac.compare_digest</code>, Node's <code>crypto.timingSafeEqual</code> and Go's <code>hmac.Equal</code> all touch every byte no matter where the first difference is.</p>
+    <p>One last trap, on the bank's side. If you check a tag with <code>==</code>, the comparison stops at the first byte that differs. Response time then grows with every correct leading byte, which lets an attacker recover a valid tag one byte at a time. Python's <code>hmac.compare_digest</code>, Node's <code>crypto.timingSafeEqual</code> and Go's <code>hmac.Equal</code> all touch every byte no matter where the first difference is.</p>
   </div>
 
   <section class="code-panel" aria-labelledby="code-title">
@@ -505,7 +704,8 @@ print(tag.hex())  <span class="c"># f7bc83f430538424b13298e6aa6fb143ef4d59a14946
 
   <footer class="hmac-foot">
     <p>HMAC is Mihir Bellare, Ran Canetti and Hugo Krawczyk's construction (CRYPTO 1996), standardized as
-      <a href="https://www.rfc-editor.org/rfc/rfc2104">RFC 2104</a> and FIPS 198-1. The worked example matches the well-known
+      <a href="https://www.rfc-editor.org/rfc/rfc2104">RFC 2104</a> and FIPS 198-1. The Flickr story is Thai Duong and Juliano Rizzo's
+      <a href="http://netifera.com/research/flickr_api_signature_forgery.pdf">Flickr API Signature Forgery</a> (2009). The worked example matches the well-known
       <a href="https://en.wikipedia.org/wiki/HMAC#Examples">HMAC-SHA256 test value</a>.
       An LLM helped build the page and polish the prose. Animations were rendered with
       <a href="https://www.manim.community/">Manim Community</a>, in the same Tetra light palette as the rest of this site.</p>
@@ -746,7 +946,7 @@ print(tag.hex())  <span class="c"># f7bc83f430538424b13298e6aa6fb143ef4d59a14946
     vn.className = "verdict " + (naiveOk ? "accepted" : "rejected");
     $("v-naive-big").textContent = naiveOk ? "ACCEPTED" : "rejected";
     $("v-naive-note").textContent = naiveOk
-      ? "Forged tag " + hex(forgedNaive).slice(0, 16) + "… verifies. The attacker never saw the secret."
+      ? "Forged seal " + hex(forgedNaive).slice(0, 16) + "… checks out, so the money goes to Mallory. She never saw the secret."
       : "Unexpected: the forgery failed.";
 
     const vh = $("v-hmac");
@@ -754,7 +954,7 @@ print(tag.hex())  <span class="c"># f7bc83f430538424b13298e6aa6fb143ef4d59a14946
     $("v-hmac-big").textContent = hmacOk ? "ACCEPTED" : "REJECTED";
     $("v-hmac-note").textContent = hmacOk
       ? "Unexpected: HMAC accepted a forgery."
-      : "Extending the HMAC tag only extends the outer hash. The real tag needs a fresh inner hash, which needs the key.";
+      : "Her add-on landed on the outer envelope. The real seal needs a fresh inner fingerprint, which needs the secret.";
 
     $("forge-out").hidden = false;
   }
