@@ -1,0 +1,4 @@
+media/
+__pycache__/
+*.pyc
+.partial_movie_files/
