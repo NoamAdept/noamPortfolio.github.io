@@ -18,6 +18,15 @@
     "part": 1
   },
   {
+    "slug": "hash-it-twice",
+    "title": "Hash It Twice",
+    "date": "2026-10-09",
+    "description": "HMAC with Manim animations — why H(key ‖ msg) falls to length extension, the 0x36/0x5C pads, two nested hashes, constant-time checks, plus a live length-extension forge.",
+    "series": "crypto",
+    "href": "hash-it-twice.html",
+    "image": "img/hmac-list-thumb.jpg"
+  },
+  {
     "slug": "four-left-five-right",
     "title": "Four Left, Five Right",
     "date": "2026-10-02",
