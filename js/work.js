@@ -1,23 +1,6 @@
 /* Shared project catalog + Faav-style list rendering */
 window.NOAM_PROJECTS = [
   {
-    id: "piSdrAcademy",
-    featured: true,
-    highlight: true,
-    passion: true,
-    title: "pi-sdr-academy — offline Pi SDR lab",
-    meta: "Python · Raspberry Pi · DSP / SDR",
-    desc: "Offline Pi laboratory for systems, DSP, and software-defined radio with dojo-style progression.",
-    image: "img/pi-sdr-academy.jpg",
-    tags: ["SDR", "DSP", "hardware", "passion"],
-    url: "https://github.com/NoamAdept/pi-sdr-academy",
-    highlights: [
-      "Offline lab modules on real hardware",
-      "Bridges RF, signals, and software",
-      "Belt / academy structure for deliberate practice",
-    ],
-  },
-  {
     id: "pvt",
     featured: true,
     highlight: false,
@@ -49,7 +32,7 @@ window.NOAM_PROJECTS = [
   {
     id: "libCanary",
     featured: true,
-    highlight: false,
+    highlight: true,
     title: "libCanary — custom stack canaries",
     meta: "C · systems security",
     desc: "Native stack-canary implementation exploring how runtime guards detect stack-smashing and harden binaries.",
@@ -176,9 +159,10 @@ window.renderProjectCards = function (el, { featuredOnly = false, highlightOnly 
       .map(
         (p) => `
       <a class="highlight-card highlight-passion" href="${p.url}" target="_blank" rel="noopener noreferrer">
-        <span class="highlight-kicker">currently building</span>
+        <span class="highlight-kicker">featured project</span>
         <h3 class="highlight-title ext">${escapeHtml(p.title)}</h3>
         <p class="highlight-meta">${escapeHtml(p.meta)}</p>
+        <p class="post-desc">${escapeHtml(p.desc)}</p>
         ${
           p.image
             ? `<img class="highlight-shot" src="${escapeHtml(p.image)}" alt="${escapeHtml(p.title)} application" width="1280" height="900" loading="lazy" />`
@@ -224,7 +208,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const detail = document.getElementById("project-detail");
   const pick =
-    window.NOAM_PROJECTS.find((p) => p.passion) ||
     window.NOAM_PROJECTS.find((p) => p.highlight) ||
     window.NOAM_PROJECTS.find((p) => p.featured) ||
     window.NOAM_PROJECTS[0];
