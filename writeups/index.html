@@ -20,7 +20,7 @@
   <nav class="topbar" aria-label="Primary">
     <div class="topbar-inner">
       <a class="topbar-brand" href="../index.html">
-        <img class="topbar-avatar" src="../avatar.jpg" alt="" width="30" height="30" />
+        <img class="topbar-avatar" src="../avatar.jpg" alt="" width="26" height="26" />
         <span>noam.yakar</span>
       </a>
       <div class="topbar-end">
@@ -30,10 +30,7 @@
           <a href="index.html" aria-current="page">writeups</a>
           <a href="../resume1.pdf" target="_blank" rel="noopener noreferrer">resume</a>
         </div>
-        <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
-        </button>
+        <button class="theme-toggle" type="button" aria-label="Switch color theme"><span class="t-dark">dark</span><span class="t-light">light</span></button>
       </div>
     </div>
   </nav>
@@ -41,41 +38,14 @@
   <div class="page-layout">
     <main class="content" id="main">
       <h1>Writeups</h1>
-      <p class="lead">
-        Crypto notes, heap learning notes, and CTF deep dives —
-        <strong>TEA</strong> bit by bit, <strong>heap</strong> from the
-        break through dangling pointers, plus <strong>pwnable.kr</strong>
-        Toddler's Bottle.
-      </p>
+      <p class="lead">Notes on crypto, the heap, and CTF challenges.</p>
       <div class="posts-list" id="writeups-list"></div>
     </main>
 
-    <aside class="sidebar">
-      <div class="sidebar-card bio-card">
-        <img class="sidebar-avatar" src="../avatar.jpg" alt="Noam Yakar" width="52" height="52" />
-        <div>
-          <h3 class="sidebar-name">Noam Yakar</h3>
-          <p class="sidebar-bio">Crypto notes, CTFs, and systems writeups.</p>
-        </div>
-      </div>
-      <div class="sidebar-card links-card">
-        <a href="../index.html"><span class="prompt">&gt;</span>Home</a>
-        <a href="../projects.html"><span class="prompt">&gt;</span>Projects</a>
-        <a href="https://github.com/NoamAdept" target="_blank" rel="noopener noreferrer"><span class="prompt">&gt;</span>GitHub</a>
-      </div>
-      <div class="sidebar-card">
-        <h4 class="sidebar-card-title">Series</h4>
-        <p class="sidebar-bio">
-          <span class="prompt">&gt;</span> crypto<br />
-          <span class="prompt">&gt;</span> heap<br />
-          <span class="prompt">&gt;</span> pwnable.kr
-        </p>
-      </div>
-    </aside>
   </div>
 
   <footer class="site-footer">
-    <p>© 2026 Noam Yakar</p>
+    <p><span>© 2026 Noam Yakar</span></p>
   </footer>
   <script src="../js/writeups.js"></script>
 </body>

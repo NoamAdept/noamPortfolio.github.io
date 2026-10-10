@@ -11,12 +11,10 @@
 <link rel="stylesheet" href="../css/site.css" />
 <style>
   body.hmac-writeup {
-    background:
-      radial-gradient(ellipse 70% 40% at 50% -8%, var(--blue-soft), transparent 55%),
-      var(--background);
+    background: var(--background);
   }
   .hmac-article {
-    max-width: 920px;
+    max-width: 760px;
     margin: 0 auto;
     padding: var(--space-7) var(--space-5) var(--space-8);
   }
@@ -37,15 +35,7 @@
     margin: 0;
     color: var(--text-primary);
   }
-  .hmac-article > h1::after {
-    content: "";
-    display: block;
-    width: 40px;
-    height: 3px;
-    background: var(--blue);
-    margin-top: var(--space-3);
-    border-radius: 2px;
-  }
+
   .dek {
     font-size: 1.15rem;
     line-height: 1.45;
@@ -335,7 +325,138 @@
   }
   footer.hmac-foot p { margin: 0.6rem 0; }
 
+
+  /* ── Beginner scaffolding ── */
+  .kicker { color: var(--text-muted); letter-spacing: 0; text-transform: none; font-weight: 500; font-size: 0.8rem; }
+  .hmac-article > h1 { font-weight: 600; letter-spacing: -0.035em; }
+  .meta-line { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-muted); margin: 0.9rem 0 0; }
+  .prose h2 { margin: 3.25rem 0 0.75rem; font-size: 1.5rem; }
+  .prose h3 { margin: 2rem 0 0.5rem; font-size: 1.1rem; font-weight: 600; color: var(--text-primary); letter-spacing: -0.015em; }
+  .prose strong { color: var(--text-primary); font-weight: 600; }
+  .tldr {
+    margin: 2rem 0 0;
+    padding: 1rem 1.15rem;
+    border: 1px solid var(--border);
+    border-left: 2px solid var(--blue);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    background: var(--surface);
+    max-width: 40rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  .tldr-title, .toc-title, .try-title {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin: 0 0 0.4rem;
+  }
+  .toc { margin: 1.75rem 0 0; max-width: 40rem; }
+  .toc ol { margin: 0; padding-left: 1.4rem; columns: 2 16rem; column-gap: 2rem; }
+  .toc li { margin: 0.2rem 0; color: var(--text-muted); font-size: 0.95rem; break-inside: avoid; }
+  .toc a { color: var(--text-secondary) !important; font-weight: 400 !important; }
+  .toc a:hover { color: var(--blue) !important; }
+  .hmac-article h2[id], .hmac-article h3[id] { scroll-margin-top: 84px; }
+  .primers { display: grid; gap: 0.5rem; max-width: 40rem; margin-top: 1rem; }
+  .primer {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-large);
+    background: var(--surface);
+    padding: 0 1rem;
+  }
+  .primer summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 0.8rem 0;
+    font-weight: 500;
+    color: var(--text-primary);
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .primer summary::-webkit-details-marker { display: none; }
+  .primer summary::after { content: "+"; font-family: var(--font-mono); color: var(--text-muted); }
+  .primer[open] summary::after { content: "–"; }
+  .primer p, .primer ul { color: var(--text-secondary); line-height: 1.6; margin: 0 0 0.85rem; }
+  .primer ul { padding-left: 1.1rem; }
+  .primer li { margin: 0.3rem 0; }
+  .primer strong { color: var(--text-primary); font-weight: 600; }
+  .mini {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    background: var(--surface-hover);
+    border-radius: var(--radius);
+    padding: 0.7rem 0.9rem;
+    margin: 0 0 0.85rem;
+    overflow-x: auto;
+    color: var(--text-primary);
+  }
+  .mini code { background: none; padding: 0; border: 0; }
+  .steps { padding-left: 1.4rem; margin: 1rem 0; }
+  .steps li { margin: 0.45rem 0; padding-left: 0.25rem; }
+  .steps li::marker { font-family: var(--font-mono); color: var(--text-muted); font-size: 0.85em; }
+  .steps.compact { font-size: 0.95rem; color: var(--text-secondary); margin: 0 0 0.9rem; max-width: none; }
+  .i-word { color: var(--blue); font-weight: 600; }
+  .o-word { color: var(--yellow-strong); font-weight: 600; }
+  .legend {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+    margin: 0 0 1rem;
+    max-width: 40rem;
+    font-size: 0.92rem;
+  }
+  .legend div { display: flex; gap: 0.6rem; align-items: baseline; }
+  .legend dt { flex: 0 0 7rem; color: var(--text-primary); }
+  .legend dd { margin: 0; color: var(--text-secondary); }
+  .chain { margin: 1.25rem 0 0.5rem; }
+  .chain-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-large);
+    background: var(--surface);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+  }
+  .chain-state, .chain-block { padding: 0.35rem 0.6rem; border-radius: var(--radius-small); border: 1px solid var(--border); white-space: nowrap; }
+  .chain-state { background: var(--surface-hover); color: var(--text-secondary); }
+  .chain-block.secret { background: var(--purple-soft); border-color: color-mix(in srgb, var(--purple) 35%, transparent); color: var(--purple); }
+  .chain-state.tagged { color: var(--text-primary); font-weight: 600; border-color: var(--border-strong); }
+  .chain-block.attacker, .chain-state.attacker { border-style: dashed; border-color: var(--danger); color: var(--danger); background: var(--danger-soft); }
+  .chain-arrow { color: var(--text-muted); }
+  .chain-arrow.attacker { color: var(--danger); }
+  .chain figcaption { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.6rem; max-width: 40rem; line-height: 1.5; }
+  .try {
+    margin: 0 0 1rem;
+    padding: 0.8rem 1rem;
+    border-radius: var(--radius);
+    background: var(--background);
+    border: 1px dashed var(--border-strong);
+  }
+  .try ul { margin: 0; padding-left: 1.1rem; font-size: 0.93rem; color: var(--text-secondary); line-height: 1.55; }
+  .try li { margin: 0.25rem 0; }
+  .how-read { margin-top: 0.15rem; }
+  .checklist { padding-left: 1.1rem; }
+  .checklist li { margin: 0.6rem 0; }
+  .recap {
+    margin-top: 3.25rem;
+    padding: 1.25rem 1.25rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--surface);
+    max-width: 40rem;
+  }
+  .recap h2 { margin-top: 0; }
+  .recap ul { padding-left: 1.1rem; color: var(--text-secondary); line-height: 1.6; }
+  .recap li { margin: 0.4rem 0; }
+  .anim-chapters span { background: var(--surface-hover); }
+  .diagram figcaption strong { color: var(--text-primary); }
+
   @media (max-width: 640px) {
+    .legend dt { flex-basis: 5.5rem; }
     .hmac-article { padding: var(--space-5) var(--space-4) var(--space-7); }
     .bytes { grid-template-columns: repeat(8, minmax(0, 1fr)); }
     .stage-row { grid-template-columns: 1fr; gap: 0.2rem; }
@@ -343,39 +464,144 @@
 </style>
 </head>
 <body class="site hmac-writeup">
+  <a class="skip-link" href="#main">Skip to content</a>
   <nav class="topbar" aria-label="Primary">
     <div class="topbar-inner">
       <a class="topbar-brand" href="../index.html">
-        <img class="topbar-avatar" src="../avatar.jpg" alt="" width="30" height="30" />
+        <img class="topbar-avatar" src="../avatar.jpg" alt="" width="26" height="26" />
         <span>noam.yakar</span>
       </a>
-      <div class="topbar-links">
-        <a href="../index.html">home</a>
-        <a href="../projects.html">projects</a>
-        <a href="index.html" aria-current="page">writeups</a>
-        <a href="../resume1.pdf" target="_blank" rel="noopener noreferrer">resume</a>
+      <div class="topbar-end">
+        <div class="topbar-links">
+          <a href="../index.html">home</a>
+          <a href="../projects.html">projects</a>
+          <a href="index.html" aria-current="page">writeups</a>
+          <a href="../resume1.pdf" target="_blank" rel="noopener noreferrer">resume</a>
+        </div>
       </div>
     </div>
   </nav>
-<article class="hmac-article">
+<main class="hmac-article" id="main">
   <p class="back-link"><a href="index.html">&gt; all writeups</a></p>
   <p class="kicker">crypto notes · message authentication</p>
   <h1>Hash It Twice</h1>
   <p class="dek">How HMAC turns a plain hash into a tamper seal, and why the obvious shortcut gets forged.</p>
+  <p class="meta-line">~12 min read · beginner-friendly · interactive</p>
+
+  <aside class="tldr" aria-label="Summary">
+    <p class="tldr-title">The short version</p>
+    <p>If you and a server share a secret key, HMAC lets the server prove a message came from someone with that key and wasn't changed on the way. The simple approach, hashing the key and message together, can be forged without knowing the key. HMAC avoids that by hashing twice. When you check a tag, use a constant-time comparison, not <code>==</code>.</p>
+  </aside>
+
+  <nav class="toc" aria-label="On this page">
+    <p class="toc-title">On this page</p>
+    <ol>
+      <li><a href="#basics">Three ideas you need first</a></li>
+      <li><a href="#problem">The problem HMAC solves</a></li>
+      <li><a href="#naive">The obvious recipe, and how it breaks</a></li>
+      <li><a href="#hmac">How HMAC fixes it</a></li>
+      <li><a href="#lab-title">Try it: byte lab</a></li>
+      <li><a href="#forge-title">Try it: forge a tag</a></li>
+      <li><a href="#timing">Checking tags safely</a></li>
+      <li><a href="#code-title">HMAC in 15 lines of Python</a></li>
+      <li><a href="#recap">Recap</a></li>
+    </ol>
+  </nav>
+
+  <section class="prose" aria-labelledby="basics">
+    <h2 id="basics">Three ideas you need first</h2>
+    <p>If you already know what a hash function, hex and XOR are, <a href="#problem">skip ahead</a>.</p>
+  </section>
+
+  <div class="primers">
+    <details class="primer" open>
+      <summary><span>What's a hash function?</span></summary>
+      <p>A hash function turns any input into a short, fixed-size fingerprint. SHA-256 always gives back 32 bytes, whether you feed it one letter or a whole movie. Three properties matter here:</p>
+      <ul>
+        <li><strong>Same input, same output.</strong> Hash "hello" twice and you get the same fingerprint both times.</li>
+        <li><strong>Tiny change, totally different output.</strong> "hello" and "hellp" have fingerprints that look completely unrelated.</li>
+        <li><strong>One-way.</strong> Given a fingerprint, you can't work backwards to the input.</li>
+      </ul>
+      <p>On its own, a hash proves nothing about <em>who</em> sent something. Anyone can hash anything. That's the gap HMAC fills.</p>
+    </details>
+    <details class="primer">
+      <summary><span>What do <code>0x36</code> and <code>f7bc83…</code> mean?</span></summary>
+      <p>Computers store data as bytes, and a byte is a number from 0 to 255. Writing bytes in <strong>hexadecimal</strong> (base 16, digits <code>0–9</code> then <code>a–f</code>) means every byte is exactly two characters: <code>00</code> is 0, <code>36</code> is 54, <code>ff</code> is 255. The <code>0x</code> prefix just says "this is hex". A 32-byte SHA-256 output is 64 hex characters.</p>
+    </details>
+    <details class="primer">
+      <summary><span>What's XOR (⊕)?</span></summary>
+      <p>XOR compares two values bit by bit. Each output bit is 1 if the input bits are different and 0 if they're the same:</p>
+      <pre class="mini"><code>  0110 1011   (a key byte)
+⊕ 0011 0110   (0x36)
+= 0101 1101</code></pre>
+      <p>Two things make XOR useful here. XOR-ing with the same value twice gets you back where you started. And XOR-ing a key with two different constants gives you two different-looking keys from one secret.</p>
+    </details>
+  </div>
+
+  <section class="prose" aria-labelledby="problem">
+    <h2 id="problem">The problem HMAC solves</h2>
+    <p>HMAC is in a lot of places: GitHub webhook signatures, <code>HS256</code> JWTs, AWS request signing, the six-digit codes in an authenticator app, and the key schedule of TLS 1.3.</p>
+    <p>Think of a wax seal pressed with a ring that only you and the receiver own. Anyone can read the letter. But if the seal is intact and matches the ring, the receiver knows two things: nobody changed the letter, and it came from someone with the ring.</p>
+    <p>HMAC is that seal for data. Two parties share a secret <strong>key</strong>. The sender computes a short <strong>tag</strong> from the key and the message and sends both. The receiver recomputes the tag with their copy of the key and checks that it matches. This isn't encryption: the message stays readable. It only proves the message is authentic and unchanged.</p>
+  </section>
+
+  <section class="prose" aria-labelledby="naive">
+    <h2 id="naive">The obvious recipe, and how it breaks</h2>
+    <p>The first idea most people have is to glue the key in front of the message and hash the result: <code>tag = SHA256(key ‖ message)</code>, where <code>‖</code> means "followed by". Without the key, you can't produce the right fingerprint. Right?</p>
+    <p>Not quite. The weakness is in how SHA-256 works inside:</p>
+    <ol class="steps">
+      <li>It pads the input and cuts it into 64-byte <strong>blocks</strong>.</li>
+      <li>It starts from a fixed 32-byte <strong>state</strong> and mixes in one block at a time, updating the state after each.</li>
+      <li>When the blocks run out, the final state <em>is</em> the hash.</li>
+    </ol>
+  </section>
+
+  <figure class="chain" aria-label="Diagram: SHA-256 processes blocks one by one. The final state is the tag. An attacker can start from that tag and keep processing extra blocks.">
+    <div class="chain-row">
+      <span class="chain-state">start</span>
+      <span class="chain-arrow" aria-hidden="true">→</span>
+      <span class="chain-block secret">key ‖ message ‖ padding</span>
+      <span class="chain-arrow" aria-hidden="true">→</span>
+      <span class="chain-state tagged">tag</span>
+      <span class="chain-arrow attacker" aria-hidden="true">→</span>
+      <span class="chain-block attacker">&amp;role=admin</span>
+      <span class="chain-arrow attacker" aria-hidden="true">→</span>
+      <span class="chain-state attacker">new valid tag</span>
+    </div>
+    <figcaption>The tag is just SHA-256's internal state at the end. An attacker can pick up from there and keep hashing, without ever seeing what came before.</figcaption>
+  </figure>
 
   <div class="prose">
-    <p>HMAC is in a lot of places: GitHub webhook signatures, <code>HS256</code> JWTs, AWS request signing, the six-digit codes in an authenticator app, and the key schedule of TLS 1.3. The definition fits on one line. Still, I didn't really understand it until I saw why the simpler version fails.</p>
-    <p>The goal is simple. Two people share a secret key. One sends a message with a short <em>tag</em>. The other checks the tag and learns two things: nobody changed the message, and it came from someone who has the key. This isn't encryption, because anyone can still read the message. It only proves the message hasn't been tampered with.</p>
-    <p>The obvious recipe is <code>tag = SHA256(key ‖ message)</code>. It's broken. SHA-256 processes its input in 64-byte blocks and carries a 32-byte state from one block to the next. The final digest <em>is</em> that state. So anyone holding a tag can load it back into the hash and keep feeding in data. The result is a valid tag for <code>key ‖ message ‖ padding ‖ anything</code>, made without ever seeing the key. This is called <strong>length extension</strong>, and the forge panel further down runs it for real.</p>
-    <p>HMAC (Bellare, Canetti and Krawczyk, 1996; RFC 2104) fixes this by hashing twice, with two keys derived from your one key:</p>
+    <p>So anyone holding a tag can load it back into SHA-256 as the starting state and keep feeding in more data. The result is a valid tag for <code>key ‖ message ‖ padding ‖ anything</code>, made without the key. This is called a <strong>length extension attack</strong>. The attacker does need to know how long the key is to get the padding right, but they can usually just try every likely length. The forge panel below runs this attack for real.</p>
   </div>
+
+  <section class="prose" aria-labelledby="hmac">
+    <h2 id="hmac">How HMAC fixes it</h2>
+    <p>HMAC (Bellare, Canetti and Krawczyk, 1996; RFC 2104) hashes twice, with two keys derived from your one key:</p>
+  </section>
 
   <div class="formula-big" aria-label="HMAC of K and m equals H of K-out concatenated with H of K-in concatenated with m">
     HMAC(K, m) = H( <span class="o">(K′ ⊕ opad)</span> ‖ H( <span class="i">(K′ ⊕ ipad)</span> ‖ m ) )
   </div>
 
+  <dl class="legend">
+    <div><dt><code>H</code></dt><dd>the hash function, here SHA-256</dd></div>
+    <div><dt><code>K′</code></dt><dd>your key, stretched to exactly 64 bytes</dd></div>
+    <div><dt><code>m</code></dt><dd>the message</dd></div>
+    <div><dt><code>⊕</code></dt><dd>XOR, byte by byte</dd></div>
+    <div><dt><code>‖</code></dt><dd>"followed by" (concatenation)</dd></div>
+    <div><dt><code>ipad</code> / <code>opad</code></dt><dd>the bytes <code>0x36</code> / <code>0x5C</code>, repeated 64 times</dd></div>
+  </dl>
+
   <div class="prose">
-    <p><code>K′</code> is the key stretched to exactly one hash block: 64 bytes for SHA-256. If the key is shorter, it's padded with zero bytes. If it's longer, it's hashed first and then padded. <code>ipad</code> is the byte <code>0x36</code> repeated 64 times, and <code>opad</code> is <code>0x5C</code> repeated 64 times. Those two constants differ in exactly half their bits, so the inner key and the outer key look unrelated to the hash function. The animation walks through each step.</p>
+    <p>Read it from the inside out:</p>
+    <ol class="steps">
+      <li><strong>Stretch the key.</strong> Pad it with zero bytes to 64 bytes, one SHA-256 block. If it's longer than 64 bytes, hash it first, then pad.</li>
+      <li><strong>Make two keys.</strong> XOR the stretched key with <code>ipad</code> to get the <span class="i-word">inner key</span>, and with <code>opad</code> to get the <span class="o-word">outer key</span>. The two constants differ in exactly half their bits, so the two keys look unrelated to the hash.</li>
+      <li><strong>Inner hash.</strong> Hash the inner key followed by the message. You get 32 bytes.</li>
+      <li><strong>Outer hash.</strong> Hash the outer key followed by those 32 bytes. That's the tag.</li>
+    </ol>
+    <p>The animation walks through each step.</p>
   </div>
 
   <figure class="diagram" id="hmac-central">
@@ -409,6 +635,14 @@
   <section class="panel" aria-labelledby="lab-title">
     <h2 id="lab-title">Byte lab</h2>
     <p class="prose">Type a key and a message. Every byte below is computed in your browser by a from-scratch SHA-256, then checked against the browser's own Web Crypto HMAC.</p>
+    <div class="try">
+      <p class="try-title">Things to try</p>
+      <ul>
+        <li>Change one letter of the message. Every character of the tag changes, not just one.</li>
+        <li>Switch between the three buttons. The zero padding turns into <code>36 36 36…</code> or <code>5c 5c 5c…</code>: that's the XOR with ipad and opad.</li>
+        <li>Paste a key longer than 64 characters. It gets hashed down to 32 bytes first.</li>
+      </ul>
+    </div>
     <form class="field-row" id="lab-form" autocomplete="off">
       <label class="narrow">key<input id="lab-key" type="text" value="key" spellcheck="false"></label>
       <label>message<input id="lab-msg" type="text" value="The quick brown fox jumps over the lazy dog" spellcheck="false"></label>
@@ -419,6 +653,7 @@
       <button type="button" data-view="out" aria-pressed="false">K′ ⊕ opad</button>
     </div>
     <p class="lane-name" id="grid-label"></p>
+    <p class="note how-read">Each box is one byte, written as two hex digits. 64 boxes = one SHA-256 block.</p>
     <div class="bytes" id="grid" aria-live="polite"></div>
     <p class="note" id="key-note"></p>
     <div class="pipe">
@@ -429,12 +664,20 @@
   </section>
 
   <div class="prose">
-    <p>The second hash is what saves it. An attacker who extends the tag is only extending the <em>outer</em> hash, which ends up hashing <code>K_out ‖ inner ‖ padding ‖ extra</code>. The verifier never computes anything with that shape. A real tag always comes from <code>K_out</code> followed by exactly 32 bytes, and those 32 bytes are a fresh inner hash of the new message. Producing that inner hash requires the key. The same structure is why HMAC-MD5 and HMAC-SHA1 still have no practical forgeries, even though MD5 and SHA-1 collisions are cheap to find. For new code, use SHA-256 anyway.</p>
+    <h3>Why the second hash saves it</h3>
+    <p>An attacker can still try length extension on an HMAC tag, but they're only extending the <em>outer</em> hash. That gives them a hash of <code>outer key ‖ inner hash ‖ padding ‖ extra</code>. The verifier never computes anything with that shape. A real tag is always the outer key followed by exactly 32 bytes, and those 32 bytes are a fresh inner hash of the new message. Producing that inner hash requires the key.</p>
+    <p>The same structure is why HMAC-MD5 and HMAC-SHA1 still have no practical forgeries, even though MD5 and SHA-1 collisions are cheap to find. For new code, use SHA-256 anyway.</p>
   </div>
 
   <section class="panel" aria-labelledby="forge-title">
     <h2 id="forge-title">Length extension, live</h2>
     <p class="prose">A toy server holds a random 16-byte secret and signs a query string two ways: the naive <code>SHA256(secret ‖ msg)</code> and real <code>HMAC-SHA256</code>. You get the message and both tags. You don't get the secret, only its length, and attackers can usually just try every length. Then you forge.</p>
+    <ol class="steps compact">
+      <li>The server signs <code>user=noam&amp;role=guest</code> and hands you the tags.</li>
+      <li>You load the naive tag back into SHA-256 as if you'd hashed the message yourself.</li>
+      <li>You keep hashing <code>&amp;role=admin</code> and get a new tag. The secret never appears.</li>
+      <li>Press the button and see which server believes you.</li>
+    </ol>
     <p class="note">server secret: <span class="secret" id="secret-mask"></span></p>
     <div class="field-row" style="margin-top:0.6rem">
       <label>signed message<input id="forge-msg" type="text" value="user=noam&amp;role=guest" spellcheck="false"></label>
@@ -466,9 +709,12 @@
     </div>
   </section>
 
-  <div class="prose">
-    <p>The last trap is on the receiving end. If you check a tag with <code>==</code>, the comparison stops at the first byte that differs. Response time then grows with every correct leading byte, which lets an attacker recover a valid tag one byte at a time. Python's <code>hmac.compare_digest</code>, Node's <code>crypto.timingSafeEqual</code> and Go's <code>hmac.Equal</code> all touch every byte no matter where the first difference is.</p>
-  </div>
+  <section class="prose" aria-labelledby="timing">
+    <h2 id="timing">Checking tags safely</h2>
+    <p>The last trap is on the receiving end. Picture a combination lock that clicks each time you get a digit right. You wouldn't need to try every combination: you'd find the first digit, then the second, and so on.</p>
+    <p>Comparing tags with <code>==</code> is that lock. The comparison stops at the first byte that differs, so a guess with more correct leading bytes takes slightly longer to reject. By measuring response times, an attacker can recover a valid tag one byte at a time.</p>
+    <p>The fix is a comparison that always checks every byte, no matter where the first difference is: Python's <code>hmac.compare_digest</code>, Node's <code>crypto.timingSafeEqual</code>, or Go's <code>hmac.Equal</code>.</p>
+  </section>
 
   <section class="code-panel" aria-labelledby="code-title">
     <h2 id="code-title">The whole thing, by hand</h2>
@@ -499,9 +745,26 @@ print(tag.hex())  <span class="c"># f7bc83f430538424b13298e6aa6fb143ef4d59a14946
     <span class="k">return</span> hmac.compare_digest(my_hmac(key, msg), received_tag)</code></pre>
   </section>
 
-  <div class="prose">
-    <p>Some notes for using it in practice. Use a random key at least as long as the hash output: 32 bytes for SHA-256. Keys longer than 64 bytes get hashed down to 32, so they add nothing. Put timestamps or nonces inside the signed data, or someone can replay an old message. Verify the exact bytes that were signed, not a re-serialized copy. If verifiers shouldn't be able to sign, switch to real signatures like Ed25519. With HMAC, anyone who can check a tag can also forge one.</p>
-  </div>
+  <section class="prose" aria-labelledby="practice">
+    <h2 id="practice">Using it in real code</h2>
+    <ul class="checklist">
+      <li><strong>Use a random key</strong> at least as long as the hash output: 32 bytes for SHA-256. Longer than 64 bytes adds nothing, because it gets hashed down to 32.</li>
+      <li><strong>Sign a timestamp or nonce</strong> along with the data, or someone can replay an old, valid message.</li>
+      <li><strong>Verify the exact bytes that were signed</strong>, not a re-serialized copy that might differ in spacing or field order.</li>
+      <li><strong>Need verify-only parties?</strong> Use real signatures like Ed25519 instead. With HMAC, anyone who can check a tag can also make one.</li>
+    </ul>
+  </section>
+
+  <section class="recap" aria-labelledby="recap">
+    <h2 id="recap">Recap</h2>
+    <ul>
+      <li>A hash alone proves nothing about who sent a message. A MAC adds a shared secret key.</li>
+      <li><code>SHA256(key ‖ message)</code> is broken: the tag is SHA-256's internal state, so attackers can keep hashing from it.</li>
+      <li>HMAC hashes twice, with an inner key and an outer key made from your key with <code>0x36</code> and <code>0x5C</code>.</li>
+      <li>Extending an HMAC tag only extends the outer hash, which the verifier never accepts.</li>
+      <li>Always compare tags in constant time.</li>
+    </ul>
+  </section>
 
   <footer class="hmac-foot">
     <p>HMAC is Mihir Bellare, Ran Canetti and Hugo Krawczyk's construction (CRYPTO 1996), standardized as
@@ -511,9 +774,9 @@ print(tag.hex())  <span class="c"># f7bc83f430538424b13298e6aa6fb143ef4d59a14946
       <a href="https://www.manim.community/">Manim Community</a>, in the same Tetra light palette as the rest of this site.</p>
     <p id="self-check"></p>
   </footer>
-</article>
+</main>
 <footer class="site-footer">
-  <p>© 2026 Noam Yakar</p>
+  <p><span>© 2026 Noam Yakar</span></p>
 </footer>
 <script>
 (function () {

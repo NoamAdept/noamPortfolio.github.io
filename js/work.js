@@ -176,8 +176,8 @@ window.renderProjectCards = function (el, { featuredOnly = false, highlightOnly 
       .map(
         (p) => `
       <a class="highlight-card highlight-passion" href="${p.url}" target="_blank" rel="noopener noreferrer">
-        <span class="highlight-kicker">Currently building</span>
-        <h3 class="highlight-title">${escapeHtml(p.title)}</h3>
+        <span class="highlight-kicker">currently building</span>
+        <h3 class="highlight-title ext">${escapeHtml(p.title)}</h3>
         <p class="highlight-meta">${escapeHtml(p.meta)}</p>
         ${
           p.image
@@ -196,11 +196,9 @@ window.renderProjectCards = function (el, { featuredOnly = false, highlightOnly 
       (p) => `
     <a class="post-card" href="${p.url}" target="_blank" rel="noopener noreferrer">
       <span class="post-meta">${escapeHtml(p.meta)}</span>
-      <h2 class="post-title">${escapeHtml(p.title)}</h2>
+      <h2 class="post-title ext">${escapeHtml(p.title)}</h2>
       <p class="post-desc">${escapeHtml(p.desc)}</p>
-      <div class="post-tags">${p.tags
-        .map((t) => `<span class="tag">${escapeHtml(t)}</span>`)
-        .join("")}</div>
+      <p class="post-tags">${p.tags.map(escapeHtml).join(" · ")}</p>
     </a>`
     )
     .join("");
