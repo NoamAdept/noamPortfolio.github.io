@@ -24,9 +24,7 @@
     --mono: var(--font-mono);
   }
   body.tea-writeup {
-    background:
-      radial-gradient(ellipse 70% 40% at 50% -8%, var(--blue-soft), transparent 55%),
-      var(--background);
+    background: var(--background);
   }
   .tea-article {
     max-width: 920px;
@@ -36,10 +34,9 @@
   .kicker {
     font-family: var(--font-mono);
     font-size: 0.72rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--blue);
-    font-weight: 600;
+    letter-spacing: 0;
+    color: var(--text-muted);
+    font-weight: 500;
     margin: 0 0 0.8rem;
   }
   .tea-article > h1 {
@@ -50,15 +47,7 @@
     margin: 0;
     color: var(--text-primary);
   }
-  .tea-article > h1::after {
-    content: "";
-    display: block;
-    width: 40px;
-    height: 3px;
-    background: var(--blue);
-    margin-top: var(--space-3);
-    border-radius: 2px;
-  }
+
   .dek {
     font-size: 1.15rem;
     line-height: 1.45;
@@ -459,7 +448,7 @@
   <nav class="topbar" aria-label="Primary">
     <div class="topbar-inner">
       <a class="topbar-brand" href="../index.html">
-        <img class="topbar-avatar" src="../avatar.jpg" alt="" width="30" height="30" />
+        <img class="topbar-avatar" src="../avatar.jpg" alt="" width="26" height="26" />
         <span>noam.yakar</span>
       </a>
       <div class="topbar-links">
@@ -659,7 +648,7 @@
   </footer>
 </article>
 <footer class="site-footer">
-  <p>© 2026 Noam Yakar</p>
+  <p><span>© 2026 Noam Yakar</span></p>
 </footer>
 <script>
 (function () {

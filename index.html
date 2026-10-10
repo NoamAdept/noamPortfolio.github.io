@@ -33,104 +33,108 @@
   <link rel="stylesheet" href="css/site.css" />
   <script src="js/theme.js"></script>
 </head>
-<body class="landing">
-  <main class="stage" aria-label="Noam Yakar">
-    <div class="glow" aria-hidden="true"></div>
-    <button class="theme-toggle landing-toggle" type="button" aria-label="Toggle dark mode">
-      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
-      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
-    </button>
-    <div class="card">
-      <div class="portrait">
-        <img src="profile.jpg" alt="Noam Yakar" width="618" height="968" fetchpriority="high" />
-      </div>
-
-      <div class="panel">
-        <header>
-          <p class="intro-kicker">security · systems · CS + Math @ ASU</p>
-          <h1 class="intro-name">Noam Yakar</h1>
-          <p class="intro-lead">
-            I like finding out how things break: binary exploitation, cryptography,
-            and software-defined radio. Yellow belt on pwn.college, and right now
-            I'm building <a href="projects.html#highlighted">pi-sdr-academy</a>,
-            an offline Raspberry Pi SDR lab.
-          </p>
-        </header>
-
-        <div class="panel-links">
-          <a class="panel-link" href="projects.html">&gt; projects</a>
-          <a class="panel-link ghost" href="writeups/">&gt; writeups</a>
-          <a class="panel-link ghost" href="resume1.pdf" target="_blank" rel="noopener noreferrer">&gt; resume</a>
+<body class="site">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <nav class="topbar" aria-label="Primary">
+    <div class="topbar-inner">
+      <a class="topbar-brand" href="index.html">
+        <img class="topbar-avatar" src="avatar.jpg" alt="" width="26" height="26" />
+        <span>noam.yakar</span>
+      </a>
+      <div class="topbar-end">
+        <div class="topbar-links">
+          <a href="index.html" aria-current="page">home</a>
+          <a href="projects.html">projects</a>
+          <a href="writeups/">writeups</a>
+          <a href="resume1.pdf" target="_blank" rel="noopener noreferrer">resume</a>
         </div>
-
-        <section class="section" aria-labelledby="latest-title" id="latest" hidden>
-          <h2 id="latest-title">Latest writeups</h2>
-          <ul class="latest-list" id="latest-list"></ul>
-        </section>
-
-        <section class="section" aria-labelledby="exp-title">
-          <h2 id="exp-title">Experience</h2>
-          <ul class="list">
-            <li>
-              <span class="prompt">&gt;</span> Nike
-              <span class="role">intern</span>
-            </li>
-            <li>
-              <span class="prompt">&gt;</span> Radware Inc.
-              <span class="role">security</span>
-            </li>
-            <li>
-              <span class="prompt">&gt;</span> ASU
-              <span class="role">CS + Math</span>
-            </li>
-          </ul>
-        </section>
-
-        <section class="section" aria-labelledby="skills-title">
-          <h2 id="skills-title">Skills</h2>
-          <ul class="chips">
-            <li>Binary exploitation</li>
-            <li>Cryptography</li>
-            <li>Systems / C</li>
-            <li>Python</li>
-            <li>SDR / DSP</li>
-            <li>CTFs</li>
-          </ul>
-        </section>
-
-        <section class="section" aria-labelledby="socials-title">
-          <h2 id="socials-title">Find me</h2>
-          <ul class="list list-cols">
-            <li>
-              <a href="https://github.com/NoamAdept" target="_blank" rel="noopener noreferrer">
-                <span class="prompt">&gt;</span> GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://www.linkedin.com/in/noam-yakar/" target="_blank" rel="noopener noreferrer">
-                <span class="prompt">&gt;</span> LinkedIn
-              </a>
-            </li>
-            <li>
-              <a href="https://pwn.college/hacker/noamyakar23" target="_blank" rel="noopener noreferrer">
-                <span class="prompt">&gt;</span> pwn.college
-              </a>
-            </li>
-            <li>
-              <a href="resume1.pdf" target="_blank" rel="noopener noreferrer">
-                <span class="prompt">&gt;</span> Resume (PDF)
-              </a>
-            </li>
-          </ul>
-        </section>
+        <button class="theme-toggle" type="button" aria-label="Switch color theme"><span class="t-dark">dark</span><span class="t-light">light</span></button>
       </div>
     </div>
+  </nav>
+
+  <main class="home" id="main">
+    <header class="home-hero">
+      <img class="home-avatar" src="avatar.jpg" alt="Noam Yakar" width="64" height="64" />
+      <div>
+        <h1 class="home-name">Noam Yakar</h1>
+        <p class="home-role">security · systems · CS + Math @ ASU</p>
+      </div>
+    </header>
+
+    <p class="home-lead">
+      I like finding out how things break: binary exploitation, cryptography,
+      and software-defined radio. I write up what I learn so it's easier for
+      the next person.
+    </p>
+
+    <div class="home-actions">
+      <a class="btn btn-accent" href="projects.html">Projects</a>
+      <a class="btn" href="writeups/">Writeups</a>
+      <a class="btn" href="resume1.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
+    </div>
+
+    <section class="row" aria-labelledby="now-label">
+      <h2 class="row-label" id="now-label">now</h2>
+      <div class="row-body">
+        <p>
+          Building <a class="inline" href="projects.html#highlighted">pi-sdr-academy</a>,
+          an offline Raspberry Pi lab for learning signals and radio.
+          Yellow belt on <a class="inline" href="https://pwn.college/hacker/noamyakar23" target="_blank" rel="noopener noreferrer">pwn.college</a>.
+        </p>
+      </div>
+    </section>
+
+    <section class="row" aria-labelledby="writing-label" id="latest" hidden>
+      <h2 class="row-label" id="writing-label">writing</h2>
+      <div class="row-body">
+        <ul class="rows" id="latest-list"></ul>
+        <a class="more" href="writeups/">all writeups →</a>
+      </div>
+    </section>
+
+    <section class="row" aria-labelledby="exp-label">
+      <h2 class="row-label" id="exp-label">experience</h2>
+      <div class="row-body">
+        <ul class="rows">
+          <li><span><span class="r-title">Nike</span><span class="r-meta">intern</span></span></li>
+          <li><span><span class="r-title">Radware Inc.</span><span class="r-meta">security</span></span></li>
+          <li><span><span class="r-title">Arizona State University</span><span class="r-meta">CS + Math</span></span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="row" aria-labelledby="skills-label">
+      <h2 class="row-label" id="skills-label">skills</h2>
+      <div class="row-body">
+        <p class="skill-line">Binary exploitation, cryptography, C and systems, Python, SDR / DSP, CTFs.</p>
+      </div>
+    </section>
+
+    <section class="row" aria-labelledby="elsewhere-label">
+      <h2 class="row-label" id="elsewhere-label">elsewhere</h2>
+      <div class="row-body">
+        <ul class="rows">
+          <li><a href="https://github.com/NoamAdept" target="_blank" rel="noopener noreferrer"><span class="r-title">GitHub</span><span class="r-meta">NoamAdept</span></a></li>
+          <li><a href="https://www.linkedin.com/in/noam-yakar/" target="_blank" rel="noopener noreferrer"><span class="r-title">LinkedIn</span><span class="r-meta">noam-yakar</span></a></li>
+          <li><a href="https://pwn.college/hacker/noamyakar23" target="_blank" rel="noopener noreferrer"><span class="r-title">pwn.college</span><span class="r-meta">noamyakar23</span></a></li>
+        </ul>
+      </div>
+    </section>
   </main>
+
+  <footer class="site-footer">
+    <p><span>© 2026 Noam Yakar</span><span class="egg-hint" aria-hidden="true">↑↑↓↓←→←→BA</span></p>
+  </footer>
 
   <script>
     /* Latest writeups, straight from the manifest */
     (function () {
       const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+      const fmt = (iso) => {
+        const d = new Date(iso + "T00:00:00");
+        return Number.isNaN(d.getTime()) ? "" : d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      };
       fetch("writeups/manifest.json")
         .then((r) => (r.ok ? r.json() : []))
         .then((items) => {
@@ -138,10 +142,10 @@
           if (!list || !Array.isArray(items) || !items.length) return;
           items.sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
           list.innerHTML = items
-            .slice(0, 3)
+            .slice(0, 4)
             .map((w) => {
               const href = "writeups/" + (w.href || "post.html?slug=" + encodeURIComponent(w.slug));
-              return `<li><a href="${esc(href)}"><span class="latest-title">${esc(w.title || w.slug)}</span><span class="latest-series">${esc(w.series || "")}</span></a></li>`;
+              return `<li><a href="${esc(href)}"><span class="r-title">${esc(w.title || w.slug)}</span><span class="r-meta">${esc(fmt(w.date))}</span></a></li>`;
             })
             .join("");
           document.getElementById("latest").hidden = false;
