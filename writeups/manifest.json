@@ -1,5 +1,12 @@
 [
   {
+    "slug": "libcanary",
+    "title": "The Bird in the Stack",
+    "date": "2026-10-10",
+    "description": "Building libCanary — a real, custom stack-canary library — and watching the same buffer overflow hijack a program with no protection, then get caught cold once the canary is in place.",
+    "series": "mitigations"
+  },
+  {
     "slug": "someone-elses-chunk",
     "title": "Someone Else's Chunk",
     "date": "2026-10-04",
