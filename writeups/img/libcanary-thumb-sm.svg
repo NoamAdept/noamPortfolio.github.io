@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="232 96 880 660" width="880" height="660" role="img" aria-labelledby="t d">
+  <title id="t">libCanary: a stack canary stops a buffer overflow</title>
+  <desc id="d">A stack frame with the saved return address at the top, then the saved frame pointer, then a canary, then a 32-byte buffer. A red overflow arrow climbs up out of the buffer and is stopped at the canary, labelled stack smashing detected.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7f8fa"/>
+      <stop offset="1" stop-color="#eef0f4"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#1f2a44" flood-opacity="0.12"/>
+    </filter>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1152" height="864" fill="url(#bg)"/>
+
+  <g font-family="Menlo, 'SF Mono', ui-monospace, Consolas, monospace" font-size="34" text-anchor="middle">
+    <!-- stack frame, higher addresses on top -->
+    <g filter="url(#soft)">
+      <rect x="306" y="118" width="440" height="128" rx="22" fill="#2f7be8"/>
+      <rect x="306" y="258" width="440" height="104" rx="22" fill="#9f6bd6"/>
+      <rect x="306" y="374" width="440" height="116" rx="22" fill="#fdb44e"/>
+      <rect x="306" y="502" width="440" height="244" rx="22" fill="#3dbf72"/>
+    </g>
+
+    <text x="526" y="194" fill="#fff">return address</text>
+    <text x="526" y="322" fill="#fff">saved rbp</text>
+    <text x="560" y="445" fill="#5a3a00" font-weight="600">canary</text>
+    <text x="526" y="700" fill="#fff">buf[32]</text>
+
+    <!-- little bird in the canary slot -->
+    <g transform="translate(408 432)">
+      <ellipse cx="0" cy="6" rx="30" ry="22" fill="#fff6d6"/>
+      <circle cx="24" cy="-14" r="15" fill="#fff6d6"/>
+      <path d="M37 -16 L52 -11 L37 -7 Z" fill="#e8742c"/>
+      <circle cx="28" cy="-17" r="3" fill="#3a2a00"/>
+      <path d="M-14 0 Q2 -10 14 4 Q0 14 -14 0 Z" fill="#f6dd8f"/>
+      <path d="M-28 4 L-46 -4 L-42 12 Z" fill="#fff6d6"/>
+    </g>
+
+    <!-- overflow: bytes climbing up out of buf -->
+    <g stroke="#ef4f5a" stroke-width="10" stroke-linecap="round" fill="none">
+      <path d="M526 668 L526 520" stroke-dasharray="2 22"/>
+    </g>
+    <path d="M526 508 l-26 34 h52 z" fill="#ef4f5a"/>
+    <g font-size="26" fill="#d93645">
+      <text x="636" y="606">AAAA…</text>
+    </g>
+
+    <!-- the crack where it hits the canary -->
+    <path d="M306 492 L352 480 L380 498 L414 478 L452 500 L494 482 L528 502 L566 480 L604 498 L640 478 L676 500 L712 482 L746 494"
+          fill="none" stroke="#ff5a64" stroke-width="7" stroke-linejoin="round" filter="url(#glow)"/>
+
+    <!-- callout -->
+    <path d="M760 488 L826 488" stroke="#ef4f5a" stroke-width="4" stroke-dasharray="4 10" stroke-linecap="round"/>
+    <path d="M760 488 l14 -9 v18 z" fill="#ef4f5a"/>
+    <rect x="830" y="430" width="276" height="116" rx="16" fill="#fff" stroke="#f3b6bb" stroke-width="3"/>
+    <text x="968" y="478" font-size="26" fill="#d93645" font-weight="600">stack smashing</text>
+    <text x="968" y="516" font-size="26" fill="#d93645" font-weight="600">detected</text>
+
+    <!-- address hints -->
+    <g font-size="22" fill="#8a909c" text-anchor="end">
+      <text x="282" y="140">high</text>
+      <text x="282" y="740">low</text>
+    </g>
+    <path d="M262 168 L262 708" stroke="#c9ced8" stroke-width="3"/>
+    <path d="M262 160 l-9 16 h18 z" fill="#c9ced8"/>
+  </g>
+</svg>

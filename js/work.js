@@ -37,6 +37,8 @@ window.NOAM_PROJECTS = [
     meta: "C · systems security",
     desc: "Native stack-canary implementation exploring how runtime guards detect stack-smashing and harden binaries.",
     tags: ["C", "memory safety", "mitigations"],
+    image: "writeups/img/libcanary-diagram.svg",
+    imageAlt: "Diagram: a buffer overflow climbs the stack and is stopped at the canary before the return address",
     url: "https://github.com/NoamAdept/libCanary",
     highlights: [
       "Custom canary init / check path",
@@ -165,7 +167,7 @@ window.renderProjectCards = function (el, { featuredOnly = false, highlightOnly 
         <p class="post-desc">${escapeHtml(p.desc)}</p>
         ${
           p.image
-            ? `<img class="highlight-shot" src="${escapeHtml(p.image)}" alt="${escapeHtml(p.title)} application" width="1280" height="900" loading="lazy" />`
+            ? `<img class="highlight-shot" src="${escapeHtml(p.image)}" alt="${escapeHtml(p.imageAlt || p.title)}" width="1152" height="864" loading="lazy" />`
             : ""
         }
         <span class="highlight-cta">View on GitHub →</span>
