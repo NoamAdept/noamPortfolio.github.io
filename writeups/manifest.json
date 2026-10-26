@@ -5,6 +5,7 @@
     "date": "2026-10-26",
     "description": "Heap notes Part 3 — memory leaks from malloc chunks to the OOM killer: why free doesn't shrink RSS, how a GC decides what's alive, exit code 137, and reading Valgrind, pprof, and heap snapshots.",
     "series": "heap",
+    "image": "img/still-reachable-thumb.svg",
     "part": 3
   },
   {
