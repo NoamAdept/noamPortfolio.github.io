@@ -1,5 +1,13 @@
 [
   {
+    "slug": "the-wrong-firmware",
+    "title": "The Wrong Firmware",
+    "date": "2026-11-15",
+    "description": "It started with one screw I couldn't undo and ended near 1am with the wrong firmware, a famous secret key, and a quiet lesson about checking your work. A teardown of an HPE Instant On AP22, and everything I got wrong on the way to it.",
+    "series": "hardware",
+    "image": "img/ap22/ap22-thumb.jpg"
+  },
+  {
     "slug": "still-reachable",
     "title": "Still Reachable",
     "date": "2026-10-26",
